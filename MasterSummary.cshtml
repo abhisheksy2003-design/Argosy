@@ -1,0 +1,251 @@
+﻿
+@model TrackerMVCEntities.BusinessEntities.JobOrderMEntities
+
+@{
+    ViewBag.Title = "BLSummary";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+
+<div class=" content-area" id="divSummary">
+    <div class="page-header">
+        <h4 class="page-title">Search and Add</h4>
+
+        @*<div class="ibox-content text-right">
+                <a onclick="AddBL();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-plus" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Generate BL"></i> </a>
+            </div>*@
+    </div>
+    <div class="col-lg-8 col-sm-12">
+        <div class="input-group  mb-3">
+            @* <input type="text" class="form-control" placeholder="Search for...">*@
+            @*<span class="input-group-append " id="tabPurpose">*@
+            <button class="btn btn-primary active" id="CHA" style="text-transform: uppercase;" type="button">CHA</button>
+            <button class="btn btn-primary" id="Shipper" style="text-transform: uppercase;" type="button">Shipper </button>
+
+            <button class="btn btn-primary" id="Consignee" style="text-transform: uppercase;" type="button">Consignee </button>
+            <button class="btn btn-primary" id="Customer" style="text-transform: uppercase;" type="button">Customer </button>
+            <button class="btn btn-primary" id="Shipping" style="text-transform: uppercase;" type="button">Shipping Line </button>
+            <button class="btn btn-primary" id="Vendor" style="text-transform: uppercase;" type="button">Vendor </button>
+            @* @Html.Hidden("hdMasterName", new { htmlAttributes = new { @id = "hdMasterName", @Value = "CHA" } })*@
+            <input type="hidden" name="myHiddenInput" id="hdMasterName" value="CHA" />
+
+            @*</span>*@
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-7 col-sm-12">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" id="txtSearch" class="form-control" placeholder="Search for...">
+                    <span class="input-group-append">
+                        <button class="btn btn-primary" id="btnSearch" type="button"><i class="fe fe-search"></i></button>
+                        @* <a onclick="AddBL();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-plus" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Generate BL"></i> </a>*@
+
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-sm-12" id="divAddMaster" style="display:none">
+            <div class="form-group">
+                <div class="input-group">                  
+                   <a onclick="AddMaster();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-plus"  data-placement="bottom" title="Add" data-original-title="Generate BL"></i> </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12">
+                                    <div class="table-responsive">
+                                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="wd-15p">Name</th>
+                                                    <th class="wd-25p">Address</th>
+                                                    <th class="wd-20p">Contact Person</th>
+                                                    <th class="wd-10p ">Contact No.</th>
+                                                    <th class="wd-15p">Email Id</th>
+                                                    <th style="visibility:hidden"></th>
+                                                    <th style="visibility:hidden"></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+
+    $('#CHA').click(function () {
+        document.getElementById("hdMasterName").value = this.id;
+    $("#CHA").addClass('active');
+    $("#Shipper").removeClass('active');
+    $("#Shipping").removeClass('active');
+    $("#Consignee").removeClass('active');
+    $("#Customer").removeClass('active');
+    $("#Vendor").removeClass('active');
+    });
+
+    $('#Shipper').click(function () {
+        document.getElementById("hdMasterName").value = this.id;
+    $("#CHA").removeClass('active');
+    $("#Shipper").addClass('active');
+    $("#Shipping").removeClass('active');
+    $("#Consignee").removeClass('active');
+    $("#Customer").removeClass('active');
+    $("#Vendor").removeClass('active');
+    });
+    $('#Shipping').click(function () {
+        document.getElementById("hdMasterName").value = this.id;
+    $("#CHA").removeClass('active');
+    $("#Shipper").removeClass('active');
+    $("#Shipping").addClass('active');
+    $("#Consignee").removeClass('active');
+    $("#Customer").removeClass('active');
+    $("#Vendor").removeClass('active');
+    });
+    $('#Consignee').click(function () {
+        document.getElementById("hdMasterName").value = this.id;
+    $("#CHA").removeClass('active');
+    $("#Shipper").removeClass('active');
+    $("#Shipping").removeClass('active');
+    $("#Consignee").addClass('active');
+        $("#Customer").removeClass('active');
+        $("#Vendor").removeClass('active');
+    });
+    $('#Customer').click(function () {
+        document.getElementById("hdMasterName").value = this.id;
+    $("#CHA").removeClass('active');
+    $("#Shipper").removeClass('active');
+    $("#Shipping").removeClass('active');
+    $("#Consignee").removeClass('active');
+        $("#Customer").addClass('active');
+        $("#Vendor").removeClass('active');
+    });
+    $('#Vendor').click(function () {
+        document.getElementById("hdMasterName").value = this.id;
+        $("#CHA").removeClass('active');
+        $("#Shipper").removeClass('active');
+        $("#Shipping").removeClass('active');
+        $("#Consignee").removeClass('active');
+        $("#Customer").revomeClass('active');
+        $("#Vendor").addClass('active');
+    });
+</script>
+
+<script>
+    function AddMaster() {
+        var MasterName = $("#hdMasterName").val();
+        if (MasterName == "CHA")
+        {
+            document.location = '@Url.Action("NewCHAProfile", "CHA")';
+        }
+        if (MasterName == "Shipper") {
+            document.location = '@Url.Action("NewShipperProfile", "Shipper")';
+        }
+        if (MasterName == "Consignee") {
+            document.location = '@Url.Action("NewImporterProfile", "Importer")';
+        }
+        if (MasterName == "Customer") {
+            document.location = '@Url.Action("NewCustomerProfile", "Customer")';
+        }
+        if (MasterName == "Shipping") {
+            document.location = '@Url.Action("NewShipLineProfile", "ShipLine")';
+        }
+        if (MasterName == "Vendor") {
+            document.location = '@Url.Action("NewVendorProfile", "Vendor")';
+        }
+    }
+</script>
+<script>
+    $("#btnSearch").click(function () {
+        var SearchText = $("#txtSearch").val();
+        var MasterName = $("#hdMasterName").val();
+     //   alert(SearchText)
+        //  alert(MasterName)
+        if (SearchText == "") {
+         //   alert("Please enter search text!")
+            $("#txtSearch").removeClass("form-control is-valid state-valid")
+            $("#txtSearch").addClass("form-control is-invalid state-invalid")
+            $("#divAddMaster").hide()
+        }
+        else {
+            $("#txtSearch").removeClass("form-control is-invalid state-invalid")
+            $("#txtSearch").addClass("form-control is-valid state-valid")           
+            $("#divAddMaster").show()
+
+            var data = JSON.stringify({
+                'SearchText': SearchText,
+                'Master': MasterName
+
+            });
+            $.ajax({
+                url: "/Master/GlobalSearch",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                //  dataType: "json",
+                success: function (data) {
+                    //  alert(JSON.stringify(data))
+                    $('#example').dataTable({
+                        "destroy": true,
+                        "bLengthChange": false,
+                        "aaData": data,
+                        "columns": [
+                        { "data": "Name" },
+                        { "data": "Address" },
+                        { "data": "ContactPerson" },
+                        { "data": "ContactNo" },
+                        { "data": "Email" },
+                        {
+                            "data": "Id",
+                            "render": function (data, type, row, meta) {
+                                if (type === 'display') {
+
+                                    data = "<button type=\"button\" class=\"btn btn-icon btn-info  disabled \" name=\"removebutton\" style=\"height:35px;\" ><i class=\"fa fa-edit\" style=\"font-size: 16px;\"></i></button>"
+
+                                    // data = '<a  onclick="EditJO(' + data + ')"  href="#" class="btn btn-sm btn-info" title="Edit" ><i class="fa fa-edit"></i></a>';
+                                }
+
+                                return data;
+                            }
+
+
+                        },
+                         {
+                             "data": "Id",
+                             "render": function (data, type, row, meta) {
+                                 if (type === 'display') {
+
+                                     data = "<button type=\"button\" class=\"btn btn-icon btn-primary  disabled \" name=\"removebutton\" style=\"height:35px;\" ><i class=\"fa fa-eye\" style=\"font-size: 16px;\"></i></button>"
+
+                                     // data = '<a  onclick="EditJO(' + data + ')"  href="#" class="btn btn-sm btn-info" title="Edit" ><i class="fa fa-edit"></i></a>';
+                                 }
+
+                                 return data;
+                             }
+
+
+                         }
+                        ]
+                    });
+
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+    });
+</script>

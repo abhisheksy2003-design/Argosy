@@ -1,0 +1,875 @@
+﻿
+@{
+    ViewBag.Title = "ProformaInvoice";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<style>
+    .required {
+        color: red;
+    }
+
+    .hiderow {
+        display: none;
+    }
+</style>
+<script src="~/js/GetTableJsonPagging.js"></script>
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<style>
+    .table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+<div class=" content-area overflow-hidden" id="divawating">
+    <div class="page-header">
+        <h4 class="page-title">Proforma Invoice</h4>
+        <div class="form-group">
+            <label class="form-label"></label>
+            <div class="row gutters-xs">
+                <div class="col">
+                    
+
+                    <button type="button" class="btn btn-icon btn-teal" name="summarylist" title="Summary list" id="summarylist" onclick="ShowSummary();"><i class="fa fa-file-text"></i></button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7 col-lg-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Invoice No</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input id="txtInvoiceNo" placeholder="New" type="text" class="form-control" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Invoice Date</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtInvoicedate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 08:00") })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Wo No</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input id="txtContainerNo" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-xs-4">
+                            <div class="form-group">
+                                <label class="form-label mandatory" style="visibility:hidden">.</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#largeModal5" onclick="OpenWorkDetails();"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                        @*<button class="btn btn-primary" onclick="GetOneDetails();"><i class="fa fa-check-circle" aria-hidden="true"></i></button>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Customer</label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" placeholder="Customer" readonly="readonly" class="form-control" id="ddlCustomer" />
+                                        <input type="hidden" class="form-control" id="ddlCustomerId" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">CHA</label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" placeholder="CHA"readonly="readonly" class="form-control" id="ddlCHA" />
+                                        <input type="hidden" class="form-control" id="ddlCHAId" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Exporter</label>
+
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="text" placeholder="Exporter" readonly="readonly" class="form-control" id="ddlExporter" />
+                                            <input type="hidden" class="form-control" id="ddlExporterId" />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Forwarder</label>
+
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="text" placeholder="Forwarder" readonly="readonly" class="form-control" id="ddlForwarder" />
+                                            <input type="hidden" class="form-control" id="ddlForwarderId" />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">GST Party Name</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input id="txtGSTPartyName" type="text" class="form-control" readonly="readonly" />
+                                            <input type="hidden" class="form-control" id="lblstatecode" />
+                                            <input type="hidden" class="form-control" id="lblpartyid" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1 col-xs-4">
+                                <div class="form-group">
+                                    <label class="form-label mandatory" style="visibility:hidden">.</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <button class="btn btn-primary" data-toggle="modal" data-target="#largeModal" onclick="OpenTariffDetails();"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">GST No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input id="txtGSTNo" type="text" class="form-control" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive scrolling-table-container" style="height:300px;">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover tbl-cart text-nowrap" id="example">
+                                            <thead>
+                                                <tr>
+
+                                                    <th class="wd-15p sorting">Wo No</th>
+                                                    <th class="wd-15p sorting">Wo Type</th>
+                                                    <th class="wd-15p sorting">Wo On</th>
+                                                    <th class="wd-15p sorting">SB No/Container No</th>
+                                                    <th class="wd-15p sorting">Size</th>
+                                                    <th class="wd-15p sorting">Item</th>
+                                                    <th class="wd-15p sorting">Qty</th>
+                                                    <th class="wd-15p sorting">ItemID</th>
+
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <label class="form-label">Tariff</label>
+
+                                @Html.DropDownList("ddlTariff", (IEnumerable<SelectListItem>)ViewBag.TariffSetting, "--Select-- ", new { @class = "form-control", @id = "ddlTariff", name = "ddlTariff", autocomplete = "off" })
+
+
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <label class="form-label">GST</label>
+
+                                @Html.DropDownList("ddlGST", (IEnumerable<SelectListItem>)ViewBag.Setting, "--Select-- ", new { @class = "form-control", @id = "ddlGST", name = "ddlGST", autocomplete = "off" })
+
+
+                            </div>
+                            <div class="col-md-3 col-xs-4">
+                                <div class="form-group">
+                                    <label class="form-label mandatory" style="visibility:hidden">.</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <button class="btn btn-primary" onclick="btnCalculateClick()">Calculate</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5  pull-right side-right" style="margin-top:-780px;">
+        <div class="card">
+
+            <div class="card-body">
+                <div class="row">
+                    <label class="form-label" style="color:blue;margin-top:-20px;">Charges to be collected</label>
+
+
+                </div>
+                <br />
+
+                <div class="row">
+
+
+                    <div class="table-responsive scrolling-table-container" style="margin-left:-5px;margin-right:-5px;height:600px;">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblAddEmptyDetails">
+                                <thead>
+                                    <tr>
+                                        <th class="wd-15p sorting">Item</th>
+                                        <th class="wd-15p sorting">SB No/Container No</th>
+                                        <th class="wd-15p sorting">Size</th>
+                                        <th class="wd-15p sorting">Net Amount</th>
+
+
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                        <div id="divtblWOTOtal" runat="server">
+                            <table forecolor="Black" class="table table-striped table-bordered table-hover" style="border-top:5px solid #7bc144;margin-left:-5px;">
+                                <tr class="table-bordered">
+
+                                    <td style="width:69%;text-align:left"><b>Net Total</b></td>
+ 
+                                    <td style="width:30%;text-align:right"><asp:Label runat="server" ID="lblTotal" style="margin-left:10px;"> </asp:Label>&nbsp;<i class="fa fa-rupee"></i></td>
+                                </tr>
+                             
+                                <tr class="table-bordered">
+
+
+                                    <td style="width:50%;text-align:left"><b>CGST</b></td>
+                                    
+                                    <td style="width:30%;text-align:right"><asp:Label runat="server" ID="lblCGST" style="margin-left:10px;"> </asp:Label>&nbsp;<i class="fa fa-rupee"></i></td>
+                                </tr>
+                                <tr class="table-bordered">
+
+
+                                    <td style="width:50%;text-align:left"><b>SGST</b></td>
+                                     
+                                    <td style="width:30%;text-align:right"><asp:Label runat="server" ID="lblSGST" style="margin-left:10px;"> </asp:Label>&nbsp;<i class="fa fa-rupee"></i></td>
+                                </tr>
+                                <tr class="table-bordered">
+
+
+                                    <td style="width:50%;text-align:left"><b>IGST</b></td>
+                                     
+                                    <td style="width:30%;text-align:right"><asp:Label runat="server" ID="lblIGST" style="margin-left:10px;"> </asp:Label>&nbsp;<i class="fa fa-rupee"></i></td>
+                                </tr>
+                                <tr class="table-bordered">
+
+                                    <td style="width:69%;text-align:left"><b>Grand Total</b></td>
+
+                                    
+                                    <td style="width:30%;text-align:right"><asp:Label runat="server" ID="lblAllTotal" style="margin-left:10px;"> </asp:Label>&nbsp;<i class="fa fa-rupee"></i></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-success float-right" id="Save" onclick="Save()" title="Save"><i class="fa fa-save"></i></button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="largeModal" class="modal fade">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content ">
+            <div class=" content-area">
+                <div class="modal-header pd-x-20">
+                    <h4 class="page-title">GST Party Search</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="card-body hero-feature">
+                        <div class="row">
+
+                            <div class="col-lg-3 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Search</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TXtSearchOn", null, new { @class = "form-control", @id = "TXtSearchOn", name = "TXtSearchOn", autocomplete = "off", placeholder = "Search By Party Name or GST No" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group" style="padding-top:26px;">
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <button class="btn btn-primary" id="btnSearch" type="button" onclick="GetDetailsForTariffSearch()"><i class="fe fe-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <div class="table-responsive push scrolling-table-container">
+                                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="example3" style="width:100%">
+                                        <thead style="background-color: #8969eb;text-align: center;font-family: monospace;">
+                                            <tr></tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- modal-dialog -->
+</div>
+
+<div class=" content-area" id="divsummary" style="display:none">
+    <div class="page-header">
+        <h4 class="page-title">
+            Proforma Summary
+        </h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="Back();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Add Work Order"></i> </a>
+            </li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+
+                        <div class="row">
+
+                            <div class="col-md-2 col-lg-2">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">From</label>
+                                    @Html.TextBox("FromDate", null, new { @id = "FromDate", @class = "form-control form_date2", @Value = DateTime.Now.AddDays(-1).ToString("dd MMM yyyy") })
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-lg-2">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">To</label>
+                                    @Html.TextBox("ToDate", null, new { @id = "ToDate", @class = "form-control form_date2", @Value = DateTime.Now.ToString("dd MMM yyyy") })
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+
+                                            <button class="btn btn-primary" id="TripSearch" type="button" onclick="Showdetails()"><i class="fe fe-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                        <thead>
+
+                                            <tr></tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="largeModal5" class="modal fade">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content ">
+            <div class=" content-area">
+                <div class="modal-header pd-x-20">
+                    <h4 class="page-title">Work Order Search</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="card-body hero-feature">
+                        <div class="row">
+
+                            <div class="col-lg-3 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Search</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TXtSearchOn1", null, new { @class = "form-control", @id = "TXtSearchOn1", name = "TXtSearchOn1", autocomplete = "off", placeholder = "Search By Party Name or GST No" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group" style="padding-top:26px;">
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <button class="btn btn-primary" id="btnSearch" type="button" onclick="Getw()"><i class="fe fe-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <div class="table-responsive push scrolling-table-container">
+                                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="example5" style="width:100%">
+                                        <thead style="background-color: #8969eb;text-align: center;font-family: monospace;">
+                                            <tr></tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- modal-dialog -->
+</div>
+<script>
+    function ShowSummary() {
+        $("#divawating").hide();
+        $("#divsummary").show();
+    }
+    function Back() {
+        $("#divawating").show();
+        $("#divsummary").hide();
+    }
+    function Showdetails() {
+        debugger;
+        var FromDate = document.getElementById('FromDate').value;
+        var ToDate = document.getElementById('ToDate').value;
+
+        try {
+            var data1 = { 'FromDate': FromDate, 'ToDate': ToDate };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/BookingEntry/invoceSummary",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    RepTableDataJsonwopaging($("#example2"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+
+    function OpenWorkDetails() {
+        $("#largeModal5").modal('show')
+        Getw();
+    }
+    function Getw() {
+        $("#global-loader").fadeOut("slow");
+
+        var Search = $("#TXtSearchOn1").val();
+
+        var data1 = { 'Search': Search };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GetDetailsWorkorder",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example5").empty();
+                RepTableDataJsonwopaging($("#example5"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+    function OpenTariffDetails() {
+
+        $("#largeModal1").modal('show')
+        GetDetailsForTariffSearch
+    }
+    function GetDetailsForTariffSearch() {
+        $("#global-loader").fadeOut("slow");
+
+        var Search = $("#TXtSearchOn").val();
+
+        var data1 = { 'Search': Search };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GetDetailsForSearch",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example3").empty();
+                RepTableDataJsonwopaging($("#example3"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+    function GetGSTName(GSTName, GSTIn_uniqID, state_Code, GSTID) {
+        $("#txtGSTPartyName").val(GSTName);
+        $("#txtGSTNo").val(GSTIn_uniqID);
+        $("#lblstatecode").val(state_Code);
+        $("#lblpartyid").val(GSTID);
+        $("#largeModal").modal('hide');
+    }
+    function GetWoNo(WoNo) {
+        $("#txtContainerNo").val(WoNo);
+      
+        $("#largeModal5").modal('hide');
+        GetOneDetails();
+    }
+
+
+
+    function GetOneDetails() {
+        $("#global-loader").fadeOut("slow");
+
+        var Search = $("#txtContainerNo").val();
+
+        var data1 = { 'Search': Search };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GetWNoSearch",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data == "0" || data == "[]" || data == "") {
+                    alert('No record found.');
+                    return;
+                }
+                $("#txtGSTPartyName").val(data[0].GSTName);
+                $("#lblpartyid").val(data[0].GSTID);
+                $("#txtGSTNo").val(data[0].GSTIn_uniqID);
+                $("#ddlTariff").val(data[0].TariffID);
+                $("#ddlGST").val('10');
+
+                $("#ddlCustomer").val(data[0].CustomerName);
+                $("#ddlCHA").val(data[0].CHAName);
+                $("#ddlExporter").val(data[0].ShipperName);
+                $("#ddlForwarder").val(data[0].ForwarderName);
+
+                $("#ddlCustomerId").val(data[0].CustomerID);
+                $("#ddlCHAId").val(data[0].CHAID);
+                $("#ddlExporterId").val(data[0].ExporterId);
+                $("#ddlForwarderId").val(data[0].ForwarderId);
+                $("#lblstatecode").val(data[0].statecode);
+                
+                $('#example').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+                    //"bFilter": false,
+                    "paging": false,
+                    "order": false,
+                    "aaData": data,
+                    "columns": [
+                       
+                        { "data": "WoNo" },
+                        { "data": "WoType" },
+                        { "data": "WoOn" },
+                        { "data": "SB_NoContainerNo" },
+                        { "data": "Size" },
+                        { "data": "Item" },
+                        { "data": "Qty" },
+                        { "data": "ItemID" },
+                       
+                    ]
+                });
+                btnCalculateClick();
+                
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+</script>
+
+
+<script>
+    function btnCalculateClick() {
+        debugger;
+        var Tariff = $("#ddlTariff").val();  
+        var Invoicedate = $("#txtInvoicedate").val();
+   
+        
+        var statecode = $("#lblstatecode").val();
+        var lblTaxID = $("#ddlGST").val();
+
+        
+
+            var tablearrayCont = [];
+        var table = document.getElementById("example");
+            var row;
+            for (var i = 1; i < table.rows.length; i++) {
+                row = table.rows[i]; 
+                WoNo = row.cells[0].innerText;
+                ContainerNo = row.cells[3].innerText;
+                Size = row.cells[4].innerText;
+                Qty = row.cells[6].innerText;
+                ItemID = row.cells[7].innerText; 
+                        tablearrayCont.push({
+                            'WoNo': WoNo, 'ContainerNo': ContainerNo, 'Size': Size, 'Qty': Qty, 'ItemID': ItemID 
+                        });
+                
+                  
+            }
+        var data1 = {
+            'GetContainerDetails': tablearrayCont, 'Tariff': Tariff, 'Invoicedate': Invoicedate, 'statecode': statecode, 'lblTaxID': lblTaxID
+
+        };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            url: "/BookingEntry/CalculateClick",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                $('#tblAddEmptyDetails').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+                    //"bFilter": false,
+                    "paging": false,
+                    "order": false,
+                    "aaData": data,
+                    "columns": [
+                        { "data": "AccountName" },
+                        { "data": "ContainerNo" },
+                        { "data": "Size" },
+                        { "data": "NetAmount" },
+                    ]
+                });
+                FillData(data[0].Addedby);
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+  
+    }
+    function FillData(Addedby) {
+         
+
+        var data1 = { 'Search': Addedby };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            type: 'POST',
+            url: '/BookingEntry/ProformaData',
+            data: data,
+            // data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (Data) {
+
+                $("#lblTotal").text(Data[0].TotalAmount);
+                $("#lblCGST").text(Data[0].SGST);
+                $("#lblSGST").text(Data[0].CGST);
+                $("#lblIGST").text(Data[0].IGST);
+                $("#lblAllTotal").text(Data[0].GrandTotal);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+    function Save() {
+    
+        var Invoicedate = $("#txtInvoicedate").val();
+        var partyid = $("#lblpartyid").val();
+        var lblTaxID = $("#ddlGST").val();
+        var lblTotal = $("#lblTotal").text();
+        var lblCGST = $("#lblCGST").text();
+        var lblSGST = $("#lblSGST").text();
+        var lblIGST = $("#lblIGST").text();
+        var lblAllTotal = $("#lblAllTotal").text();
+
+        var CustomerId = $("#ddlCustomerId").val();
+        var CHAId = $("#ddlCHAId").val();
+        var ExporterId = $("#ddlExporterId").val();
+        var ForwarderId = $("#ddlForwarderId").val();
+        
+        var data1 = {
+            'Invoicedate': Invoicedate, 'partyid': partyid, 'lblTaxID': lblTaxID, 'lblTotal': lblTotal, 'lblCGST': lblCGST, 'lblSGST': lblSGST, 'lblIGST': lblIGST,
+            'lblAllTotal': lblAllTotal, 'CustomerId': CustomerId, 'CHAId': CHAId, 'ExporterId': ExporterId, 'ForwarderId': ForwarderId
+        };
+        var data = JSON.stringify(data1);
+                  $.ajax({
+                      url: "/BookingEntry/SaveInvoice",
+                            data: data,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                              success: function (data) {
+                                  //alert(data);
+                                 
+                                  alert('record saved');
+
+                                  document.location = '@Url.Action("ProformaInvoice", "BookingEntry")';
+
+                            },
+                            error: function (errormessage) {
+                                alert(errormessage.responseText);
+                            }
+                        });
+    }
+    function PrintInvoice(InvoiceNo) {
+
+
+        var data1 = { 'InvoiceNo': InvoiceNo };
+        data = JSON.stringify(data1);
+
+        $.ajax({
+            url: '/BookingEntry/PerformaPrint',
+            type: 'Post',
+            data: data,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+
+                var myWindow = window.open("", "MsgWindow1", 'width=' + screen.availWidth + ',height=' + screen.availHeight + ',resizable=no');
+                myWindow.close();
+                var myWindow = window.open("", "MsgWindow1", 'width=' + screen.availWidth + ',height=' + screen.availHeight + ',resizable=no');
+                myWindow.document.write(response);
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        });
+    };
+    function SumbitInvoice(InvoiceNo, WorkYear, AssessNo) {
+        $("#global-loader").fadeOut("slow");
+
+        let text = WorkYear;
+        let result = text.trim();
+
+        var data1 = { 'InvoiceNo': InvoiceNo, 'WorkYear': result, 'AssessNo': AssessNo};
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/FinalSaveInvoice",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                if (data != 0) {
+                    alert('record saved');
+                    Showdetails();
+                }
+               
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+</script>

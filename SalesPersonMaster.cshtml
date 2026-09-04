@@ -1,0 +1,246 @@
+﻿
+@{
+    ViewBag.Title = "SalesPersonMaster";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+
+@*@{
+    ViewBag.Title = "SalesPersonMaster";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}*@
+<div class=" content-area" id="add">
+    <div class="page-header" style="margin-top:-13px;">
+        <h4>Marketing Person Entry</h4>
+        <div class="form-group">
+            <label class="form-label"></label>
+            <div class="row gutters-xs">
+                <div class="col">
+                    <button type="button" class="btn btn-added"  id="summarylist" onclick="ViewSummary();">
+                       Summary
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body" style="margin-top:-25px;">
+        <div class="card col-sm-12 col-lg-12">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">New </label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input ID="SalesPerson_ID1" type="text" placeholder="New" readonly="readonly" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="form-group required">
+                            <label class="form-label mandatory">Marketing Person Code</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input id="txtSPCode" placeholder="Enter Marketing Person Code" type="text" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="form-group required">
+                            <label class="form-label mandatory">Marketing Person Name</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input id="txtSPName" placeholder="Enter Marketing Person Name" type="text" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Email</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                    <input id="txtEmailIDBank" placeholder="Enter Email ID" type="email" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="row m-2">
+                        <div class="col-lg-12 col-xs-12">
+                            <div class="form-group">
+                                <label class="custom-switch">
+                                    <input type="checkbox" name="custom-switch-checkbox" id="chkIsActivee" class="custom-switch-input">
+                                    <span class="custom-switch-indicator"></span>
+                                    <span class="custom-switch-description">Is Active?</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                                 <div class="col d-flex gap-2">
+                                    <button class="btn btn-save px-4" id="btnSaveDriver" onclick="Save1();">Save</button>
+                                    <button class="btn btn-cancel px-4" type="button" id="clear" onclick="window.location.reload();">
+                                        Clear
+                                    </button>
+
+                                </div>
+                       
+                </div>
+            </div>
+            
+                     
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="summaryList"></div>
+            <script>
+        $(document).ready(function () {
+            var SalesPerson_ID1 = @ViewBag.SalesPerson_ID1;
+            var PersonCode = '@ViewBag.SalesPerson_Code';
+            var PersonName = '@ViewBag.SalesPerson_Name';
+            var EmailID = '@ViewBag.EmailID';
+
+            if (@ViewBag.IsEdit == 1) {
+
+                $("#txtSPCode").val(PersonCode);
+                $("#txtSPName").val(PersonName);
+                $("#txtEmailIDBank").val(EmailID);
+                $("#SalesPerson_ID1").val(SalesPerson_ID1);
+
+                $('#txtSPCode').prop('readonly', true);
+                $('#txtSPName').prop('readonly', true);
+
+            }
+            //if (chkIsActive == 0) {
+            //    document.getElementById("chkIsActive").checked = false;
+            //} else {
+            //    document.getElementById("chkIsActive").checked = true;
+            //}
+
+        //    console.log(PersonCode);
+        //    console.log(PersonName);
+        //    console.log(EmailID);
+
+        //    if (EmailID != "" || EmailID != null){
+        //        $("#txtEmailIDBank").val(EmailID);
+
+        //}
+        //    if (PersonCode != "" || PersonCode != null) {
+        //        $("#txtSPCode").val(PersonCode);
+        //        $('#txtSPCode').prop('readonly', true);
+        //    } else {
+        //        $('#txtSPCode').prop('readonly', false);
+        //    }
+        //    if (PersonName != "" || PersonName != null) {
+        //        $("#txtSPName").val(PersonName);
+        //        $('#txtSPName').prop('readonly', true);
+        //    } else {
+        //        $('#txtSPName').prop('readonly', false);
+        //    }
+        })
+
+    function Save1() {
+        debugger
+        var SalesPerson_ID1 = $("#SalesPerson_ID1").val();
+        if (SalesPerson_ID1 == 'NEW') {
+            SalesPerson_ID1 = 0;
+        }
+        //var SPID = document.getElementById('txtSPCode').value;
+        var SPCode = document.getElementById('txtSPCode').value;
+        var SPName = document.getElementById('txtSPName').value;
+       var Email = document.getElementById('txtEmailIDBank').value;
+        var chkIsActive = document.getElementById('chkIsActivee').value;
+
+        if (SPCode == "") {
+            document.getElementById("txtSPCode").style.borderColor = "red";
+            alert('Please Enter Sales Person Code...')
+            event.preventDefault();
+            return;
+        }
+
+        if (SPName == "") {
+            document.getElementById("txtSPName").style.borderColor = "red";
+            alert('Please Enter Sales Person Name...')
+            event.preventDefault();
+            return;
+        }
+
+
+        if (Email == "") {
+            document.getElementById("txtEmailIDBank").style.borderColor = "red";
+            alert('Please Enter Email...')
+            event.preventDefault();
+            return;
+        }
+        if ($('#chkIsActivee').is(":checked")) {
+            chkIsActive = true;
+        }
+        else {
+            chkIsActive = false;
+        }
+        var elements = {};
+        elements.SalesPerson_ID1 = SalesPerson_ID1;
+        elements.SalesPerson_Code = SPCode;
+        elements.SalesPerson_Name = SPName;
+        elements.EmailID = Email;
+        elements.IsActive = chkIsActive;
+
+
+        var data = { 'elements': elements };
+        data = JSON.stringify(data);
+        $.ajax({
+            url: "/Master/SaveSalesPersonMaster",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+            alert('Record saved successfully')
+            window.location.href = '@Url.Action("SalesPersonMaster", "Master")';
+            },
+            error: function (errormessage) {
+            alert(errormessage.responseText);
+            }
+        });
+  }
+
+    function ViewSummary() {
+
+
+        $.ajax({
+            url: "/Master/SalesPersonSummary",
+            type: "POST",
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            success: function (response) {
+                $("#add").hide();
+                $('#summaryList').html(response);
+
+                $('#summaryList').show();
+            }
+        });
+
+
+
+        }
+        //function EditSalesPersonDetails(){
+        //}
+            </script>
+
+
+

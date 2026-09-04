@@ -1,0 +1,485 @@
+﻿
+@{
+    ViewBag.Title = "ChangeBillingParty";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+
+<script src="~/js/GetTableJsonPagging.js"></script>
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@* script for the sweet alert *@
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<div class="main-content">
+   
+    <div class="page-header" >
+        <h4 class="page-title">
+            Amendment Change Billing Party
+        </h4>
+
+        @*<div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="BackToWorkOrder();" id="addlocallistbtn" data-modal="modal-13">
+                Add
+            </button>
+        </div>*@
+    </div>
+
+
+    <div class="card">
+        <div class="card-header">
+            <h4><i class="icon-reorder"></i>Change Billing Party</h4>
+        </div>
+        <div class="card-body p-4">
+
+            <div class="form-group">
+
+                <br />
+                <div class="row">
+                    <div class="col-lg-3 col-sm-12">
+
+                        <label class="form-label mandatory">Invoice No</label>
+
+                        @Html.TextBox("txtInvoiceNo", null, new { @class = "form-control", @id = "txtInvoiceNo", @name = "txtInvoiceNo", autocomplete = "off", placeholder = "New" })
+
+
+                    </div>
+                    <div class="col-md-2" style="padding-top:25px;">
+
+                        <button class="btn btn-primary raised " onclick="SearchInvoice();"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+                    </div>
+
+
+
+                </div>
+                <br />
+                <h4><u>Invoice Details</u> </h4>
+                <div class="row">
+                    <div class="col-lg-3 col-sm-12">
+
+                        <label class="form-label mandatory">Invoice No</label>
+
+                        @Html.TextBox("txtOldInvoiceNo", null, new { @class = "form-control", @id = "txtOldInvoiceNo", @name = "txtOldInvoiceNo", autocomplete = "off", @readonly = true, placeholder = "Invoice No" })
+
+
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <label class="form-label mandatory">Invoice Date</label>
+
+                        @Html.TextBox("TxtInvoiceDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 08:00"), @readonly = true })
+
+                    </div>
+
+                    <div class="col-lg-3 col-sm-12">
+
+                        <label class="form-label mandatory">Valid Upto Date</label>
+
+                        @Html.TextBox("TxtvalidDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 08:00"), @readonly = true })
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+
+                        <label class="form-label mandatory">Billing Party</label>
+
+                        @Html.TextBox("TxtOldBillingParty", null, new { @class = "form-control", @id = "TxtOldBillingParty", @name = "TxtOldBillingParty", autocomplete = "off", @readonly = true, placeholder = "Billing Party" })
+
+
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+
+                        <label class="form-label mandatory">Customer</label>
+
+                        @Html.TextBox("TxtCustomer", null, new { @class = "form-control", @id = "TxtCustomer", @name = "TxtCustomer", autocomplete = "off", @readonly = true, placeholder = "Customer" })
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group label-floating">
+                            <label class="form-label mandatory">Net Amount</label>
+                            @Html.TextBox("txtNetAmount", null, new { @class = "form-control", @id = "txtNetAmount", name = "txtNetAmount", autocomplete = "off", @readonly = true })
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <div class="form-group label-floating">
+                            <label class="form-label mandatory">SGST</label>
+                            @Html.TextBox("txtSGST", null, new { @class = "form-control", @id = "txtSGST", name = "txtSGST", autocomplete = "off", @readonly = true })
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <div class="form-group label-floating">
+                            <label class="form-label mandatory">CGST</label>
+                            @Html.TextBox("txtCGST", null, new { @class = "form-control", @id = "txtCGST", name = "txtCGST", autocomplete = "off", @readonly = true })
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <div class="form-group label-floating">
+                            <label class="form-label mandatory">IGST</label>
+                            @Html.TextBox("txtSGST", null, new { @class = "form-control", @id = "txtIGST", name = "txtIGST", autocomplete = "off", @readonly = true })
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group label-floating">
+                            <label class="form-label mandatory">Grand Total</label>
+                            @Html.TextBox("txtGrandTotal", null, new { @class = "form-control", @id = "txtGrandTotal", name = "txtGrandTotal", autocomplete = "off", @readonly = true })
+                        </div>
+                    </div>
+                </div>
+
+                <h4><u>New Billing Party Details </u></h4>
+                <div class="row">
+
+
+                    <div class="col-lg-3 col-sm-12">
+
+                        <label class="form-label mandatory">New GST Number</label>
+
+                        <input id="txtGSTNo" type="text" class="form-control" readonly="readonly" />
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12">
+
+                        <label class="form-label mandatory">New Billed to Party Name</label>
+
+                        <input id="txtGSTName" type="text" class="form-control" readonly="readonly" />
+                        <input type="hidden" class="form-control" id="txtstatecode" />
+                        <input type="hidden" class="form-control" id="txtGSTid" />
+
+                    </div>
+
+                    <div class="col-md-1 col-xs-4">
+
+                        <br />
+
+                        @*<button class="btn btn-primary " data-toggle="modal" onclick="OpenDetails();"><i class="fa fa-search" aria-hidden="true"></i></button>*@
+                        <a data-toggle="modal" href="#TestModal" id="gstSearch" class="btn btn-primary raised" style="margin-top:10px; padding-top:10px" onclick="LoadGSTSearch()"><i class="fa fa-search" aria-hidden="true"></i></a>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group label-floating">
+                        <label class="form-label mandatory">Remarks</label>
+                        @Html.TextBox("TxtRemakrs", null, new { @class = "form-control", @id = "TxtRemakrs", name = "TxtRemakrs", autocomplete = "off" })
+                    </div>
+                </div>
+
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="d-flex gap-2">
+
+                    <button type="button" class="btn btn-save px-4" id="btndriverholdpayment" onclick="Save();">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-cancel px-4" onclick="Clear()">
+                        Clear
+                    </button>
+                    @* <button class="btn btn-primary" id="btndriverholdpayment" onclick="Save();">Save</button>*@
+                    <input value="@ViewBag.TINUMBER" type="hidden" id="TxtTinNumber" />
+                    <input type="hidden" id="TxtSgstGet" />
+                    <input type="hidden" id="CGSTGet" />
+                    <input type="hidden" id="IGSTGet" />
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<div class="modal fade" id="TestModal" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content" id='myModalContent'>
+        </div>
+    </div>
+</div>
+<div id="largeModal2" class="modal fade">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content ">
+            <div class=" content-area">
+                <div class="modal-header pd-x-20">
+                    <h4 class="page-title">Billed to Search </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="card-body hero-feature">
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Search</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TXtSearchOn", null, new { @class = "form-control", @id = "TXtSearchOn", name = "TXtSearchOn", autocomplete = "off", placeholder = "Search By Party Name or GST No" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <button class="btn btn-primary" id="btnSearch" type="button" onclick="GetDetailsSearch()"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <div class="table-responsive push scrolling-table-container">
+                                    <table class="table table-bordered table-hover display nowrap" id="example10" style="width:100%">
+                                        <thead style="background-color: #8969eb;text-align: center;font-family: monospace;">
+                                            <tr></tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- modal-dialog -->
+</div>
+
+
+<script>
+
+    $(window).on("load", function (e) {
+        $("#loader").fadeOut("slow");
+    })
+    function LoadGSTSearch() {
+
+        $.ajax({
+            type: "POST",
+            url: "/Finance/ProformaGSTSearch",
+            //data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                //alert(response);
+                $('#TestModal').modal('show');
+                $('#myModalContent').html(response);
+            },
+            failure: function (response) {
+                alert(response);
+                alert(response.responseText);
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        })
+    }
+
+
+    function GetGSTDetails() {
+        $("#loader").fadeIn("slow");
+
+        var TaxID = $("#TxtTaxcode").val();
+        var data1 = { 'TaxID': TaxID };
+        var data = JSON.stringify(data1);
+
+        if (TaxID !== "") {
+            $.ajax({
+                type: "POST",
+                url: "/Finance/GetGSTDetailsForCalculate",
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $("#TxtSgstGet").val(data.SGST);
+                    $("#CGSTGet").val(data.CGST);
+                    $("#IGSTGet").val(data.IGST);
+                    $("#loader").fadeOut("slow");
+
+                },
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                    $("#loader").fadeOut("slow");
+                }
+            })
+        }
+    }
+
+
+
+
+
+
+
+    function OpenDetails() {
+        debugger;
+        $("#largeModal2").modal('show');
+        //$("#largeModal").modal('hide');
+
+        GetDetailsSearch();
+    }
+    function GetDetailsSearch() {
+        $("#global-loader").fadeOut("slow");
+
+        var Search = $("#TXtSearchOn").val();
+
+        var data1 = { 'Search': Search };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/Finance/GetDetailsForSearch",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#largeModal").modal('hide');
+                $("#example10").empty();
+                RepTableDataJsonwopaging($("#example10"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+    function GetGSTName(GSTName, GSTIn_uniqID, state_Code, GSTID, Address) {
+        $("#txtGSTName").val(GSTName);
+        $("#txtGSTNo").val(GSTIn_uniqID);
+        $("#lblstatecode").val(state_Code);
+        $("#lblpartyid").val(GSTID);
+        $("#txtGstAdd").val(Address);
+        $("#largeModal").modal('hide');
+        $("#largeModal2").modal('hide');
+
+    alert(GSTID);
+    }
+
+    function Clear() {
+        location.reload();
+    }
+
+    function SearchInvoice()
+    {
+
+    var InvoiceNo = $("#txtInvoiceNo").val();
+
+     var data1 = {
+                'InvoiceNo': InvoiceNo
+            };
+
+
+            var data = JSON.stringify(data1);
+
+            $.ajax({
+                type: 'POST',
+                url: '/Finance/GetInvoiceDetails',
+                data: data,
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (jsonResult) {
+
+                    jsonResult = JSON.parse(jsonResult);
+
+                    $("#txtOldInvoiceNo").val(jsonResult[0].InvoiceNo);
+                    $("#TxtInvoiceDate").val(jsonResult[0].InvoiceNo);
+                    $("#TxtvalidDate").val(jsonResult[0].InvoiceNo);
+                    $("#TxtOldBillingParty").val(jsonResult[0].GSTName);
+                    $("#TxtCustomer").val(jsonResult[0].Customer);
+                    $("#txtNetAmount").val(jsonResult[0].Netamount);
+                    $("#txtSGST").val(jsonResult[0].SGST);
+                    $("#txtCGST").val(jsonResult[0].CGST);
+                    $("#txtIGST").val(jsonResult[0].IGST);
+                    $("#txtGrandTotal").val(jsonResult[0].GrandTotal);
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                    $("#global-loader").fadeOut("slow");
+                }
+            });
+
+    }
+
+     function Save() {
+
+         var GSTNO =  $("#txtGSTNo").val();
+                            var InvoiceNo = $("#txtOldInvoiceNo").val();
+                            var GSTID = $("#txtGSTid").val();
+
+
+                          if(GSTNO=="")
+                          {
+                           alert('Please Select New Billing Party, Can not Proceed')
+                           return false;
+                          }
+                         if(InvoiceNo=="")
+                          {
+                           alert('Please Select the valid Invoice')
+                           return false;
+                          }
+
+
+
+     Swal.fire({
+                        title: "Are you sure?",
+                        text: "Do you want change the Billing Party for Invoice No " + InvoiceNo,
+                        icon: "warning",
+                        buttons: [
+                            'No, Cancel!',
+                            'Yes, Approve!'
+                        ],
+                        dangerMode: true,
+                    }).then(function (isConfirm) {
+                        if (isConfirm) {
+
+
+                            var data1 = {
+                                'InvoiceNo': InvoiceNo, 'GSTID': GSTID
+                            };
+                            var data = JSON.stringify(data1);
+
+                            return $.ajax({
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                type: 'POST',
+                                url: "/Finance/ChangeBillingPartyDetails",
+                                data: data,
+                                success: function (result) {
+                                    alert('Record saved successfully.')
+                                    document.location = '@Url.Action("ChangeBillingParty", "Finance")';
+                                },
+                                error: function () {
+                                    alert("Error!");
+                                }
+                            });
+
+                        } else {
+                           Swal.fire("Cancelled", "You have Not Cancelled", "error");
+                        }
+                    })
+
+
+    }
+
+</script>
+
+

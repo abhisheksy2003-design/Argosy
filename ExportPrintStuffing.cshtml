@@ -1,0 +1,208 @@
+﻿@{
+    Layout = null;
+    var details = ViewBag.Details as System.Data.DataTable;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link href="~/css/printstyle.css" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 6px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .no-border td, .no-border th {
+            border: none !important;
+        }
+
+        .main-container {
+            width: 1000px;
+            margin: auto;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0px 0px 8px #ccc;
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .section-title {
+            background: #fcbd021f;
+            padding: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid #000;
+            text-align: left;
+        }
+
+        .header-table td, .header-table th {
+            border: none !important;
+            padding: 2px 5px;
+        }
+
+        .footer-table td, .footer-table th {
+            border: none !important;
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .sub-footer-table td, .sub-footer-table th {
+            border: none !important;
+            padding: 5px;
+            text-align: center;
+        }
+
+        hr {
+            border: 2px solid orange;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="main-container">
+
+        <!-- Header -->
+        <table class="header-table no-border">
+            <tr>
+                <td style="width:25%">
+                    <img src="~/assets/images/companylogo.jpg" height="90" />
+                </td>
+                <td style="text-align:center; font-family:'Segoe UI'; width:75%">
+                    <div style="font-size:20px; font-weight:bold">@ViewBag.CompanyName</div>
+                    <div style="font-size:12px">@ViewBag.CompanyAddress</div>
+                </td>
+            </tr>
+        </table>
+
+        <hr />
+
+        <!-- Report Title -->
+        <div class="title">EXPORT STUFFING REPORT</div>
+        <br />
+
+        <!-- Header Information -->
+        <table class="table-bordered">
+            <tr>
+                <th style="width:50%; text-align:left;">
+                    <p><b>Stuffing No:</b> @ViewBag.StuffingNo</p>
+                    @*<p><b>SB No:</b> @ViewBag.SBNo</p>*@
+                    <p><b>Stuffing Date:</b> @ViewBag.StuffingDate</p>
+                    <p><b>Container No:</b> @ViewBag.ContainerNo</p>
+                    <p><b>Cargo Type:</b> @ViewBag.CargoType</p>
+                </th>
+
+                <th style="width:50%; text-align:left;">
+                    <p><b>Acc.Holder :</b> @ViewBag.Acc_Holder</p>
+                    <p><b>CHA :</b> @ViewBag.CHA</p>
+                    <p><b>Consignee :</b> @ViewBag.Exporter</p>
+                    <p><b>Shipping Line:</b> @ViewBag.Line</p>
+                </th>
+            </tr>
+        </table>
+
+        <br />
+
+        <!-- Details Title -->
+        <div class="section-title">Stuffing Details</div>
+
+        <!-- Details Table -->
+        <table class="table-bordered">
+            <thead>
+                <tr style="background:#fcbd021f;">
+                    <th>Container No</th>
+                    <th>Size</th>
+                    <th>SB No</th>
+                    <th>SB Qty</th>
+                    <th>Stuffed Qty</th>
+                    <th>Weight</th>
+                    <th>Stuffed Date</th>
+                    <th>Cargo Type</th>
+                    <th>Custom Seal</th>
+                    <th>Agent Seal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (details != null)
+                {
+                    foreach (System.Data.DataRow dr in details.Rows)
+                    {
+                        <tr>
+                            <td>@dr["ContainerNo"]</td>
+                            <td>@dr["Size"]</td>
+                            <td>@dr["SBNo"]</td>
+                            <td>@dr["SBQty"]</td>
+                            <td>@dr["StuffedQty"]</td>
+                            <td>@dr["StuffedWeight"]</td>
+                            <td>@dr["StuffedDate"]</td>
+                            <td>@dr["CargoType"]</td>
+                            <td>@dr["CustomSeal"]</td>
+                            <td>@dr["AgentSeal"]</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <br />
+
+        <!-- Footer Note -->
+        <table class="table-bordered">
+            <tr>
+                <th>
+                    <p><b>Note:</b> This is a system-generated stuffing print. Signature is not required.</p>
+                </th>
+            </tr>
+        </table>
+
+        <br />
+
+        <!-- Footer Signatures -->
+        <table class="sub-footer-table" style="width:100%; border-collapse:collapse;">
+            <tr style="height:30px;">
+                <td style="width:33%;"></td>
+                <td style="width:33%;"></td>
+                <td style="width:34%;"></td>
+            </tr>
+            <tr>
+                <td>
+                    Representative / Survey Shipping Agent /<br />CHA
+                </td>
+                <td>
+                    CFS Executive Name
+                </td>
+                <td>
+                    For @ViewBag.con_Name<br /> (Suptt of Customs)
+                </td>
+            </tr>
+        </table>
+
+    </section>
+</body>
+</html>

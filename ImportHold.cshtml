@@ -1,0 +1,490 @@
+﻿
+@{
+    ViewBag.Title = "EmptyContainerOutPass";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+@{
+    var isOnHold='r';
+}
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<link href="~/assets1/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+
+    .hiderow {
+        display: none;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<script src="~/js/GetTableJsonPagging.js"></script>
+
+
+<div class="main-content" id="divEntryfrom">
+
+ 
+
+
+    <div class="page-header" style="margin-top:-12px;">
+        <h4 class="page-title">
+            Import Hold Status
+        </h4>
+
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="ItemSummaryList();" id="addlocallistbtn" data-modal="modal-13">
+                Summary
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+
+            <h4><i class="icon-reorder"></i>Hold Entry</h4>
+
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-lg-2 col-sm-3">
+                    <div class="form-group label-floating">
+                        <label class="form-label">Search On</label>
+                        @Html.DropDownList("ddlSearchOn", new List<SelectListItem>
+                        {
+                            new SelectListItem { Text = "Select", Value = "Select"},
+                          new SelectListItem { Text = "IGM-Item No", Value = "IGM-Item No"},
+                        new SelectListItem { Text = "Container", Value = "Container"},
+
+                        new SelectListItem { Text = "BL Number", Value = "BLNumber"},
+                          }, new { @class = "form-select", autocomplete = "off", @id = "ddlSearchOn", onchange = "SearchOn()", onblur = "SearchOn()" })
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-12" style="display:none" id="divIGMNO">
+                    <div class="form-group">
+                        <label class="form-label mandatory">IGM No</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <input ID="txtIGMNo" type="text" placeholder="IGM No" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-12" style="display:none" id="divitemNo">
+                    <div class="form-group">
+                        <label class="form-label mandatory">Item No</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <input ID="txtItemNo" type="text" placeholder="Item No" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-12" style="display:none" id="divContainer">
+                    <div class="form-group">
+                        <label class="form-label mandatory" id="lblSingle">Label</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <input id="txtContainerNo" type="text" placeholder="" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden"> '</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+
+                                <button class="btn btn-filters" id="TripSearch" type="button" onclick="ShowConIgm()"> <img src="~/assets/images/icons/search-whites.svg" alt="img"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+
+                        <label class="control-label"> Hold Reason<span class="required">*</span></label>
+
+                        @Html.DropDownList("HoldType", (IEnumerable<SelectListItem>)ViewBag.HoldType, "--Select--", new { @class = "form-control", @id = "HoldType", @onchange = "HoldTypeChange()" })
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="control-label">Remark</label>
+                        <input type="text" id="txtRemark" name="regular" class="form-control">
+                    </div>
+
+
+
+                </div>
+                <div class="row">
+                    <br />
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="table-responsive push scrolling-table-container">
+                            <table id="tblHoldDetails" class="table table-bordered table-hover display nowrap" style="width:100%">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-start mt-4">
+                    <button class="btn btn-primary me-2 raised" type="button" id="putOnHold" onclick="return PutOnHold();">Put On Hold</button>
+                    <button class="btn btn-success raised" type="button" id="releaseHold" onclick="return ReleasedFromHold();">Hold Released</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<div class="main-content" id="InBoundSummaryList" style="display:none;">
+  
+    <div class="page-header" style="margin-top:-12px;">
+        <h4 class="page-title">
+            Hold Summary Status
+        </h4>
+
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="ItemSummaryList2();" id="holdSummary" data-modal="modal-13">
+                Add
+            </button>
+        </div>
+    </div>
+
+
+
+    <div class="page-body">
+        <div class="card col-sm-12 col-lg-12">
+            <div class="card-header">
+
+                <h4><i class="icon-reorder"></i>Hold Entry</h4>
+
+            </div>
+            <div class="ard-block col-sm-12 col-lg-12">
+                <div class="row">
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">From Date </label>
+
+                        @Html.TextBox("txtFromDate", null, new { @class = "form-control datePicker1", @id = "txtFromDate", @Value = DateTime.Now.AddDays(-7).ToString("dd MMM yyyy HH:mm") })
+
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">To Date </label>
+
+                        @Html.TextBox("txtToDate", null, new { @class = "form-control datePicker1", @id = "txtToDate", @Value = DateTime.Now.ToString("dd MMM yyyy  HH:mm") })
+
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label" style="visibility:hidden"> '</label>
+                            <div class="row gutters-xs">
+                                <div class="col" style="margin-top: 15px;">
+                                    <button class="btn btn-primary raised" title="Show" id="btnShow" onclick="GetShow()" type="button">
+                                        Show
+                                    </button>
+                                    <button class="btn btn-success raised" id="btnSearch" title="Export To Excel" onclick="GetExcelFile()" type="button">
+                                        Export
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="table-responsive">
+
+                            <table id="example3" class="table table-bordered table-hover display nowrap" style="width:100%">
+                                <thead>
+
+                                    <tr></tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+        </div>
+    </div>
+        <script>
+
+    function ItemSummaryList() {
+
+        $('#divEntryfrom').hide();
+        $('#InBoundSummaryList').show();
+    }
+    function ItemSummaryList2() {
+        location.reload();
+
+    }
+    function GetShow() {
+
+
+        debugger
+        var FromDate = $("#txtFromDate").val();
+        var ToDate = $("#txtToDate").val();
+
+
+
+
+        var data1 = { 'Fromdate': FromDate, 'Todate': ToDate };
+        var data = JSON.stringify(data1);
+
+
+        $.ajax({
+            url: '/InBound/GetHoldDetails',
+            type: 'Post',
+            data: data,
+
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                debugger;
+                if (data == "0" || data == "[]") {
+
+                    alert('No data found.');
+                    return;
+                }
+                $("#example3").empty();
+                RepTableDataJson($("#example3"), data, "Voucher Details", "VoucherDetails_List");
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+                $("#loader").fadeOut("slow");
+            }
+        });
+    }
+
+    function ShowDetails() {
+        var Containerno = $("#txtContainerno").val();
+        var data1 = { 'Containerno': Containerno };
+        data = JSON.stringify(data1);
+        $.ajax({
+            url: "/InBound/GetContainerDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                debugger;
+
+                response = JSON.parse(response);
+
+                $("#txtBOENo").val(response[0].BOE_NO);
+                $("#txtInDate").val(response[0].IN_DATE_TIME);
+
+               var JONo = response[0].SHIPMENT_NUMBER;
+               Search(JONo);
+
+
+            }
+
+
+        });
+
+
+    }
+
+    function Search(JONo) {
+        debugger;
+        $("#loader").fadeIn("slow");
+        var ContainerNo = document.getElementById('txtContainerno').value;
+
+        debugger;
+        data1 = { 'JONo': JONo, 'ContainerNo': ContainerNo };
+        data = JSON.stringify(data1);
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/GateInEntry/GetHoldDetails',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (jsonResult) {
+                $("#tblHoldDetails").empty();
+                RepTableDataJsonwopaging($("#tblHoldDetails"), jsonResult, "Hold", "Hold");
+                $("#loader").fadeOut("slow");
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#loader").fadeOut("slow");
+            }
+        });
+    }
+
+
+    function PutOnHold() {
+        debugger
+        var Containerno = $("#txtContainerno").val();
+        var HoldReason = $("#HoldType").val();
+
+        if (HoldReason == "") {
+            document.getElementById("HoldType").style.borderColor = "red";
+            alert('Please Select the Hold Reason ')
+            $("#loader").fadeOut("slow");
+            event.preventDefault();
+            return;
+        }
+
+
+        var Remark = $("#txtRemark").val();
+        var HoldStatus = "H";
+        var data1 = {
+            'Containerno': Containerno, 'HoldReason': HoldReason, 'Remark': Remark, 'HoldStatus': HoldStatus
+        };
+
+
+        var data = JSON.stringify(data1);
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/InBound/SaveHoldStatus",
+            data: data,
+            success: function (result) {
+
+                if (result == 'SUCCESS') {
+                    swal.fire("Good Job!", "Record Added Successfully!!", "success").then(function () {
+                        window.location = "/Inbound/Hold"
+                    }); 
+                }
+                else {
+                    alert("Save failed!");
+                }
+            },
+            error: function () {
+                alert("Error!")
+            }
+        });
+
+    }
+
+   function ReleasedFromHold() {
+        debugger;
+        var Containerno = $("#txtContainerno").val();
+        var HoldReason = $("#HoldType").val();
+
+        if (HoldReason == "") {
+            document.getElementById("HoldType").style.borderColor = "red";
+            alert('Please Select the Hold Reason ')
+            $("#loader").fadeOut("slow");
+            event.preventDefault();
+            return;
+        }
+
+
+        var Remark = $("#txtRemark").val();
+        var HoldStatus = "C";
+        var data1 = {
+            'Containerno': Containerno, 'HoldReason': HoldReason, 'Remark': Remark, 'HoldStatus': HoldStatus
+        };
+
+
+        var data = JSON.stringify(data1);
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/InBound/SaveHoldStatus",
+            data: data,
+            success: function (result) {
+
+                if (result == 'SUCCESS') {
+                    swal.fire("Good Job!", "Record Added Successfully!!", "success").then(function () {
+                        window.location = "/Inbound/Hold"
+                    }); 
+        
+
+                }
+                else {
+                    alert("Save failed!");
+                }
+            },
+            error: function () {
+                alert("Error!")
+            }
+        });
+
+    }
+
+            function SearchOn() {
+
+                var Search = $("#ddlSearchOn").val();
+
+                // hide all first
+                $("#divIGMNO").hide();
+                $("#divitemNo").hide();
+                $("#divSingle").hide();
+
+                if (Search == "IGM-Item No") {
+                    $("#divIGMNO").show();
+                    $("#divitemNo").show();
+                    $("#divContainer").hide();
+
+                }
+                else if (Search == "Container") {
+                    $("#lblSingle").text("Container No");
+                    $("#txtSingle").attr("placeholder", "Container No");
+                    $("#divContainer").show();
+                }
+                else if (Search == "BOENo") {
+                    $("#lblSingle").text("BOE No");
+                    $("#txtSingle").attr("placeholder", "BOE No");
+                    $("#divContainer").show();
+                }
+                else if (Search == "BLNumber") {
+                    $("#lblSingle").text("BL Number");
+                    $("#txtSingle").attr("placeholder", "BL Number");
+                    $("#divContainer").show();
+                }
+                else if (Search == "Select") {
+                    $("#divIGMNO").hide()
+                    $("#divitemNo").hide()
+                    $("#divContainer").hide()
+                }
+            }
+
+        </script>
+

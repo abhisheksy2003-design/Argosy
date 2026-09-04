@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/css/printstyle.css" rel="stylesheet" />
+    <script src="~/js/qrcode.min.js"></script>
+    <script src="~/js/JsBarcode.all.min.js"></script>
+    <script src="~/js/QRCode.js"></script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title></title>
+
+    <meta charset="utf-8" />
+
+    <link rel="shortcut icon" type="image/png" href="./favicon.png" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .table-bordered td,
+        .table-bordered th {
+            border: 1px solid #000; /* Black border */
+            padding: 1px;
+            word-break: break-all;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .h4-14 {
+            font-size: 11px;
+            margin-top: 0;
+            margin-bottom: 0px;
+        }
+
+        .img {
+            margin-left: "auto";
+            margin-top: "auto";
+            height: 25px;
+        }
+
+        pre,
+        p {
+            padding: 0;
+            margin: 0;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            width: 100%;
+            border-collapse: collapse;
+            padding: 1px;
+        }
+
+        .hm-p p {
+            text-align: left;
+            padding: 1px;
+            padding: 5px 4px;
+        }
+
+        td {
+            text-align: left;
+            padding: 8px 6px;
+            font-size: 11px !important;
+        }
+
+        th {
+            font-size: 12px !important;
+        }
+
+        .table-b td,
+        .table-b th {
+            border: 1px solid #000; /* Black border */
+        }
+
+        .hm-p td,
+        .hm-p th {
+            padding: 3px 0px;
+        }
+
+        .main-pd-wrapper {
+            box-shadow: 0 0 10px #ddd;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .table-bordered td,
+        .table-bordered th {
+            border: 1px solid #000; /* Black border */
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .table-bordered td, .table-bordered th {
+            border: 1px solid #000; /* Black border */
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .table > :not(:last-child) > :last-child > * {
+            border-bottom-color: #000; /* Black border */
+        }
+    </style>
+</head>
+<body>
+
+    <section class="main-pd-wrapper" style="width: 1000px; margin: auto">
+
+        <div style="width:100%;height:100%; padding:0px">
+
+            <table class="tblBox">
+
+                <tbody>
+
+                    <tr>
+                        <td style="width:25%">
+                            <img src="~/assets/images/companylogo.jpg" height="90" />
+                        </td>
+                        <th style="padding-right:50px; text-align: right; border: none; width: 90%; text-align: center; background-color: white; font-family: 'Segoe UI'">
+                            <spam style="white-space: wrap; word-break: break-word; color: #000000; padding-left: 50px; text-align: right; border: none; font-size: 20px; margin-top: 0px; margin-bottom: -13px;">@ViewBag.CompanyName</spam>   <br />
+                            <spam style=" padding-left: 50px; text-align: right; border: none; font-size: 12px; margin-top: 0px; margin-bottom: 0px;">@ViewBag.CompanyAddress</spam> <br />
+                        </th>
+
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr style="color:orange; border:2px solid;" />
+        </div>
+        <b style="display:flex; justify-content:center;">   GATE OUT SLIP </b>
+
+        <br />
+        <table class="hm-p table-bordered" style="width: 100%; margin-top: 0px">
+            <tr>
+
+                <th style="width: 500px">
+                    <p>Slip No: @ViewBag.GateOutNo</p>
+                    <p>Slip Date :  @ViewBag.OutDate</p>
+                    <p>SB No: @ViewBag.IGMNO</p> 
+                    <p>SB Date: @ViewBag.ITEMNO</p>
+                </th>
+                <th style="width: 500px">
+                    <p>Acc. Holder : @ViewBag.Acc_Holder</p>
+                    <p>CHA :  @ViewBag.CHA</p>
+                    <p>Exporter :  @ViewBag.Exporter</p>
+                    <p>Transporter Name:  @ViewBag.Transporter</p>
+                    <p>Vehicle No :  @ViewBag.VehicleNo</p>
+                </th>
+
+            </tr>
+        </table>
+
+        <table class="table table-bordered h4-14" style="width: 100%; margin-top: 5px">
+            <thead style="display: table-header-group">
+                <tr style="background: #fcbd021f;">
+                    <td colspan="12">
+                        <h3 style="font-size:12px!important; font-weight:600;">Container Details</h3>
+                    </td>
+                </tr>
+                <tr> 
+                    <th>Container No</th>
+                    <th>Size</th>
+                    <th>Packages</th>
+                    <th>Weight(KGS)</th>
+                    <th>Custom Seal No</th>
+                    <th>Agent Seal No</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (ViewBag.ContainerDetails != null)
+                {
+                    foreach (System.Data.DataRow dr in ViewBag.ContainerDetails.Rows)
+                    {
+                        <tr>
+                            <td style="text-align:center">@dr["ContainerNo"]</td>
+                            <td style="text-align:center">@dr["SIZE"]</td>
+                            <td style="text-align:center">@dr["StuffedQty"]</td>
+                            <td style="text-align:center">@dr["TareWeight"]</td>
+                            <td style="text-align:center">@dr["CustomSeal"]</td>
+                            <td style="text-align:center">@dr["AgentSeal"]</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+            <tfoot></tfoot>
+        </table>
+
+        <table class="hm-p table-bordered" style="width: 100%; margin-top: 0px">
+            <tr>
+                <th style="width: 500px">
+                    <p>Terms and conditions :</p>
+                    <span style="font-weight:normal"></span>
+                    <p style="font-weight:300">Note :This is Computer Generated Gate In Slip, Signature & Stamp Not Required</p>
+                </th>
+                <th style="width: 500px; text-align:center;">
+                    <br /><br /><br />
+                    <img src="@ViewBag.path" style="width:100px;" />
+                    <p> Gate Out Executive</p>
+                </th>
+            </tr>
+        </table>
+
+        <table class="hm-p table-bordered" style="width: 100%; margin-top: 0px">
+            <tr>
+                <th>
+                    Prepared By : @ViewBag.UserName
+                </th>
+            </tr>
+        </table>
+
+        <table class="hm-p table-bordered" style="width: 100%; margin-top: 0px">
+            <tr>
+                <th>
+                    Date & Time : @ViewBag.PrintDate
+                </th>
+            </tr>
+        </table>
+
+    </section>
+
+</body>
+</html>

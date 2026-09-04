@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Typeofvehicle";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<div class=" content-area" id="DIvCompantMaster">
+    <div class="page-header">
+        <h4 class="page-title" id="New">Type Of Vehicle Entry</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" style="display:none">
+                <a onclick="ShowSummary();" id="ShowSummary" class="btn btn-josph btn-success" style="color:white;align-content:center;"><i class="fa fa-file-text" data-toggle="tooltip" data-placement="bottom" title="Summary" data-original-title="Back"></i>  </a>
+            </li>
+        </ol>
+    </div>
+
+    <div class="col-sm-12 col-lg-12">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-3">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Entry ID</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input ID="txtBookingEntry" type="text" placeholder="New" readonly="readonly" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Type Of Vehicle</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        <input id="txtTypeOfVehicle" placeholder="Type Of Vehicle" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                    </div>
+                 
+                    
+                    <div class="row">
+                        <div class="col-md-1 col-xs-4">
+                            <div class="form-group">
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button class="btn btn-success btn-xs" id="btnSave" onclick="return Save();">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function Save() {
+        debugger;
+     
+        var txtTypeOfVehicle = document.getElementById('txtTypeOfVehicle').value;
+      
+
+       
+        var data1 = {
+             'txtTypeOfVehicle': txtTypeOfVehicle};
+        data = JSON.stringify(data1);
+
+                $.ajax({
+                    url: "/BookingEntry/SaveTypeOfVehicle",
+                    data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                         alert("Record Save !");
+                         window.location.href = '@Url.Action("Typeofvehicle", "BookingEntry")';
+
+
+                },
+                    error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                   }
+                });
+
+    }
+</script>

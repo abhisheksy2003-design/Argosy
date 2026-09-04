@@ -1,0 +1,569 @@
+﻿
+@{
+    ViewBag.Title = "TransportBookingEntry";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<style>
+    .table thead th, .text-wrap table thead th {
+        background-color: #9f78ff;
+        color: white;
+    }
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<div class=" content-area" id="DIvCompantMaster">
+    <div class="page-header">
+        <h4 class="page-title" id="New">Booking Entry</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="ShowSummary();" id="ShowSummary" class="btn btn-josph btn-success" style="color:white;align-content:center;"><i class="fa fa-file-text" data-toggle="tooltip" data-placement="bottom" title="Summary" data-original-title="Back"></i>  </a>
+            </li>
+        </ol>
+    </div>
+
+    <div class="col-sm-12 col-lg-12">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-3">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Booking Entry ID</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input ID="txtBookingEntry" type="text" placeholder="New" readonly="readonly" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="form-label">Activity <span style="color:red">*</span></label>
+                                @Html.DropDownList("ddlActivity", new List<SelectListItem>
+                                {
+                               new SelectListItem { Text = "Cargo", Value = "Cargo"},
+                                new SelectListItem { Text = "Container", Value = "Container"},
+
+                                  }, "Select", new { @class = "form-control", autocomplete = "off", @id = "ddlActivity", onchange = "GetActivityDetails()" })
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12" id="divCustomerName">
+                            <div class="form-group">
+                                <label class="form-label">Customer <span style="color:red">*</span></label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" placeholder="Customer" class="form-control" id="ddlCustomer" />
+                                        <input type="hidden" class="form-control" id="hdnCustomerId" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Sub Customer</label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" placeholder="Sub Customer" class="form-control" id="ddlSubCustomer" />
+                                        <input type="hidden" class="form-control" id="hdnSubCustomerId" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-12" id="divCustomerName">
+                            <div class="form-group">
+                                <label class="form-label">From Location <span style="color:red">*</span></label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" placeholder="From" class="form-control" id="ddlFrom" />
+                                        <input type="hidden" class="form-control" id="hdnFromId" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">To Location <span style="color:red">*</span></label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" placeholder="To" class="form-control" id="ddlTo" />
+                                        <input type="hidden" class="form-control" id="hdnToId" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Type Of Vehicle <span style="color:red">*</span></label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        @*<input id="txtTypeOfVehicle" placeholder="Type Of Vehicle" type="text" class="form-control" />*@
+                                        @Html.DropDownList("txtTypeOfVehicle", (IEnumerable<SelectListItem>)ViewBag.TransportBookingEntry, "--Select--", new { @class = "form-control", @id = "txtTypeOfVehicle", name = "txtTypeOfVehicle", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">No Of Vehicles <span style="color:red">*</span></label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        <input id="txtNoOfVehicles" placeholder="No Of Vehicles" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Weight/Container(KGS) <span style="color:red">*</span></label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        <input id="txtWeightContainer" placeholder="Weight/Container" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-sm-12" id="divNoOf20" style="display:none">
+                            <div class="form-group">
+                                <label class="form-label mandatory">No of 20'</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        <input id="txtNoof20" placeholder="No of 20'" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-sm-12" id="divNoOf40" style="display:none">
+                            <div class="form-group">
+                                <label class="form-label mandatory">No of 40'</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        <input id="txtNoof40" placeholder="No of 40'" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Remarks</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        <textarea type="text" rows="2" placeholder="Remarks" class="form-control" id="Remarks"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 col-xs-4">
+                            <div class="form-group">
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button class="btn btn-success btn-xs" id="btnSave" onclick="return Save();">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+    </div>
+<div class=" content-area" id="divsummary" style="display:none">
+    <div class="page-header">
+        <h4 class="page-title">
+            Booking Search Entry
+        </h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="Back();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Add Work Order"></i> </a>
+            </li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">From Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("FromDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 08:00") })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12" id="divallfrom">
+                                <div class="form-group">
+                                    <label class="form-label">From Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("ToDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.AddDays(1).ToString("dd MMM yyyy 07:59") })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+
+                                            <button class="btn btn-primary" id="TripSearch" type="button" onclick="Showdetails()"><i class="fe fe-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <button class="btn btn-orange" title="Export To Excel" id="btnSearch" type="button"><i class="fa fa-file-excel-o" onclick="GetExcelFile()"></i></button>
+                                    <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                        <thead>
+
+                                            <tr></tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        function GetExcelFile() {
+
+        window.location = '@Url.Action("BondExRegisterExportToExcel", "BookingEntry")?';
+
+
+    }
+    function ShowSummary() {
+        $("#DIvCompantMaster").hide();
+        $("#divsummary").show();
+    }
+    function Back() {
+        $("#DIvCompantMaster").show();
+        $("#divsummary").hide();
+    }
+    $(window).on("load", function (e) {
+
+    })
+    function GetActivityDetails() {
+        debugger;
+        var Activity = $("#ddlActivity").val();
+        if (Activity == "Cargo") {
+            $("#divNoOf20").hide();
+            $("#divNoOf40").hide();
+        }
+        else {
+            $("#divNoOf20").show();
+            $("#divNoOf40").show();
+        }
+
+    }
+   
+    function Showdetails() {
+        debugger;
+        var FromDate = $("#FromDate").val();
+        var ToDate = $("#ToDate").val()
+        try {
+            var data1 = { 'FromDate': FromDate, 'ToDate': ToDate };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/BookingEntry/TransportBookingEntrySummary",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    RepTableDataJsonwopaging($("#example2"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+</script>
+<script>
+
+    function Save() {
+        debugger;
+        var hdnCustomerId = document.getElementById('hdnCustomerId').value;
+        var hdnSubCustomerId = document.getElementById('hdnSubCustomerId').value;
+        var hdnFromId = document.getElementById('hdnFromId').value;
+        var hdnToId = document.getElementById('hdnToId').value;
+        var txtTypeOfVehicle = document.getElementById('txtTypeOfVehicle').value;
+        var txtNoOfVehicles = document.getElementById('txtNoOfVehicles').value;
+        var txtWeightContainer = document.getElementById('txtWeightContainer').value;
+        var txtNoof20 = document.getElementById('txtNoof20').value;
+        var txtNoof40 = document.getElementById('txtNoof40').value;
+        var Remarks = document.getElementById('Remarks').value;
+        var Activity = document.getElementById('ddlActivity').value;
+
+
+        if (Activity == "") {
+            alert("please select activity");
+            $("#ddlActivity").focus();
+            return false;
+        }
+        if (hdnCustomerId = "0") {
+            alert("please select Customer ");
+            $("#hdnCustomerId").focus();
+            return false;
+        }
+        if (hdnFromId = "0") {
+            alert("please select From Location");
+            $("#hdnFromId").focus();
+            return false;
+        }
+        if (hdnToId = "0") {
+            alert("please select To Location");
+            $("#hdnToId").focus();
+            return false;
+        }
+
+        if (txtTypeOfVehicle == "") {
+            alert("please select Type Of Vehicle");
+            $("#txtTypeOfVehicle").focus();
+            return false;
+        }
+        if (txtNoOfVehicles == "") {
+            alert("please select No Of Vehicles");
+            $("#txtNoOfVehicles").focus();
+            return false;
+        }
+        if (txtWeightContainer == "") {
+            alert("please select Weight/Container");
+            $("#txtWeightContainer").focus();
+            return false;
+        }
+        var data1 = {
+            'hdnCustomerId': hdnCustomerId, 'hdnSubCustomerId': hdnSubCustomerId, 'hdnFromId': hdnFromId, 'hdnToId': hdnToId, 'txtTypeOfVehicle': txtTypeOfVehicle, 'txtNoOfVehicles': txtNoOfVehicles,
+            'txtWeightContainer': txtWeightContainer, 'txtNoof20': txtNoof20, 'txtNoof40': txtNoof40, 'Remarks': Remarks, 'Activity': Activity};
+        data = JSON.stringify(data1);
+
+                $.ajax({
+                    url: "/BookingEntry/Save",
+                    data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                         alert("Record Save !");
+                         window.location.href = '@Url.Action("TransportBookingEntry", "BookingEntry")';
+
+
+                },
+                    error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                   }
+                });
+
+    }
+</script>
+<script type="text/javascript">
+
+    
+   
+    
+    $(document).ready(function () {
+        AutomCom();
+
+    });
+
+
+    function AutomCom() {
+        debugger;
+        $("#ddlCustomer").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/ImportReceipt/getAutoCustomerList",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.AGName,
+                                val: item.AGID,
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlCustomer").val(i.item.label);
+                $("#hdnCustomerId").val(i.item.val);
+            },
+            minLength: 1
+        });
+        $("#ddlSubCustomer").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/ImportReceipt/getAutoCustomerList",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.AGName,
+                                val: item.AGID,
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlSubCustomer").val(i.item.label);
+                $("#hdnSubCustomerId").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+        $("#ddlFrom").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/BookingEntry/getLocation",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.AGName,
+                                val: item.AGID,
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlFrom").val(i.item.label);
+                $("#hdnFromId").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+        $("#ddlTo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/BookingEntry/getLocation",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.AGName,
+                                val: item.AGID,
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlFrom").val(i.item.label);
+                $("#hdnToId").val(i.item.val);
+            },
+            minLength: 1
+        });
+    };
+
+</script>

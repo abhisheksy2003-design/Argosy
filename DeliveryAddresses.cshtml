@@ -1,0 +1,282 @@
+﻿<div>
+    <style>
+
+        .mandatory {
+            color: #5ED84F !important;
+            display: block;
+            margin-bottom: .375rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+    </style>
+
+    <div class="page-header">
+        <h4 class="page-title"> Add Delivery Address for: @ViewBag.Name</h4> <label id="lblCommonID" style="display:none"> @ViewBag.CommonID</label> <label id="lblName" style="display:none"> @ViewBag.Name</label>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a onclick="getBack();" class="btn btn-primary btn-success" style="color:white;align-content:center;"><i class="fa fa-arrow-left" data-placement="bottom" title="Back"></i>  </a></li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="card-body">
+                            <div class="btn-list">
+                                @foreach (var d in ViewBag.CustomerLocationList as List<TrackerMVCEntities.BusinessEntities.DeliveryAddresses>)
+                                {
+                                    <a href="#" onclick="getAddressWiseData(@d.LocationID,@d.ID)" class="btn btn-square btn-primary ">@d.Location</a>
+                                    <input type="hidden" value="@d.LocationID" class="locationClass" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2 col-lg-4" id="divddlLocation">
+                            <div class="form-group label-floating">
+                                <label class="form-label"> Location</label>
+                                @Html.DropDownList("ddlLocation", (IEnumerable<SelectListItem>)ViewBag.LocationList, "--Select--", new { @class = "form-control", @id = "ddlLocation", name = "ddlLocation", autocomplete = "off", onchange = "getLocationValidation()" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-lg-12">
+                            <div class="form-group label-floating">
+                                <label class="form-label">Address</label>
+                                @Html.TextArea("txtAddress", null, new { @class = "form-control", @id = "txtAddress", name = "txtAddress", autocomplete = "off", rows = "2", @maxlength = 500 })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-list text-center">
+                        <div class="row">
+                            <div class=" btn-list col-12">
+                                <button class="btn btn-primary btn-success pull-right" type="button" id="Save" onclick="Save();" name="Save">Save</button>
+                                <button class="btn btn-default pull-left" type="button" id="Save" onclick="New();" name="New">Clear</button>
+                                <button class="btn btn-primary pull-left" type="button" id="Save" style="display:none" onclick="Copy();" name="New">Make Copy</button>
+                                @Html.Hidden("hdCopyId", null, new { @class = "form-control", @id = "hdCopyId", name = "hdCopyId", autocomplete = "off" })
+                                @Html.Hidden("hdID", null, new { @class = "form-control", @id = "hdID", name = "hdID", autocomplete = "off" })
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+                <script>
+
+                    function getBack() {
+                        // alert("hi")
+                        $("#divSummary").show()
+                        $('#divUpdateCustomerData').hide()
+
+                    }
+                </script>
+                <script>
+                    function getAddressWiseData(LocationID, ID) {
+
+
+                        var Common_ID = $("#lblCommonID").text();
+                        var data = JSON.stringify({
+                            'id': LocationID,
+                            'Common_ID': Common_ID,
+                            'GSTID': ID
+                        });
+                        $.ajax({
+                            url: "/Master/GetDeliveryAddresswiseData",
+                            data: data,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+
+                                $("#txtAddress").val(data.Address);
+                                $("#ddlLocation").val(data.LocationID);
+                                
+                                $("#hdID").val(data.ID);
+                                $("#hdCopyId").val("");
+
+                                $('#divddlLocation :input').attr('disabled', true);
+                                $("#txtAddress").removeClass("form-control is-invalid state-invalid")
+                                $("#txtAddress").addClass("form-control")
+                                $("#ddlLocation").removeClass("form-control is-invalid state-invalid")
+                                $("#ddlLocation").addClass("form-control")
+                                
+                            },
+                            error: function (errormessage) {
+                                alert("error");
+                                alert(errormessage.responseText);
+                            }
+                        });
+
+
+                    }
+                    function New() {
+                        $("#hdCopyId").val("");
+                        $("#ddlLocation").focus();
+                        $("#txtAddress").val("");
+                        $("#ddlLocation").val("");
+                        
+                        $("#hdID").val("");
+                        $('#divddlLocation :input').attr('disabled', false);
+                    }
+
+                    function Copy() {
+                        $("#hdCopyId").val("1");
+                        var location = $("#ddlLocation option:selected").text();
+                        var result = confirm("Do you want to copy " + location + " location?");
+                        if (result) {
+                            $("#hdID").val("");
+                            //$("#ddlLocation").val("");
+                            $('#divddlLocation :input').attr('disabled', false);
+                            //$("#ddlLocation").focus();
+                        }
+                        else {
+
+                        }
+                    }
+
+                    function Save() {
+                        
+                        
+                        var res = Validation();
+                        //  alert(res);
+                        if (res == 0) {
+                            return false;
+                        }
+                        var duplicate = ValDuplicate();
+                        
+                        if (duplicate == 0) {
+                           
+                            return false;
+                        }
+                        
+
+
+                    }
+    
+                </script>
+                <script>
+
+                    function Validation() {
+
+                        var ddlLocation = document.getElementById('ddlLocation').value;
+                        var txtAddress = document.getElementById('txtAddress').value;                       
+
+                        var blResult = Boolean;
+                        blResult = true;
+
+                        if (ddlLocation == "") {
+                            //  document.getElementById('ContainerNo').style.borderColor = "red"
+                            $("#ddlLocation").removeClass("form-control is-valid state-valid")
+                            $("#ddlLocation").addClass("form-control is-invalid state-invalid")
+                            blResult = blResult && false;
+                        }
+                        if (txtAddress == "") {
+                            //  document.getElementById('ContainerNo').style.borderColor = "red"
+                            $("#txtAddress").removeClass("form-control is-valid state-valid")
+                            $("#txtAddress").addClass("form-control is-invalid state-invalid")
+                            blResult = blResult && false;
+                        }
+                        
+                        if (blResult == false) { alert('Please fill the required fields!'); }
+                        return blResult;
+
+                        //$('#btnRemoveCSS').click(function () {
+
+                    }
+                    function ValDuplicate() {
+                        var AddressDetails1 = {};
+                        var blResult = Boolean;
+                        blResult = true;
+                        AddressDetails1.common_id = $("#lblCommonID").text();
+                        AddressDetails1.Address = $("#txtAddress").val();
+                        AddressDetails1.LocationID = $("#ddlLocation option:selected").val();           
+
+                        var data2 = { 'AddressDetails1': AddressDetails1 };
+                        var data = JSON.stringify(data2);
+
+                        $.ajax({
+                            url: "/Master/ValidationforDuplicate",
+                            data: data,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {   
+                                
+                                if (data.IsDuplicate == true) {     
+                                    
+                                    alert("Same address for same location against this party already added. Cannot proceed!")
+                                    $("#txtAddress").focus(); 
+                                    blResult = false;
+                                }
+                                else {
+                                    DeliverySave() 
+                                    blResult = true;
+                                }
+
+                                //var id=$("#lblCommonID").text();
+                                //var name=$("#lblName").text();
+                                //LocationDetails(id,name)
+                                //  document.location = '@Url.Action("GlobalSearchSummary", "Master")';
+                            },
+                            error: function (errormessage) {
+                                alert("error");
+                                alert(errormessage.responseText);
+                            }
+                        });
+                        return blResult;
+                    }
+                    function DeliverySave() {
+                        var AddressDetails = {};
+                        AddressDetails.common_id = $("#lblCommonID").text();
+                        AddressDetails.name = $("#lblName").text();
+                        AddressDetails.Address = $("#txtAddress").val();
+                        AddressDetails.LocationID = $("#ddlLocation option:selected").val();
+                        AddressDetails.IsCopy = $("#hdCopyId").val();
+                        AddressDetails.ID = $("#hdID").val();
+                        
+                        
+                        var data1 = { 'AddressDetails': AddressDetails };
+                        var data = JSON.stringify(data1);
+
+
+                        //  alert(data);
+                        $.ajax({
+                            url: "/Master/SaveDeliveryAddresses",
+                            data: data,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                alert("Record saved successfully")
+                                var result = confirm("Do you want to add another address on same Location?");
+                                if (result) {
+                                    $("#txtAddress").val("");
+                                    //$("#ddlLocation").val("");
+                                    $('#divddlLocation :input').attr('disabled', false);
+                                    $("#ddlLocation").focus();
+                                    $("#hdCopyId").val("");
+                                    $("#hdID").val("");
+                                }
+                                else {
+                                    New();
+                                }
+
+                                //var id=$("#lblCommonID").text();
+                                //var name=$("#lblName").text();
+                                //LocationDetails(id,name)
+                                //  document.location = '@Url.Action("GlobalSearchSummary", "Master")';
+                            },
+                            error: function (errormessage) {
+                                alert("error");
+                                alert(errormessage.responseText);
+                            }
+                        });
+                    }
+                </script>

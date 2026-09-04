@@ -1,0 +1,861 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<link href="~/assets/css/Dashboard_Style.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.3.1/css/all.min.css" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/fonts/simple-line-icons/style.min.css">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/colors.min.css">
+<script src="~/js/GetTableJson.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<style>
+    body {
+        background-color: white !important;
+    }
+</style>
+<style>
+    .welcome-card {
+        position: relative;
+        background: #ffffff;
+        border-radius: 18px;
+        overflow: hidden;
+        padding: 18px 22px;
+    }
+
+        /* CURVED SHAPE */
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -80px;
+            width: 280px;
+            height: 280px;
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            border-radius: 50%;
+            opacity: 0.15;
+        }
+
+    .welcome-flex {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+    }
+
+    .welcome-left {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+    }
+
+    .welcome-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #36d1dc, #5b86e5);
+        padding: 2px;
+    }
+
+        .welcome-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #fff;
+        }
+
+    .welcome-text p {
+        margin: 0;
+        font-size: 12px;
+        color: #666;
+    }
+
+    .welcome-text h4 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #111;
+    }
+
+    .welcome-title {
+        margin-top: 6px;
+        font-size: 18px;
+        font-weight: 800;
+        color: #1f2937;
+    }
+
+    .welcome-img img {
+        width: 170px;
+        margin-top: -10px;
+    }
+
+    @@media(max-width:768px) {
+        .welcome-flex {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .welcome-img img {
+            width: 140px;
+            margin-top: 10px;
+        }
+    }
+</style>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #eef2f7, #f9fbfd);
+        padding: 10px;
+    }
+
+    .page-title {
+        color: #222;
+        margin-bottom: 10px;
+    }
+
+    .dashboard-card {
+        border-radius: 18px;
+        padding: 22px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        color: #fff;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        transition: all 0.4s ease;
+    }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            transition: 0.5s;
+        }
+
+        .dashboard-card:hover::before {
+            top: -20%;
+            right: -20%;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.25);
+        }
+
+    .card-content {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+    }
+
+    .card-text h4 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    .card-text span {
+        font-size: 14px;
+        opacity: 0.9;
+        letter-spacing: 0.5px;
+    }
+
+    .gradient-primary {
+        background: linear-gradient(135deg, #36d1dc, #5b86e5);
+    }
+
+    .gradient-cyan {
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+    }
+
+    .gradient-pink {
+        background: linear-gradient(135deg, #ff5f6d, #ffc371);
+    }
+
+    .gradient-orange {
+        background: linear-gradient(135deg, #f7971e, #ffd200);
+    }
+
+    .gradient-success {
+        background: linear-gradient(135deg, #00b09b, #96c93d);
+    }
+</style>
+<style>
+    .import-wrapper {
+        position: relative;
+    }
+
+    .import-card {
+        border-radius: 24px;
+        padding: 30px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        color: #fff;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+        transition: all 0.4s ease;
+    }
+
+        .import-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255,255,255,0.15), transparent);
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .import-card:hover::after {
+            opacity: 1;
+        }
+
+        .import-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 28px 55px rgba(0,0,0,0.30);
+        }
+
+    .import-icon {
+        height: 62px;
+        width: 62px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        background: rgba(255,255,255,0.25);
+        box-shadow: inset 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    .import-text h4 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+    }
+
+    .import-text span {
+        font-size: 15px;
+        opacity: 0.9;
+        letter-spacing: 0.4px;
+    }
+
+    /* GRADIENT THEMES */
+    .card-import-1 {
+        background: linear-gradient(135deg, #5f72ff, #9b23ea);
+    }
+
+    .card-import-2 {
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+    }
+
+    .card-import-3 {
+        background: linear-gradient(135deg, #ff512f, #f09819);
+    }
+</style>
+
+<style>
+    .export-wrapper {
+        position: relative;
+    }
+
+    .export-card {
+        border-radius: 24px;
+        padding: 28px;
+        color: #fff;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+        transition: all 0.4s ease;
+    }
+
+        .export-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.25), transparent 60%);
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .export-card:hover::before {
+            opacity: 1;
+        }
+
+        .export-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 28px 55px rgba(0,0,0,0.30);
+        }
+
+    .export-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .export-icon {
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.25);
+        font-size: 30px;
+        box-shadow: inset 0 0 12px rgba(255,255,255,0.35);
+    }
+
+    .export-text h4 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+    }
+
+    .export-text span {
+        font-size: 15px;
+        opacity: 0.9;
+        letter-spacing: 0.4px;
+    }
+
+    /* GRADIENT THEMES */
+    .export-orange {
+        background: linear-gradient(135deg, #f7971e, #ffd200);
+    }
+
+    .export-danger {
+        background: linear-gradient(135deg, #f54ea2, #ff7676);
+    }
+
+    .export-purple {
+        background: linear-gradient(135deg, #8e2de2, #4a00e0);
+    }
+
+    .export-warning {
+        background: linear-gradient(135deg, #f7971e, #ffb347);
+    }
+</style>
+
+
+<h5 class="page-title mb-2" style="margin-top:-30px;">Dashboard</h5>
+
+<div class="row mt-1">
+    <div class="col-12">
+        <div class="welcome-card">
+            <div class="welcome-flex">
+
+                <!-- LEFT -->
+                <div>
+                    <div class="welcome-left">
+                        <div class="welcome-avatar">
+                            <img src="~/assets/images/sprites/11.png" />
+                        </div>
+                        <div class="welcome-text">
+                            <p>Dear User,</p>
+                            <h4>
+                                @if (Session["username"] != null)
+                                {
+                                    @Session["username"].ToString();
+                                }
+                                else
+                                {
+                                    <span>Guest</span>
+                                }
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="welcome-title">
+                        Welcome to ARGOSY
+                    </div>
+                </div>
+
+                <!-- RIGHT -->
+                <div class="welcome-img">
+                    <img src="~/assets/images/sprites/Container.png" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<br />
+
+<h5 class="page-title">Basic Details</h5>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-5">
+
+    <div class="col">
+        <div class="dashboard-card gradient-primary" onclick="GetDashboardMaster(1)">
+            <div class="card-content">
+                <div class="icon-circle">
+                    <span class="material-icons-outlined">person</span>
+                </div>
+                <div class="card-text">
+                    <h4 id="Customer"></h4>
+                    <span>Customer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="dashboard-card gradient-cyan" onclick="GetDashboardMaster(2)">
+            <div class="card-content">
+                <div class="icon-circle">
+                    <span class="material-icons-outlined">badge</span>
+                </div>
+                <div class="card-text">
+                    <h4 id="Impoter"></h4>
+                    <span>Importer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="dashboard-card gradient-pink" onclick="GetDashboardMaster(3)">
+            <div class="card-content">
+                <div class="icon-circle">
+                    <span class="material-icons-outlined">assignment_ind</span>
+                </div>
+                <div class="card-text">
+                    <h4 id="CHA"></h4>
+                    <span>CHA</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="dashboard-card gradient-orange" onclick="GetDashboardMaster(4)">
+            <div class="card-content">
+                <div class="icon-circle">
+                    <span class="material-icons-outlined">supervisor_account</span>
+                </div>
+                <div class="card-text">
+                    <h4 id="Exporter">0</h4>
+                    <span>Exporter</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="dashboard-card gradient-success" onclick="GetDashboardMaster(5)">
+            <div class="card-content">
+                <div class="icon-circle">
+                    <span class="material-icons-outlined">groups</span>
+                </div>
+                <div class="card-text">
+                    <h4 id="TotalSalesPerson">0</h4>
+                    <span style="white-space:nowrap;">Sales Person</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- ========================== IMPORT DETAILS ============================= -->
+
+<h5 class="page-title">Import Details</h5>
+
+<div class="row g-4 mb-5 import-wrapper">
+
+    <!-- NO OF JOBS -->
+    <div class="col-md-4">
+        <div class="import-card card-import-1" onclick="GetDashboardTable(1)">
+            <div class="import-icon">
+                <span class="material-icons-outlined">assignment</span>
+            </div>
+            <div class="import-text">
+                <h4 id="TotalJobs">0</h4>
+                <span>No. of Jobs</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GATE IN -->
+    <div class="col-md-4">
+        <div class="import-card card-import-2" onclick="GetDashboardTable(2)">
+            <div class="import-icon">
+                <span class="material-icons-outlined">login</span>
+            </div>
+            <div class="import-text">
+                <h4 id="GetIn">0</h4>
+                <span>Gate In</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GATE OUT -->
+    <div class="col-md-4">
+        <div class="import-card card-import-3" onclick="GetDashboardTable(3)">
+            <div class="import-icon">
+                <span class="material-icons-outlined">logout</span>
+            </div>
+            <div class="import-text">
+                <h4 id="GetOut">0</h4>
+                <span>Gate Out</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- ========================== EXPORT DETAILS ============================= -->
+
+
+<h5 class="page-title">Export Details</h5>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-5 export-wrapper">
+
+    <!-- EMPTY IN -->
+    <div class="col">
+        <div class="export-card export-orange" onclick="GetDashboardTable(4)">
+            <div class="export-content">
+                <div class="export-icon">
+                    <span class="material-icons-outlined">inventory_2</span>
+                </div>
+                <div class="export-text">
+                    <h4>@ViewBag.EmptyInCount</h4>
+                    <span>Empty In</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARTING -->
+    <div class="col">
+        <div class="export-card export-danger" onclick="GetDashboardTable(5)">
+            <div class="export-content">
+                <div class="export-icon">
+                    <span class="material-icons-outlined">local_shipping</span>
+                </div>
+                <div class="export-text">
+                    <h4 id="Carting">0</h4>
+                    <span>Carting</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STUFFING -->
+    <div class="col">
+        <div class="export-card export-purple" onclick="GetDashboardTable(6)">
+            <div class="export-content">
+                <div class="export-icon">
+                    <span class="material-icons-outlined">inventory</span>
+                </div>
+                <div class="export-text">
+                    <h4 id="Stuffing">0</h4>
+                    <span>Stuffing</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOADED OUT -->
+    <div class="col">
+        <div class="export-card export-warning" onclick="GetDashboardTable(7)">
+            <div class="export-content">
+                <div class="export-icon">
+                    <span class="material-icons-outlined">local_mall</span>
+                </div>
+                <div class="export-text">
+                    <h4 id="Loadedout">0</h4>
+                    <span>Loaded Out</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h5>Import : Gate In (Daily)</h5>
+                    <span>Daily Import Progress</span>
+                </div>
+                <div class="card-header-right">
+                    <i class="icofont icofont-refresh"></i>
+                    <i class="icofont icofont-rounded-down"></i>
+                </div>
+            </div>
+            <div class="card-block">
+                <div style="height:300px">
+                    <canvas id="chartGateInDaily"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h5>Import : Gate Out (Daily)</h5>
+                    <span>Daily Import Progress</span>
+                </div>
+                <div class="card-header-right">
+                    <i class="icofont icofont-refresh"></i>
+                    <i class="icofont icofont-rounded-down"></i>
+                </div>
+            </div>
+            <div class="card-block">
+                <div style="height:300px">
+                    <canvas id="chartGateOutDaily"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h5>Export : Empty In (Daily)</h5>
+                    <span>Daily Export Progress</span>
+                </div>
+                <div class="card-header-right">
+                    <i class="icofont icofont-refresh"></i>
+                    <i class="icofont icofont-rounded-down"></i>
+                </div>
+            </div>
+            <div class="card-block">
+                <div style="height:300px">
+                    <canvas id="chartEmptyInDaily"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h5>Export : Loaded Out (Daily)</h5>
+                    <span>Daily Export Progress</span>
+                </div>
+                <div class="card-header-right">
+                    <i class="icofont icofont-refresh"></i>
+                    <i class="icofont icofont-rounded-down"></i>
+                </div>
+            </div>
+            <div class="card-block">
+                <div style="height:300px">
+                    <canvas id="chartLoadedOutDaily"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function createGradient(ctx, color1, color2) {
+        let gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, color1);
+        gradient.addColorStop(1, color2);
+        return gradient;
+    }
+
+    const whiteTextOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+        scales: {
+            x: {
+                ticks: {
+                    color: "white",
+                    font: { size: 12 }
+                },
+                grid: {
+                    color: "rgba(255,255,255,0.2)"
+                }
+            },
+            y: {
+                ticks: {
+                    color: "white",
+                    font: { size: 12 }
+                },
+                grid: {
+                    color: "rgba(255,255,255,0.2)"
+                },
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    color: "white",
+                    font: { size: 14 }
+                }
+            }
+        }
+    };
+
+    // --- 1. Daily Import: Gate In ---
+    let ctxGateIn = document.getElementById('chartGateInDaily').getContext('2d');
+    new Chart(ctxGateIn, {
+        type: 'bar',
+        data: {
+            labels: [
+                @foreach(var item in ViewBag.GateInDaily)
+                {
+                    @:"'@item.Date.ToString("dd-MM-yyyy")',"
+                }
+            ],
+            datasets: [{
+                label: 'Gate In',
+                data: [
+                    @foreach(var item in ViewBag.GateInDaily)
+                    {
+                        @:@item.figure + ","
+                    }
+                ],
+                backgroundColor: createGradient(ctxGateIn, "#00c9a7", "#92fe9d")
+            }]
+        },
+        options: whiteTextOptions
+    });
+
+    // --- 2. Daily Import: Gate Out ---
+    let ctxGateOut = document.getElementById('chartGateOutDaily').getContext('2d');
+    new Chart(ctxGateOut, {
+        type: 'bar',
+        data: {
+            labels: [
+                @foreach(var item in ViewBag.GateOutDaily)
+                {
+                    @:"'@item.Date.ToString("dd-MM-yyyy")',"
+                }
+            ],
+            datasets: [{
+                label: 'Gate Out',
+                data: [
+                    @foreach(var item in ViewBag.GateOutDaily)
+                    {
+                        @:@item.figure + ","
+                    }
+                ],
+                backgroundColor: createGradient(ctxGateOut, "#f7971e", "#ffd200")
+            }]
+        },
+        options: whiteTextOptions
+    });
+
+    // --- 3. Daily Export: Empty In ---
+    let ctxEmptyIn = document.getElementById('chartEmptyInDaily').getContext('2d');
+    new Chart(ctxEmptyIn, {
+        type: 'bar',
+        data: {
+            labels: [
+                @foreach(var item in ViewBag.EmptyInDaily)
+                {
+                    @:"'@item.Date.ToString("dd-MM-yyyy")',"
+                }
+            ],
+            datasets: [{
+                label: 'Empty In',
+                data: [
+                    @foreach(var item in ViewBag.EmptyInDaily)
+                    {
+                        @:@item.figure + ","
+                    }
+                ],
+                backgroundColor: createGradient(ctxEmptyIn, "#36d1dc", "#5b86e5")
+            }]
+        },
+        options: whiteTextOptions
+    });
+
+    // --- 4. Daily Export: Loaded Out ---
+    let ctxLoadedOut = document.getElementById('chartLoadedOutDaily').getContext('2d');
+    new Chart(ctxLoadedOut, {
+        type: 'bar',
+        data: {
+            labels: [
+                @foreach(var item in ViewBag.LoadedOutDaily)
+                {
+                    @:"'@item.Date.ToString("dd-MM-yyyy")',"
+                }
+            ],
+</script>
+
+
+@*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*@
+
+<script>
+     $(document).ready(function () {
+        loadCustomerCount();
+    });
+
+     function loadCustomerCount() {
+$.ajax({
+    url: '/Home/GetDashboardCards',  
+    type: 'GET',                        
+    success: function (res)
+    {
+        
+        $("#Customer").text(res.Customer);
+        $("#Impoter").text(res.Impoter);
+        $("#CHA").text(res.CHA);
+        $("#Exporter").text(res.Exporter);
+        $("#TotalSalesPerson").text(res.TotalSalesPerson);
+        $("#TotalJobs").text(res.TotalJobs);
+        $("#GetIn").text(res.GetIn);
+        $("#GetOut").text(res.GetOut);
+        $("#Carting").text(res.Carting);
+        $("#Stuffing").text(res.Stuffing);
+        $("#Loadedout").text(res.Loadedout);
+    },
+    error: function (err) {
+         
+        console.error("Dashboard data load failed", err);
+    }
+});
+}
+</script>
+
+
+ 

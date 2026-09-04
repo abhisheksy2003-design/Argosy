@@ -1,0 +1,214 @@
+﻿<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Import SSR Work Order Print</title>
+    <link href="~/css/printstyle.css" rel="stylesheet" />
+    <style>
+        body {
+            color: black;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .box {
+            float: left;
+            width: 100%;
+            padding: 0px;
+        }
+
+        .boxHalf {
+            float: left;
+            width: 50%;
+            padding: 0px;
+            border: 1px solid gray;
+        }
+
+        .boxHeaderL {
+            /*float: left;*/
+            width: 20%;
+            padding: 0px;
+            text-align: left;
+        }
+
+        .boxHeaderR {
+            /*float: left;*/
+            width: 80%;
+            padding: 0px;
+            text-align: center;
+        }
+
+        .tblBox {
+            border-collapse: collapse;
+            width: 100%;
+            padding: 0px;
+            float: left;
+        }
+
+        .headingh3 {
+            font-size: 12.5pt;
+            font-family: 'verdana(batlic)';
+            padding: 2px;
+            text-decoration: underline;
+        }
+
+        th {
+            border: 1px solid black;
+            font-size: 12.5px;
+            font-family: verdana(batlic);
+            background-color: #ede5e5;
+        }
+
+        td {
+            border: 1px solid black;
+            font-size: 12.5px;
+            font-family: 'Segoe UI';
+        }
+
+        h5, h4 {
+            font-size: 12.5pt;
+            font-family: 'Segoe UI';
+        }
+
+        h3 {
+            font-size: 12.5pt;
+            font-family: 'verdana(batlic)';
+        }
+
+        .buttomMargin {
+            margin-bottom: -20px;
+            padding-bottom: 0px;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: red;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div style="width:100%; text-align:center; height:100%">
+
+        <div style="width:100%;height:100%;">
+            <div class="box">
+                <div class="boxHeaderL">
+                    <img height="70" width="200" src="~/images/Ved.jpg" />
+                  
+                </div>
+                <div class="boxHeaderR">
+                    <h3 class="buttomMargin" style="font-size:6.5pt; margin-bottom:-12px;">@ViewBag.CompanyName</h3>
+                    <div style="width:90%">
+                        <h5 style="font-size:6.5pt;">@ViewBag.CompanyAddress</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:-10px">
+                <h3 class="headingh3">Import SSR Work Order Print</h3>
+            </div>
+            <hr />
+            <div class="printBody clearfix">
+                <div class="box">
+                    <table class="tblBox">
+                        <tbody>
+                            <tr>
+                                <th style="width:30%;text-align:left">SSR No :</th>
+                                <td style="width:30%;text-align:left">@ViewBag.SSRNo</td>
+                                <th style="width:20%;text-align:left">SSR Date :</th>
+                                <td style="width:30%;text-align:left">@ViewBag.SSRDate</td>
+                            </tr>
+
+                            <tr>
+                                <th style="width:20%;text-align:left">Igm No :</th>
+                                <td style="width:80%;text-align:left" colspan="3">@ViewBag.IgmNo</td>
+                            </tr>
+
+                            <tr>
+                                <th style="width:20%;text-align:left">Item No :</th>
+                                <td style="width:80%;text-align:left" colspan="3">@ViewBag.ItemNo</td>
+                            </tr>
+
+                            <tr>
+                                <th style="width:20%;text-align:left">Type :</th>
+                                <td style="width:80%;text-align:left" colspan="3">@ViewBag.Category</td>
+                            </tr>
+
+                            <tr>
+                                <th style="width:20%;text-align:left">CHA Name :</th>
+                                <td style="width:80%;text-align:left" colspan="3">@ViewBag.CHAName</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                &nbsp;
+            </div>
+            <div class="table-responsive">
+                <table class="tblBox">
+                    <thead>
+                        <tr>
+                            <th style="width:50px;">Sr No.</th>
+                            <th style="width:20px;">Container No</th>
+                            <th style="width:80px;">Size</th>
+                            <th style="width:100px;">Type</th>
+                            <th style="width:80px;">Examine</th>
+                            <th style="width:100px;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var dr in ViewBag.InvoiceItemList)
+                        {
+                            <tr>
+                                <td style="text-align:left">@dr["SRNo"]</td>
+                                <td style="text-align:left">@dr["ContainerNo"]</td>
+                                <td style="text-align:center">@dr["size"]</td>
+                                <td style="text-align:center">@dr["ctrtype"]</td>
+                                <td style="text-align:center">@dr["Examine"]</td>
+                                <td style="text-align:center">@dr["Amount"]</td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                &nbsp;
+            </div>
+            <div class="box">
+                <div class="boxHeaderL">
+                    <h5 style="font-size:6.5pt;">Prepared By : @ViewBag.PreparedBy</h5>
+                </div>
+                <div class="boxHeaderR" style="text-align:right">
+                    <h3 class="buttomMargin" style="font-size:6.5pt;">For @ViewBag.CompanyName</h3>
+                </div>
+            </div>
+            <div>
+                &nbsp;
+            </div>
+            <div>
+                <h3 style="font-size:6.5pt;text-align: right;">Authorised Signatory</h3>
+            </div>
+        </div>
+        <div>
+            &nbsp;
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        window.print();
+    });
+</script>

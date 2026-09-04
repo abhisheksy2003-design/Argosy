@@ -1,0 +1,513 @@
+﻿
+@{
+    ViewBag.Title = "FinalGatePass";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+<style>
+    /*.table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }*/
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+
+    .hiderow {
+        display: none;
+    }
+</style>
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<div class=" content-area" id="divsummary">
+    <div class="page-header">
+        <h4 class="page-title">
+            Awaiting Final Confirmations
+        </h4>
+        @*<ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a onclick="Back();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Add Work Order"></i> </a>
+                </li>
+            </ol>*@
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+
+
+
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                        <thead>
+
+                                            <tr></tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" content-area" id="diventrysummary" style="display:none">
+    <div class="page-header">
+        <h4 class="page-title">
+            Final Out Confirmations
+        </h4>
+        @*<ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a onclick="Back();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Add Work Order"></i> </a>
+                </li>
+            </ol>*@
+    </div>
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">GP No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtGPNo", null, new { @class = "form-control ", @id = "txtGPNo", autocomplete = "off", @readonly = true })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Final Out Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TXtGPdate", null, new { @class = "form-control  datePicker1 ", @id = "TXtGPdate", name = "TXtGPdate", Value = DateTime.Now.ToString("dd MMM yyyy"), autocomplete = "off", disabled = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Category</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TxtCategory", null, new { @class = "form-control ", @id = "TxtCategory", autocomplete = "off", @disable = "Disabled", @readonly = true })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Delivery Type</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TxtDeliverty", null, new { @class = "form-control ", @id = "TxtDeliverty", autocomplete = "off", @disable = "Disabled", @readonly = true })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label">Out Date and Time</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("ddloutdateandtime", null, new { @class = "form-control  form_datetime1 ", @id = "ddloutdateandtime", name = "ddloutdateandtime", Value = DateTime.Now.ToString("dd MMM yyyy HH:mm"), autocomplete = "off", disabled = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*</div>
+                                <div class="row">*@
+
+
+                        </div>
+                        <div class="row">
+
+                            <div class="col-lg-2 col-sm-12" style="display:none;">
+                                <div class="form-group">
+                                    <label class="form-label">Valid Upto</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TxtValidUptoDate", null, new { @class = "form-control  form_datetime1 ", @id = "TxtValidUptoDate", name = "TxtValidUptoDate", Value = DateTime.Now.ToString("dd MMM yyyy HH:mm"), autocomplete = "off", disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12" id="divTEUS">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <span style="font-weight: bold"> 20 :</span> <label id="lbltwenty" style="font-weight: bold"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12" id="divTEUS1">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <span style="font-weight: bold"> 40 :</span> <label id="lblforty" style="font-weight: bold"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12" id="divTEUS2">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <span style="font-weight: bold"> 45 :</span> <label id="lblfortyfive" style="font-weight: bold"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12" id="divTEUS3">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <span style="font-weight: bold"> TEUS :</span>   <label id="lblTotal" style="font-weight: bold"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-10">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblsavedetails">
+                                        <thead>
+                                            <tr>
+                                                <th>Select</th>
+                                                <th>Jo no</th>
+                                                <th>Container No</th>
+                                                <th>Size</th>
+
+                                                <th>Vehicle</th>
+                                                <th>Cargo Qty</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden">.</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*<input type="button" id="btnShow" title="Save" value="Save" class="btn btn-primary" onclick="Savedetails()" />*@
+                                            <button id="btnsave" class="btn btn-submit" title="Save" onclick="Savedetails()">Save</button>
+                                            @*<input type="button" id="btnShow" title="Clear" value="Clear" class="btn btn-gray" onclick="Clear()" />*@
+                                            <button type="button" class="btn btn-cancel" onclick="Clear()" name="clearProfile" title="clear" id="clearValue">Clear</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(window).on('load', function () {
+
+        Showdetails()
+
+    })
+
+    function Showdetails() {
+        debugger;
+
+
+        try {
+
+            $.ajax({
+                url: "/BookingEntry/FinalSummary",
+                //data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    RepTableDataJsonwopaging($("#example2"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+    function GatePassGen(GPNo) {
+        $("#divsummary").hide()
+        $("#diventrysummary").show()
+        $("#txtGPNo").val(GPNo);
+
+        try {
+            var data1 = { 'GPNo': GPNo };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/BookingEntry/FinalGridSummary",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    data = JSON.parse(data);
+
+
+                    $("#TXtGPdate").val(data[0].GPDate);
+                    $("#TxtCategory").val(data[0].Category);
+                    $("#TxtValidUptoDate").val(data[0].ValidUpto);
+                    $("#TxtDeliverty").val(data[0].DeliveryType);
+
+                    $("#ddloutdateandtime").val(data[0].GPDate);
+
+                    $('#tblsavedetails').dataTable({
+                        "destroy": true,
+                        "bLengthChange": false,
+                        "bPaginate": false,
+                        "bFilter": false,
+                        "paging": false,
+                        "aaData": data,
+                        "columns": [
+                            {
+
+                                "data": "ContainerNo",
+                                "render": function (data, type, row, meta) {
+                                    data = '<input type=\"checkbox\" name=\"checklist[]\" class=\"checklist\" id=\"checklist\" checked  value="' + data + '">';
+                                    return data;
+
+                                }
+                            },
+                            { "data": "Jono" },
+                            { "data": "ContainerNo" },
+                            { "data": "CargoQty" },
+
+
+                            {
+
+                                "data": "VehicleNo",
+
+                                "render": function (data, type, row, meta) {
+                                    data = '<input type=\"textbox\" name=\"TxtVehicleno\" class=\"form-control\" id=\"TxtVehicleno\" style=\"width: 150px;text-transform:uppercase\"     value="' + data + '">';
+                                    return data;
+
+                                }
+                            },
+                            { "data": "Size" },
+
+
+
+
+                        ]
+
+                    })
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+
+        @*function Save() {
+
+
+         debugger;
+         ///ddlentryType
+
+
+            var GPNo = $("#txtGPNo").val();
+
+            var SelectedData = new Array();
+            var tablearray = new Array();
+
+            var table = document.getElementById("example3");
+
+            var row;
+            for (var i = 1; i < table.rows.length; i++) {
+
+                row = table.rows[i];
+
+                Jono = row.cells[1].innerText;
+                ContainerNo = row.cells[1].innerText;
+
+                Size = row.cells[2].innerText;
+
+
+                SelectedData.push({
+                    'Jono': Jono, 'ContainerNo': ContainerNo, 'Size': Size
+                })
+            }
+
+            var data1 = {
+                'Debitdata': SelectedData, 'GPNo': GPNo
+            };
+         var data = JSON.stringify(data1);
+
+
+
+                          $.ajax({
+                              url: "/BookingEntry/SaveGatePassDetails",
+                            data: data,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                              success: function (data) {
+                                  //alert(data);
+                                  $('#btnSave').removeAttr('disabled', 'disabled');
+
+
+                                  alert(data);
+
+                          document.location = '@Url.Action("GenerateGatePass", "BookingEntry")';
+
+
+                            },
+                            error: function (errormessage) {
+                                alert(errormessage.responseText);
+                            }
+                        });
+
+
+     }*@
+</script>
+<script>
+    function Savedetails() {
+
+        $("#global-loader").fadeIn("slow");
+        var barcodeno = $("#TxtBarcodeno").val();
+        var Gpno = $("#txtGPNo").val();
+        var GPdate = $("#TXtGPdate").val();
+        var Category = $("#TxtCategory").val();
+        var validdate = $("#TxtValidUptoDate").val();
+        var deliverytype = $("#TxtDeliverty").val();
+        var InandOutdate = $("#ddloutdateandtime").val();
+
+
+
+
+        var itemcount = checkItemcount();
+        if (itemcount == false) {
+            alert("No details selected for saving. Cannot proceed");
+        }
+        else {
+            var checkboxarray = [];
+            $('input[type=checkbox]').each(function () {
+                if (this.checked) {
+
+                    checkboxarray.push($(this).val());
+                }
+            });
+
+            var tablearray = [];
+            var table = document.getElementById("tblsavedetails");
+            var row;
+            for (var i = 1; i < table.rows.length; i++) {
+
+                row = table.rows[i];
+
+                for (var k = 0; k < checkboxarray.length; k++) {
+                    var InvoiceNo = row.cells[2].innerText;
+                    if (InvoiceNo == checkboxarray[k]) {
+                        row = table.rows[i];
+                        JoNo = row.cells[1].innerText;
+                        ContainerNo = row.cells[2].innerText;
+                        Size = row.cells[3].innerText;
+                        VehicleNo = row.cells[4].childNodes[0].value;
+
+                        /*if (VehicleNo == "") {
+                            alert("Vehicle no cannot be left blank again container no " + ContainerNo + "");
+                            $("#global-loader").fadeOut("slow");
+                            return false;
+                        }*/
+
+                        Cargo = row.cells[5].innerText;
+                        tablearray.push({
+                            'JONo': JoNo, 'ContainerNo': ContainerNo, 'SIZE': Size,
+                            'VehicleNo': VehicleNo,   'CargoQty': Cargo
+                        })
+                    }
+                }
+            }
+            var data1 = {
+                'Containerdetails': tablearray,   'Gpno': Gpno, 'Category': Category, 'validdate': validdate, 'deliverytype': deliverytype,
+                'InandOutdate': InandOutdate, 'GPdate': GPdate
+            };
+            var data = JSON.stringify(data1);
+            $.ajax({
+                url: "/BookingEntry/SaveFinalOutConformation",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    alert(data);
+                    $("#global-loader").fadeOut("slow");
+                     @*document.location = '@Url.Action("FinalOutConfirmations", "Gate")'*@
+                      document.location = '@Url.Action("FinalGatePass", "BookingEntry")';
+                },
+
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                    $("#global-loader").fadeOut("slow");
+                }
+            });
+
+        }
+    }
+
+
+    function Clear() {
+       @* document.location = '@Url.Action("FinalOutConfirmations", "Gate")';*@
+        document.location = '@Url.Action("FinalGatePass", "BookingEntry")';
+    }
+
+    function checkItemcount() {
+
+        var table = $('#tblsavedetails').DataTable();
+
+        if (table.rows().count() == 0) {
+
+            return false;
+        }
+        return true;
+
+    }
+</script>

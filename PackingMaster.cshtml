@@ -1,0 +1,278 @@
+﻿
+@{
+    ViewBag.Title = "PackingMaster";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<style>
+    .table thead th, .text-wrap table thead th {
+        background-color: #9f78ff;
+        color: white;
+    }
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+<script src="~/js/GetTableJson.js"></script>
+<div class=" content-area" id="DIvCompantMaster">
+    <div class="page-header">
+        <h4 class="page-title" id="New">Packing Master</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="ShowSummary();" id="ShowSummary" class="btn btn-josph btn-success" style="color:white;align-content:center;"><i class="fa fa-file-text" data-toggle="tooltip" data-placement="bottom" title="Summary" data-original-title="Back"></i>  </a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2 col-sm-12" style="display:none">
+        <div class="form-group">
+            <label class="form-label mandatory">Packing ID </label>
+            <div class="row gutters-xs">
+                <div class="col">
+                    <input ID="txtPackingID" type="text" placeholder="New" readonly="readonly" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-6">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-4 col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label">Packing Name</label>
+                                @Html.TextBox("PackingName", null, new { @class = "form-control", @id = "PackingName", name = "PackingName", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="form-group label-floating">
+                            @*<label class="custom-control custom-checkbox"></label>*@
+                            @*@Html.EditorFor(model => model.IsScan, new { htmlAttributes = new { @class = "custom-control-input", @id = "IsScan", name = "IsScan", placeholder = "IsScan", autocomplete = "off", type = "checkbox",onchange="OnIsScanChange()" } })*@
+                            <input type="checkbox" class="checkbox origin" name="checklist[]" id="chkIsScan">
+                            <span>Is Active?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-success float-right" id="Save" onclick="Save()" title="Save"><i class="fa fa-save"></i></button>
+
+                        </div>
+                    </div>
+                    <div class="row" style="display:none" id="divupdate">
+                        <div class="col-md-12">
+                            <button class="btn btn-success float-right" id="Update" onclick="Update()" title="Update"><i class="fa fa-save"></i></button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" content-area" id="divsummary" style="display:none">
+    <div class="page-header">
+        <h4 class="page-title">Packing List</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="Back();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Add Work Order"></i> </a>
+            </li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+
+                        <div class="row">
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Search</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                            @Html.TextBox("txtsearch", null, new { @class = "form-control ", @id = "txtsearch", name = "txtsearch", autocomplete = "on" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+
+                                            <button class="btn btn-primary" id="TripSearch" type="button" onclick="Showdetails()"><i class="fe fe-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                        <thead>
+
+                                            <tr></tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function ShowSummary() {
+        $("#DIvCompantMaster").hide();
+        $("#divsummary").show();
+    }
+    function Back() {
+        $("#DIvCompantMaster").show();
+        $("#divsummary").hide();
+    }
+    $(window).on("load", function (e) {
+
+    })
+</script>
+<script>
+
+    function Save() {
+        var PackingName = document.getElementById('PackingName').value;
+        var IsScan;
+        if ($("#chkIsScan").is(":checked")) {
+            IsScan = "1";
+        }
+        else {
+            IsScan = "0";
+        }
+
+        var InsertDescriptionName = {};
+        InsertDescriptionName.PackingName = PackingName;
+
+
+                $.ajax({
+                    url: "/Master/InsertDescriptionName",
+                    data: '{InsertDescriptionName: ' + JSON.stringify(InsertDescriptionName) + '}',
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                         alert(data);
+                         window.location.href = '@Url.Action("PackingMaster", "Master")';
+
+
+                },
+                    error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                   }
+                });
+
+    }
+</script>
+<script type="text/javascript">
+
+    function Showdetails() {
+        $("#global-loader").fadeIn("slow");
+
+        var search = document.getElementById('txtsearch').value;
+        var data1 = {
+            'search': search
+        };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Master/GetDescriptionSummary',
+            data: data,
+            // data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                $("#example2").empty();
+                RepTableDataJson($("#example2"), data, "Voucher Closed Details", "VoucherClosedDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+    function EditComany(CompanyID, Companyname) {
+        $("#DIvCompantMaster").show();
+        $("#divsummary").hide();
+        $("#divupdate").show();
+        document.getElementById('txtCompanyID').value = CompanyID;
+
+        document.getElementById('CompanyName').value = Companyname;
+
+    }
+
+    function Update() {
+
+        var CompanyID = document.getElementById('txtCompanyID').value
+        var CompanyName = document.getElementById('CompanyName').value;
+        var IsScan;
+        if ($("#chkIsScan").is(":checked")) {
+            IsScan = "1";
+        }
+        else {
+            IsScan = "0";
+        }
+
+        var CompanyNameMEntities = {};
+        CompanyNameMEntities.CompanyName = CompanyName;
+        CompanyNameMEntities.CompanyID = CompanyID;
+
+                $.ajax({
+                    url: "/Master/UpdateCompanyName",
+                    data: '{CompanyNameMEntities: ' + JSON.stringify(CompanyNameMEntities) + '}',
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                         alert(data);
+                         window.location.href = '@Url.Action("CompanyMaster", "Master")';
+
+
+                },
+                    error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                   }
+                });
+
+    }
+</script>

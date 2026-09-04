@@ -1,0 +1,1084 @@
+﻿@model MvcBondEntities.BusinessEntities.JobOrderMEntities
+
+@{
+    ViewBag.Title = "Update Job Order";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<script src="~/js/GetTableJson.js"></script>
+<link href="~/css/NewCHAProfile.css" rel="stylesheet" />
+<script src="~/js/validation.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@* script for the sweet alert *@
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<style>
+    .dropdown-disable {
+        cursor: not-allowed;
+        pointer-events: none;
+        /*Button disabled - CSS color class*/
+        color: #6b6f80;
+        background-color: #fff;
+        opacity: 0.65;
+    }
+
+    .col-size {
+        min-width: 90px !important;
+    }
+
+    .col-fcl {
+        min-width: 90px !important;
+    }
+
+    .col-iso {
+        min-width: 90px !important;
+    }
+
+    .col-jo {
+        min-width: 90px !important;
+    }
+
+</style>
+<style>
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+@* For waiting event *@
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+                        top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+                        opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 45%; color: White;">
+        <div class="global-loader1">
+
+        </div>
+    </p>
+</div>
+
+<div class=" content-area" id="divBLForm">
+    <div class="page-header">
+        <h4 class="page-title">Update Job Order</h4>
+
+    </div>
+    @*@using (Html.BeginForm("BL", "GenerateBL", FormMethod.Post))*@
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "BLForm" }))
+    {
+        @*@Html.AntiForgeryToken()*@
+    }
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Search Criteria</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.DropDownList("ddlSearchCriteria", new List<SelectListItem>
+                                         { new SelectListItem { Text = "--Select--", Value = ""},
+                                             new SelectListItem { Text = "IGM No", Value = "IGMNo"},
+                                             new SelectListItem { Text = "BLNo", Value = "BLNo"},
+
+                                           }, new { @class = "form-select", autocomplete = "off", @id = "ddlSearchCriteria" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12" id="divBLNo" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label"> BL Number</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.Editor("txtSearchBL", new { htmlAttributes = new { @class = "form-control", @id = "txtSearchBL" } })
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12" id="divIGMNo" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label"> IGM No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.Editor("txtSearchIGMNo", new { htmlAttributes = new { @class = "form-control", @id = "txtSearchIGMNo" } })
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-2 col-sm-12" id="divIGMNo1" style="display:none">
+
+                                <div class="form-group">
+                                    <label class="form-label"> Item No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.Editor("txtSearchItemNo", new { htmlAttributes = new { @class = "form-control", @id = "txtSearchItemNo" } })
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-1 col-sm-12 " id="divShowButton">
+                                <div class="form-group">
+                                    <label class="form-label " style="visibility:hidden">.</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="button" id="btnShow1" onclick="ShowJODetails()" name="login" value="Show" class="btn btn-primary me-2" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            @*<input size="16" type="text" value="2012-06-15 14:45" readonly class="form_datetime1">*@
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">JO No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.Editor("JONo", new { htmlAttributes = new { @class = "form-control Number", @id = "JONo", @readonly = "Readonly", Placeholder = "NEW" } })
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">JO Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.EditorFor(model => model.JODate, new { htmlAttributes = new { @class = "form-control", @id = "JODate", @readonly = "readonly", @Value = DateTime.Now.ToString("dd MMM yyyy") } })
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" style="display:none;">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden">.</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <a href="#" onclick="AddAttachment()">
+                                                <i class="fa fa-paperclip fa-2x	" style="color:#6c4cbb" aria-hidden="true"></i>
+                                                <span class="custom-switch-description" style="font-size:17px;color:#6c4cbb"><b><label id="lblCount">0</label></b></span>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Customer</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @* @Html.EditorFor(model => model.AgentID, new { htmlAttributes = new { @class = "form-control", @id = "AgentID" } })*@
+                                            @Html.DropDownListFor(model => model.AgentID, (IEnumerable<SelectListItem>)ViewBag.Customer, "--Select--", new { @class = "form-select", @id = "ddlAgent", name = "AgentID", onblur = "myRequiredValidation('ddlAgent')", autoComplete = "on" })
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Shipping Line</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @* @Html.EditorFor(model => model.shipperid, new { htmlAttributes = new { @class = "form-control Number", @id = "shipperid" } })*@
+                                            @Html.DropDownListFor(model => model.shipperid, (IEnumerable<SelectListItem>)ViewBag.ShipLines, "--Select--", new { @class = "form-select", @id = "shipperid", name = "shipperid" })
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">CHA</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @* @Html.EditorFor(model => model.shipperid, new { htmlAttributes = new { @class = "form-control Number", @id = "shipperid" } })*@
+                                            @Html.DropDownListFor(model => model.Chaid, (IEnumerable<SelectListItem>)ViewBag.CHA, "--Select--", new { @class = "form-select", @id = "Chaid", name = "Chaid", onblur = "myRequiredValidation('Chaid')", autoComplete = "on" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-12" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label"> Shipper</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @* @Html.DropDownListFor(model => model.Size, (IEnumerable<SelectListItem>)ViewBag.ContainerSize, "--Select--", new { @class = "form-control", @id = "ddlSize", name = "Size", onblur = "myRequiredValidation('ddlSize')" })*@
+
+                                            @Html.DropDownListFor(model => model.SLID, (IEnumerable<SelectListItem>)ViewBag.Shippers, "--Select--", new { @class = "form-select", @id = "ddlshipper", name = "SLID" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-lg-2 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Via No</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @* @Html.EditorFor(model => model.AgentID, new { htmlAttributes = new { @class = "form-control", @id = "AgentID" } })*@
+                                                @Html.EditorFor(model => model.ViaNo, new { htmlAttributes = new { @class = "form-control", @id = "txtViaNo" } })
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Vessel Name</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.DropDownListFor(model => model.VesselID, (IEnumerable<SelectListItem>)ViewBag.Vessel, "--Select--", new { @class = "form-select", @id = "ddlVessel", name = "VesselID", onblur = "myRequiredValidation('ddlVessel')" })
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Port Name</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.DropDownListFor(model => model.PortID, (IEnumerable<SelectListItem>)ViewBag.Ports, "--Select--", new { @class = "form-select", @id = "ddlPort", name = "PortID" })
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Berthing Date @*and Time*@</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.EditorFor(model => model.berthingdate, new { htmlAttributes = new { @class = "form-control cal-icon", @id = "txtBerthingDate" } })
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">IGM No</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.EditorFor(model => model.IGMNo, new { htmlAttributes = new { @class = "form-control", @id = "txtIGMNo", @readonly = "Readonly" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            @*</div>*@
+                            <div class="row">
+                                <div class="col-lg-2 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="form-label">BL No</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.EditorFor(model => model.BLNumber, new { htmlAttributes = new { @class = "form-control", @id = "txtBLNo" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="form-label">HBL No</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.EditorFor(model => model.HouseBLNumber, new { htmlAttributes = new { @class = "form-control", @id = "txtHouseBLNo" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Marketing Person</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.DropDownListFor(model => model.Sales_Person_Id, (IEnumerable<SelectListItem>)ViewBag.SalesPersonM, "--Select--", new { @class = "form-select", @id = "ddlSalesPerson", name = "ddlSalesPerson", onblur = "myRequiredValidation('ddlSalesPerson')" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Remarks</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @* @Html.EditorFor(model => model.AgentID, new { htmlAttributes = new { @class = "form-control", @id = "AgentID" } })*@
+                                                @Html.EditorFor(model => model.JoRemarks, new { htmlAttributes = new { @class = "form-control", @id = "txtJoRemarks" } })
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered nowrap" id="containerList" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="wd-15p sorting">Container No</th>
+                                                    <th class="wd-15p sorting">Container Type</th>
+                                                    <th class="wd-15p sorting">Cargo  Type</th>
+                                                    <th class="col-size">Size</th>
+                                                    <th class="col-fcl">FCL/LCL</th>
+                                                    <th class="col-iso">ISO Code</th>
+
+                                                    <th class="wd-15p sorting">Commodity Group</th>
+                                                    <th class="col-jo">JO Type</th>
+
+                                                    <th class="wd-15p sorting">Temp</th>
+                                                    <th class="wd-15p sorting">HUM</th>
+                                                    <th class="wd-15p sorting">Vent</th>
+                                                    <th class="wd-15p sorting">Class</th>
+                                                    <th class="wd-15p sorting">UN No</th>
+                                                    <th class="wd-15p sorting">Packing Group</th>
+                                                    <th class="wd-15p sorting">Over Width</th>
+                                                    <th class="wd-15p sorting">Over Height</th>
+                                                    <th class="wd-15p sorting">Over Length</th>
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group pull-right">
+                                <label class="form-label"></label>
+                                <div class="row gutters-xs">
+                                    <div class="col d-flex gap-3">
+                                        <input type="button" id="btnSave" name="login" value="Save" class="btn btn-save px-4" onclick="SaveJobOrderDetails()" />
+                                        @* <input type="button" id="btnClear" onclick="Clear()" name="login" value="Clear" class="btn btn-secondary" />*@
+                                        <button type="button" class="btn btn-cancel px-4" onclick="Clear()" name="clearProfile" title="clear" id="clearValue">Clear</button>
+                                        <input type="hidden" id="hdMode" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal  fade" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content" id='myModalContent'>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    var containerTypeList = @Html.Raw(
+        Json.Encode(
+            ((IEnumerable<SelectListItem>)ViewBag.ContainerTypes)
+            .Select(x => new { id = x.Value, text = x.Text })
+        )
+    );
+
+     var cargoTypeList = @Html.Raw(Json.Encode(
+        ((IEnumerable<SelectListItem>)ViewBag.CargoType)
+        .Select(x => new { id = x.Value, text = x.Text })
+    ));
+
+    var sizeList = @Html.Raw(Json.Encode(
+        ((IEnumerable<SelectListItem>)ViewBag.ContainerSize)
+        .Select(x => new { id = x.Value, text = x.Text })
+    ));
+
+    var isoCodeList = @Html.Raw(Json.Encode(
+        ((IEnumerable<SelectListItem>)ViewBag.ISOCodes)
+        .Select(x => new { id = x.Value, text = x.Text })
+    ));
+
+    var commodityGroupList = @Html.Raw(Json.Encode(
+        ((IEnumerable<SelectListItem>)ViewBag.CommodityGroup)
+        .Select(x => new { id = x.Value, text = x.Text })
+    ));
+    var joTypeList = @Html.Raw(Json.Encode(
+        ((IEnumerable<SelectListItem>)ViewBag.JoTypes)
+        .Select(x => new { id = x.Value, text = x.Text })
+    ));
+
+    // FCL / LCL (static)
+    var flList = [
+        { id: "1", text: "FCL" },
+        { id: "2", text: "LCL" }
+    ];
+    var PackingGroupList = [
+        { id: "I", text: "I" },
+        { id: "II", text: "II" },
+        { id: "III", text: "III" }
+    ];
+
+    function renderDropdown(list, selectedId, cssClass, rowIndex) {
+
+        var html = "<select class='form-select " + cssClass + "' data-row='" + rowIndex + "'>";
+        html += "<option value=''>--Select--</option>";
+
+        $.each(list, function (i, item) {
+            var selected = (item.id == selectedId) ? "selected" : "";
+            html += "<option value='" + item.id + "' " + selected + ">" + item.text + "</option>";
+        });
+
+        html += "</select>";
+        return html;
+    }
+
+    function renderInput(value, cssClass, rowIndex, type = "text") {
+
+        value = value == null ? "" : value;
+
+        return "<input type='" + type + "' " +
+            "class='form-control " + cssClass + "' " +
+            "data-row='" + rowIndex + "' " +
+            "value='" + value + "' />";
+    }
+
+
+</script>
+
+
+    <Script>
+
+    function FetchContainerDetails(jono) {
+    // alert(jono)
+
+    var data = JSON.stringify({
+            'jono': jono
+    });
+
+        $.ajax({
+            url: "/BookingEntry/FetchJOContainerDetails",
+        data: data,
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        //  dataType: "json",
+        success: function (data) {
+            console.log(data);
+
+            //-=======Display Total Container Details with Teus
+            //try {
+            //    DisplayContSize(data.Containerlist);
+            //}
+            //catch (ex) { }
+            //-=======End Total Container Details with Teus
+
+            $('#containerList').dataTable({
+                "destroy": true,
+                "bLengthChange": false,
+                "aaData": data.Containerlist,
+                "columns": [
+
+                    { data: "ContainerNo" },//0
+                    {
+                        data: "ContainerTypeID",                        //1
+                        render: function (data, type, row, meta) {
+                            return renderDropdown(containerTypeList, data, "ddlContainerType", meta.row);
+                        }
+                    },
+
+                    {
+                        data: "Cargotypeid",                       //2
+                        render: function (data, type, row, meta) {
+                            return renderDropdown(cargoTypeList, data, "ddlCargoType", meta.row);
+                        }
+                    },
+                    {
+                        data: "Size",//3
+                        render: function (data, type, row, meta) {
+                            return renderDropdown(sizeList, data, "ddlSize", meta.row);
+                        }
+                    },
+                    {
+                        data: "FLID",//4
+                        render: function (data, type, row, meta) {
+                            return renderDropdown(flList, data, "ddlFL", meta.row);
+                        }
+                    },
+                    {
+                        data: "ISOCode",//5
+                        render: function (data, type, row, meta) {
+                            return renderDropdown(isoCodeList, data, "ddlISOCode", meta.row);
+                        }
+                    },
+                    {
+                        data: "Commodity_group_id",//6
+                        render: function (data, type, row, meta) {
+                            return renderDropdown(commodityGroupList, data, "ddlCommodityGroup", meta.row);
+                        }
+                    },
+                    {
+                        data: "JOTypeID",//7
+                        render: function (data, type, row, meta) {
+                            return renderDropdown(joTypeList, data, "ddlJoType", meta.row);
+                        }
+                    },
+                    {
+                        data: "Temp",                       //8
+                        render: function (data, type, row, meta) {
+                            return renderInput(data, "txtTemp", meta.row);
+                        }
+                    },
+                    {
+                        data: "Humidity",                       //9
+                        render: function (data, type, row, meta) {
+                            return renderInput(data, "txtHumidity", meta.row);
+                        }
+                    },
+                    {
+                        data: "Ventilation",                       //10
+                        render: function (data, type, row, meta) {
+                            return renderInput(data, "txtVentilation", meta.row);
+                        }
+                    },
+                    {
+                        data: "Class",                       //11
+                        render: function (data, type, row, meta) {
+                            return renderInput(data, "txtClass", meta.row);
+                        }
+                    },
+                    {
+                        data: "UNNo",                       //12
+                        render: function (data, type, row, meta) {
+                            return renderInput(data, "txtUNNo", meta.row);
+                        }
+                    },
+                    {
+                        data: "PackingGroup",                       //13
+                        render: function (data, type, row, meta) {
+                            return renderDropdown(PackingGroupList, data, "ddlPackingGroup", meta.row);
+                        }
+                    },
+                    {
+                        data: "OverWidth",                       //14
+                        render: function (data, type, row, meta) {
+                            return renderInput(data, "txtOverWidth", meta.row, "number");
+                        }
+                    },
+                    {
+                        data: "OverHeight",                       //15
+                        render: function (data, type, row, meta) {
+                            return renderInput(data, "txtOverHeight", meta.row, "number");
+                        }
+                    },
+                    {
+                        data: "OverLength",                       //16
+                        render: function (data, type, row, meta) {
+                            return renderInput(data, "txtOverLength", meta.row, "number");
+                        }
+                    }
+                ]
+            });
+
+        },
+        error: function (errormessage) {
+            alert(errormessage.responseText);
+        }
+    });
+
+}
+
+        function showModal(JobNo) {
+
+            $('#txtJobNoDoc').val(JobNo);
+        $('#myModal').modal('show');
+        FetchAttachmentTableData(JobNo);
+}
+
+        function closeModal() {
+            $('#myModal').modal('hide');
+}
+
+        function UploadAttachment() {
+
+    var fileInput = document.getElementById('jobOrderAttachment');
+        var jobNo = $('#txtJobNoDoc').val();
+        var docType = $('#ddlDocType').val();
+
+        if (fileInput.files.length === 0) {
+            Swal.fire("Please select a file.");
+        return;
+    }
+
+        var formData = new FormData();
+        formData.append('JobNo', jobNo);
+        formData.append('DocType', docType);
+        formData.append('UploadedFile', fileInput.files[0]);
+
+        $.ajax({
+            url: '/BookingEntry/UploadJobOrderDocument',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            if (response.success) {
+            FetchAttachmentTableData(response.JoNo);
+            } else {
+            Swal.fire("Upload failed: " + response.message);
+            }
+        },
+        error: function () {
+            Swal.fire("Something went wrong while uploading.");
+        }
+    });
+}
+
+        function FetchAttachmentTableData(JoNo) {
+            data1 = { 'JoNo': JoNo };
+        data = JSON.stringify(data1);
+
+        $.ajax({
+            type: 'POST',
+        url: '/BookingEntry/FetchAttachmentTableData',
+        data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: true,
+        success: function (jsonResult) {
+
+            $("#tblJobOrderAttachments").empty();
+        RepTableDataJson($("#tblJobOrderAttachments"), jsonResult, "Voucher Details", "VoucherDetails_List");
+        },
+        error: function (errormessage) {
+            alert(errormessage.responseText);
+        $("#global-loader").fadeOut("slow");
+        }
+    });
+
+}
+
+    </Script>
+
+    <script>
+
+        function getBack() {
+            $("#divSummary").show()
+    $('#divBLForm').hide()
+        JOSummary()
+}
+
+        $(document).ready(function () {
+            upperCaseOnKeyUp(txtViaNo);
+    //upperCaseOnKeyUp(ContainerNo);
+});
+
+
+        $("#ddlSearchCriteria").change(function () {
+    if ($("#ddlSearchCriteria").val() == "IGMNo") {
+            // alert("hi")
+            $("#divIGMNo").show()
+        $("#divIGMNo1").show()
+        $("#divBLNo").hide()
+    }
+        else if ($("#ddlSearchCriteria").val() == "BLNo") {
+            // alert("hi")
+            $("#divIGMNo").hide()
+        $("#divIGMNo1").hide()
+        $("#divBLNo").show()
+
+    }
+
+});
+
+
+        function Checkshow() {
+            JOSummary()
+        }
+
+
+        function OnChangeDate(element) {
+    // $("#chkIsWithDate").onchange(function () {
+    //  alert("hi");
+    var IsDate = $("#chkIsWithDate").is(":checked");
+        if (IsDate == true) {
+
+            $('#divShowButton1').show();
+        $('#divShowButton').hide();
+
+        $('#divDate').show();
+    }
+        else {
+            $('#divShowButton1').hide();
+        $('#divShowButton').show();
+        $('#divDate').hide();
+    }
+}
+    </script>
+
+    <script>
+        function myRequiredTextValidation(TextField) {
+    // alert("#" + TextField)
+    if ($("#" + TextField).val() == "") {
+            $("#" + TextField).removeClass("form-control is-valid state-valid")
+        $("#" + TextField).addClass("form-control is-invalid state-invalid")
+
+    } else {
+            // alert("hi")
+            $("#" + TextField).removeClass("form-control is-invalid state-invalid")
+        $("#" + TextField).addClass("form-control is-valid state-valid")
+
+    }
+};
+
+        function myRequiredValidation(TextField) {
+
+    // alert("#" + TextField);
+
+    if ($("#" + TextField).val() == "") {
+            $("#" + TextField).removeClass("form-control is-valid state-valid")
+        $("#" + TextField).addClass("form-control is-invalid state-invalid")
+        //  document.getElementById(TextField).style.borderColor = "red"
+    } else {
+            // alert("hi")
+            $("#" + TextField).removeClass("form-control is-invalid state-invalid")
+        $("#" + TextField).addClass("form-control is-valid state-valid")
+        // document.getElementById(TextField).style.borderColor = "Gainsboro"
+    }
+};
+    </script>
+
+
+
+    <script>
+        function ShowJODetails() {
+    // read selected criteria
+    var criteria = $('#ddlSearchCriteria').val();
+        if (!criteria) {
+            alert('Please select a Search Criteria.');
+        return;
+    }
+
+        var searchValue = '';
+        if (criteria === 'BLNo') {
+            searchValue = $('#txtSearchBL').val();
+        if (!searchValue || !searchValue.trim()) {
+            alert('Please enter BL No.');
+        return;
+        }
+    } else if (criteria === 'IGMNo') {
+            searchValue = $('#txtSearchIGMNo').val();
+        if (!searchValue || !searchValue.trim()) {
+            alert('Please enter IGM No.');
+        return;
+        }
+    } else {
+            alert('Unsupported search criteria selected.');
+        return;
+    }
+
+        var searchtext = $('#txtSearchItemNo').val();
+
+        $.ajax({
+            url: "/BookingEntry/FetchJODetails",
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        //  dataType: "json",
+        //data: JSON.stringify(payload),
+        data: JSON.stringify({
+            SearchCriteria: criteria,
+        SearchValue: searchValue.trim(),
+        SearchText: searchtext,
+        }),
+        success: function (data) {
+            if (!data || !data.JOList) {
+            alert('No records found for the given criteria.');
+        return;
+            }
+
+        $('#divBLForm :input').attr('disabled', false);
+
+        $("#JONo").val(data.JOList.JONo);
+        $("#JODate").val(data.JOList.JODateInString);
+
+        $("#ddlAgent").val(data.JOList.AgentID);
+        $("#shipperid").val(data.JOList.shipperid);
+        $("#Chaid").val(data.JOList.Chaid);
+
+        $("#txtViaNo").val(data.JOList.ViaNo);
+        $("#ddlVessel").val(data.JOList.VesselID);
+        $("#ddlPort").val(data.JOList.PortID);
+
+        $("#txtBerthingDate").val(data.JOList.berthingDateInstring);
+
+        $("#txtBLNo").val(data.JOList.BLNumber);
+        $("#txtHouseBLNo").val(data.JOList.HouseBLNumber);
+
+        $("#ddlSalesPerson").val(data.JOList.Sales_Person_Id);
+
+        $("#txtIGMNo").val(data.JOList.IGMNo);
+
+        $("#txtJoRemarks").val(data.JOList.Remarks);
+
+        document.getElementById('lblCount').innerHTML = data.JOList.AttachmentCount || 0;
+        $('#hdMode').val("");
+
+        var JoNo = data.JOList.JONo;
+
+        FetchContainerDetails(JoNo);
+        },
+        error: function (errormessage) {
+            var msg = (errormessage && errormessage.responseText) ? errormessage.responseText : 'An error occurred while fetching details.';
+        alert(msg);
+        }
+    });
+}
+
+    </script>
+
+    <script>
+
+    $("#txtViaNo").change(function () {
+    //alert("hi");
+    if ($("#txtViaNo").val() != "")
+    {
+        var ViaNo = $("#txtViaNo").val()
+        $.ajax({
+            type: 'POST',
+            url: '/BookingEntry/getVesselDetails',
+            data: '{viaNo: ' + JSON.stringify(ViaNo) +'}',
+            //data: JSON.stringify(formData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                debugger;
+               // alert(JSON.stringify(data))
+                if (data.VesselID == 0) {
+                    $("#ddlPort").val("");
+                    $("#txtBerthingDate").val("");
+                    $("#txtIGMNo").val("");
+                    $("#txtViaNo").removeClass("form-control is-valid state-valid")
+                    $("#txtViaNo").addClass("form-control is-invalid state-invalid")
+                    $("#txtViaNo").val('');
+                    alert('Specified via no not found in vessel master. Cannot proceed.');
+                }
+                else {
+
+                    $("#ddlVessel").val(data.VesselID);
+                    $("#ddlPort").val(data.PortID);
+                    $("#txtBerthingDate").val(data.berthingDateInstring);
+                    $("#txtIGMNo").val(data.IGMNo);
+                    $("#txtViaNo").removeClass("form-control is-invalid state-invalid")
+                    $("#txtViaNo").addClass("form-control is-valid state-valid")
+                }
+               // Clear()
+                // document.location = '@Url.Action("GenerateBL", "BL")';
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+});
+    </script>
+
+    <script>
+
+        function validateSaveFunction() {
+    debugger;
+        // alert("hifg");
+        var ddlAgent = document.getElementById('ddlAgent').value;
+
+        var ddlVessel = document.getElementById('ddlVessel').value;
+
+        var ddlSalesPerson = document.getElementById('ddlSalesPerson').value;
+
+        var ddlJoType = document.getElementById('ddlJoType').value;
+
+
+        var blResult = Boolean;
+        blResult = true;
+
+
+        if (ddlVessel == "") {
+            $("#ddlVessel").removeClass("form-control is-valid state-valid")
+        $("#ddlVessel").addClass("form-control is-invalid state-invalid")
+        blResult = blResult && false;
+    }
+
+        if (ddlJoType == "") {
+            $("#ddlJoType").removeClass("form-control is-valid state-valid")
+        $("#ddlJoType").addClass("form-control is-invalid state-invalid")
+        blResult = blResult && false;
+    }
+
+        if (blResult == false) {alert('Please fill the required fields!'); }
+        return blResult;
+
+};
+
+        function SaveJobOrderDetails() {
+    debugger;
+
+    //var res = validateSaveFunction();
+    //if (res == false) {
+    //    return false;
+    //}
+
+    var JobOrderModel = new Object();
+
+        JobOrderModel.JONo = $("#JONo").val();
+        JobOrderModel.JODate = $("#JODate").val();
+        JobOrderModel.AgentID = $("#ddlAgent").val();
+        JobOrderModel.Shipperid = $("#shipperid").val();
+        JobOrderModel.Chaid = $("#Chaid").val();
+        JobOrderModel.ViaNo = $("#txtViaNo").val();
+        JobOrderModel.VesselID = $("#ddlVessel").val();
+        JobOrderModel.PortID = $("#ddlPort").val();
+        JobOrderModel.BerthingDate = $("#txtBerthingDate").val();
+        JobOrderModel.IGMNo = $("#txtIGMNo").val();
+        JobOrderModel.ItemNo = $("#txtSearchItemNo").val();
+        JobOrderModel.BLNumber = $("#txtBLNo").val();
+        JobOrderModel.HouseBLNumber = $("#txtHouseBLNo").val();
+        JobOrderModel.Sales_Person_Id = $("#ddlSalesPerson").val();
+        JobOrderModel.Remarks = $("#txtJoRemarks").val();
+        JobOrderModel.JoTypeId = $("#ddlJoType").val();
+
+
+            var SelectedData = [];
+
+            var table = $('#containerList').DataTable();
+
+            table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+
+                var rowNode = $(this.node());
+
+                var obj = {
+                    ContainerNo: rowNode.find('td:eq(0)').text().trim(),
+
+                    ContainerTypeID: rowNode.find('.ddlContainerType').val(),
+                    Cargotypeid: rowNode.find('.ddlCargoType').val(),
+                    Size: rowNode.find('.ddlSize').val(),
+                    FCLID: rowNode.find('.ddlFL').val(),
+                    ISOCodeID: rowNode.find('.ddlISOCode').val(),
+                    Commodity_group_id: rowNode.find('.ddlCommodityGroup').val(),
+                    JOTypeID: rowNode.find('.ddlJoType').val(),
+
+                    Temperature: rowNode.find('.txtTemp').val(),
+                    Humidity: rowNode.find('.txtHumidity').val(),
+                    Ventilation: rowNode.find('.txtVentilation').val(),
+                    Class: rowNode.find('.txtClass').val(),
+                    UNNo: rowNode.find('.txtUNNo').val(),
+                    PackingGroup: rowNode.find('.ddlPackingGroup').val(),
+
+                    OverWidth: rowNode.find('.txtOverWidth').val(),
+                    OverHeight: rowNode.find('.txtOverHeight').val(),
+                    OverLength: rowNode.find('.txtOverLength').val()
+                };
+
+                SelectedData.push(obj);
+            });
+
+            console.log("SelectedData", SelectedData);
+
+
+
+        var data1 = {
+            'JobOrderModel': JobOrderModel, 'SelectedData': SelectedData
+    };
+        var data = JSON.stringify(data1);
+
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'POST',
+        url: "/BookingEntry/UpdateJobOrderDetails",
+        data: data,
+        success: function (result) {
+            if (result.Status === 1) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Record Updated successfully!',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => location.reload());
+            } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: result.Message
+            });
+            }
+        },
+        error: function () {
+            alert("Error!")
+        }
+    });
+    // }
+}
+    </script>
+
+    <script>
+
+        function FetchJobOrderExcelDataByUserID() {
+            $.ajax({
+                url: '/BookingEntry/GetExportJobOrderExcelDataByUserID',
+                type: 'GET',
+                success: function (data) {
+                    if (data && data.length > 0) {
+                        $("#containerList").empty();
+                        try {
+                            DisplayContSize(data);
+                        }
+                        catch (ex) { }
+                        RepTableDataJson($("#containerList"), data, "Container Details", "ContainerDetails_List");
+                        //-=======Display Total Container Details with Teus
+
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Fetch failed", error);
+                }
+            });
+}
+
+
+
+
+
+
+
+    </script>

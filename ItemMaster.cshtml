@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewBag.Title = "ItemMaster";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<style>
+    .table thead th, .text-wrap table thead th {
+        background-color: #9f78ff;
+        color: white;
+    }
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+<script src="~/js/GetTableJson.js"></script>
+<div class=" content-area" id="DIvCompantMaster">
+    <div class="page-header">
+        <h4 class="page-title" id="New">Item Master</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="ShowSummary();" id="ShowSummary" class="btn btn-josph btn-success" style="color:white;align-content:center;"><i class="fa fa-file-text" data-toggle="tooltip" data-placement="bottom" title="Summary" data-original-title="Back"></i>  </a>
+            </li>
+        </ol>
+    </div>
+    
+    <div class="col-sm-12 col-lg-12">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Item Code </label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input ID="txtItemCode" type="text" placeholder="New" readonly="readonly" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Item Date</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtItemDate", null, new { @class = "form-control form_datetime1", @id = "txtItemDate", name = "txtItemDate", @readonly = true, autocomplete = "on", @Value = DateTime.Now.ToString("dd MMM yyyy hh:mm") })
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="form-label">Item Group</label>
+                                @Html.DropDownList("ddlItemGroup", (IEnumerable<SelectListItem>)ViewBag.ItemGroup, "--Select--", new { @class = "form-control", @id = "ddlItemGroup", name = "ddlItemGroup", autocomplete = "off", onchange = "GetIteCode()" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">Item desc</label>
+                                @Html.TextBox("txtItemdesc", null, new { @class = "form-control", @id = "txtItemdesc", name = "txtItemdesc", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">HSC/SAC Code</label>
+                                @Html.TextBox("txtHSC/SACCode", null, new { @class = "form-control", @id = "txtHSC/SACCode", name = "txtHSC/SACCode", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="form-label">Purchase Unit</label>
+                                @Html.DropDownList("ddlPurchaseUnit", (IEnumerable<SelectListItem>)ViewBag.UnitM, "--Select--", new { @class = "form-control", @id = "ddlPurchaseUnit", name = "ddlPurchaseUnit", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="form-label">Sale Unit</label>
+                                @Html.DropDownList("ddlSaleUnit", (IEnumerable<SelectListItem>)ViewBag.UnitM, "--Select--", new { @class = "form-control", @id = "ddlSaleUnit", name = "ddlSaleUnit", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">Unit Price</label>
+                                @Html.TextBox("txtUnitPrice", null, new { @class = "form-control", @id = "txtUnitPrice", name = "txtUnitPrice", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">Tax(%)</label>
+                                @Html.TextBox("txtTax", null, new { @class = "form-control", @id = "txtTax", name = "txtTax", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">Min. QTY</label>
+                                @Html.TextBox("txtMinQty", null, new { @class = "form-control", @id = "txtMinQty", name = "txtMinQty", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">Max. QTY</label>
+                                @Html.TextBox("txtMaxQty", null, new { @class = "form-control", @id = "txtMaxQty", name = "txtMaxQty", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">SUB. Unit</label>
+                                @Html.TextBox("txtSUBUnit", null, new { @class = "form-control", @id = "txtSUBUnit", name = "txtSUBUnit", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+         
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-success float-right" id="Save" onclick="Save()" title="Save"><i class="fa fa-save"></i></button>
+
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+ <script>
+     function GetIteCode() {
+
+         debugger;
+
+         var ItemGroup = $("#ddlItemGroup").val();
+
+         var data1 = { 'ItemGroup': ItemGroup };
+         data = JSON.stringify(data1);
+         $.ajax({
+             url: "/BookingEntry/GetIteCode",
+             data: data,
+             type: "POST",
+             contentType: "application/json; charset=utf-8",
+             dataType: "json",
+             success: function (data) {
+                 debugger;
+                 
+                 if (data != "") {
+                     $("#txtItemCode").val(data[0].ItemCode);
+                   
+                 }
+
+
+
+
+             },
+             error: function (errormessage) {
+                 alert("error");
+                 alert(errormessage.responseText);
+             }
+         });
+     }
+      function Save() {
+      
+          var ItemCode = document.getElementById('txtItemCode').value;
+          var ItemDate = document.getElementById('txtItemDate').value;
+          var temGroup = document.getElementById('ddlItemGroup').value;
+          var Itemdesc = document.getElementById('txtItemdesc').value;
+          var SACCode = document.getElementById('txtHSC/SACCode').value;
+          var PurchaseUnit = document.getElementById('ddlPurchaseUnit').value;
+          var SaleUnit = document.getElementById('ddlSaleUnit').value;
+          var UnitPrice = document.getElementById('txtUnitPrice').value;
+
+          var Tax = document.getElementById('txtTax').value;
+          var MinQty = document.getElementById('txtMinQty').value;
+          var MaxQty = document.getElementById('txtMaxQty').value;
+          var SUBUnit = document.getElementById('txtSUBUnit').value;
+        var data1 = {
+            'ItemCode': ItemCode, 'ItemDate': ItemDate, 'temGroup': temGroup, 'Itemdesc': Itemdesc, 'SACCode': SACCode, 'PurchaseUnit': PurchaseUnit, 'SaleUnit': SaleUnit,
+            'UnitPrice': UnitPrice, 'Tax': Tax, 'MinQty': MinQty, 'MaxQty': MaxQty, 'SUBUnit': SUBUnit};
+        data = JSON.stringify(data1);
+
+                $.ajax({
+                    url: "/BookingEntry/ItemMasterSave",
+                    data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                         alert("Record Save !");
+                         window.location.href = '@Url.Action("ItemMaster", "Master")';
+
+
+                },
+                    error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                   }
+                });
+
+    }
+ </script>

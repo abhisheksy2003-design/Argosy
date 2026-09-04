@@ -1,0 +1,635 @@
+﻿
+@{
+    ViewBag.Title = "Export Tariff Master";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="~/js/GetTableJson.js"></script>
+@*<div id="global-loader"></div>*@
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<div class="content-area overflow-hidden" id="divmainsummary">
+    <div>
+       
+        <div class="page-header" >
+            <h4 class="page-title">
+                Export Tariff Master
+            </h4>
+
+            <div class="page-header-breadcrumb">
+                <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="summary();" id="summarylist" data-modal="modal-13">
+                    Summary
+                </button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-lg-2 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Tariff ID </label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input ID="txtTariffID" type="text" placeholder="New" readonly="readonly" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Description</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input ID="txtDescription" type="text" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-5 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Customer</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.DropDownList("ddlcustomer", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "--Select--", new { @class = "form-select", @id = "ddlcustomer", name = "ddlcustomer" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Exporter</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.DropDownList("ddlshippingline", (IEnumerable<SelectListItem>)ViewBag.ShippingLineList, "--Select--", new { @class = "form-select", @id = "ddlshippingline", name = "ddlshippingline" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-5 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">CHA Name</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.DropDownList("ddlCHA", (IEnumerable<SelectListItem>)ViewBag.CHA, "--Select--", new { @class = "form-select", @id = "ddlCHA", name = "ddlCHA" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Sales Person</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.DropDownList("ddlsales", (IEnumerable<SelectListItem>)ViewBag.SalesListD, "--Select--", new { @class = "form-select", @id = "ddlsales", name = "ddlsales" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">From Date</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txtFromDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy HH:mm") })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label"> To Date</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txtToDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.AddDays(365).ToString("dd MMM yyyy HH:mm") })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Free Day</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input ID="txtday" type="number" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Free Day Storage</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input ID="txtstorageday" type="number" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Free Day Empty</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input ID="txtEmptyday" type="number" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-xs-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory" style="visibility:hidden">.</label>
+                            <label class="custom-switch">
+                                <input type="checkbox" name="custom-switch-checkbox" id="chkIsActiveEdit" checked class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Is Active?</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" style="display:none">
+                    <div class="col-lg-3 col-sm-12" id="divAddDriverss">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Upload Files</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <div class="form-group" id="divFileUpload">
+                                        <input type="file" id="fileJOAttachment" name="postedFile" class="btn btn-primary" />
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12" id="divAddDriverss">
+                        <div class="form-group">
+                            <label class="form-label mandatory" style="visibility:hidden">.</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <div class="form-group" id="divFileUpload">
+                                        <input type="Button" id="btnUpload" value="Upload" class="btn btn-info" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label"></label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                     
+                                    <button id="btnSave" class="btn btn-save px-4" onclick="return Save();"> Save</button> 
+                                    <input type="button" name="clear" value="Clear" class="btn btn-cancel px-4" title="clear" onclick="window.location.reload();">
+                                    <input id="attchmentvalue" type="hidden" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" content-area" id="divsummary" style="display:none">
+  
+    <div class="page-header">
+        <h4 class="page-title">
+            Export Tariff Master List
+        </h4>
+
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="Back();"  data-modal="modal-13">
+                Add
+            </button>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Search</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                            @Html.TextBox("txtsearch", null, new { @class = "form-control ", @id = "txtsearch", name = "txtsearch", autocomplete = "on" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <button class="btn btn-filters me-2" id="TripSearch" type="button" onclick="Showdetails()"> <img src="~/assets/images/icons/search-whites.svg" alt="img"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.ActionLink("Export To Excel", "ExportToExcelImportAccountMaster", null, new { @class = "btn btn-success btn-md" })
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                        <thead>
+                                            <tr></tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>function summary() {
+        $("#divmainsummary").hide();
+        $("#divsummary").show();
+    }
+    function Back() {
+        $("#divmainsummary").show();
+        $("#divsummary").hide();
+    }
+    $(window).on("load", function (e) {
+
+        $("#ddlshippingline").val(233);
+        $("#ddlCHA").val(1);
+        $("#ddlcustomer").val(61);
+        $("#ddlConsignee").val(1);
+    })
+
+    $(window).on("load", function (e) {
+        $("#global-loader").fadeOut("slow");
+    })</script>
+<script type="text/javascript">function Showdetails() {
+        $("#global-loader").fadeIn("slow");
+
+
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/export/GetImportTariffSettingSummary',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (jsonResult) {
+
+                $("#example2").empty();
+                RepTableDataJson($("#example2"), jsonResult, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }</script>
+<script>
+
+      function Save() {
+
+        var txtDescription = document.getElementById('txtDescription').value;
+
+
+
+
+
+
+        var datac = {
+            'TariffDescription': txtDescription
+        };
+          var data = JSON.stringify(datac);
+
+          var TariffID = document.getElementById('txtTariffID').value;
+
+          if (TariffID == "") {
+
+
+              $.ajax({
+                  url: "/export/CheckExportTariffMasterAlready",
+                  data: data,
+                  type: "POST",
+                  contentType: "application/json; charset=utf-8",
+                  // dataType: "json",
+                  success: function (data) {
+                      if (data != "Account name already exits!") {
+                          Save1();
+                      } else {
+                          alert(data);
+                      }
+
+                  },
+
+                  error: function (errormessage) {
+                      alert(errormessage.responseText);
+                  }
+              });
+
+          } else {
+              Save1();
+          }
+
+    }
+
+
+    function Save1() {
+        var res = validateSaveFunctions();
+        if (res == false) {
+            return false;
+        }
+        var TariffID = document.getElementById('txtTariffID').value;
+        var txtDescription = document.getElementById('txtDescription').value;
+        var ddlshippingline = document.getElementById('ddlshippingline').value;
+        var ddlCHA = document.getElementById('ddlCHA').value;
+        var ddlcustomer = document.getElementById('ddlcustomer').value;
+
+        var txtFromDate = document.getElementById('txtFromDate').value;
+        var txtToDate = document.getElementById('txtToDate').value;
+        var txtday = document.getElementById('txtday').value;
+        var StorageDay = document.getElementById('txtstorageday').value;
+        var EmptyDay = document.getElementById('txtEmptyday').value;
+
+        var isactive = document.getElementById('chkIsActiveEdit').value;
+        var SalesID = document.getElementById('ddlsales').value;
+        var AttchmentID = document.getElementById('attchmentvalue').value;
+        if (txtday == "") {
+            txtday = 0;
+        }
+
+
+        if (isactive == "on") {
+            isactive = 1;
+        } else {
+            isactive = 0;
+        }
+
+
+
+
+
+
+        var datac1 = {
+            'TariffID': TariffID, 'txtDescription': txtDescription, 'ddlshippingline': ddlshippingline, 'ddlCHA': ddlCHA, 'ddlcustomer': ddlcustomer, 'txtFromDate': txtFromDate,
+            'txtToDate': txtToDate, 'txtday': txtday, 'StorageDay': StorageDay, 'EmptyDay': EmptyDay, 'isactive': isactive,
+            'AttchmentID': AttchmentID, 'SalesID': SalesID
+        };
+        var datac = JSON.stringify(datac1);
+
+        //alert(datac);
+
+
+        $.ajax({
+            url: "/export/SaveExportTariffmaster",
+            data: datac,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            // dataType: "json",
+            success: function (response) {
+
+                alert("Record saved successfully!");
+                document.location = '@Url.Action("ExportTariffMaster", "export")';
+
+            },
+
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+
+
+    }
+
+
+
+    function EditTariffMaster(tariffID, TariffDescription, lineid, chaid, customerid, EffectiveFROM, EffectiveUpto,
+        FreeDay, Freedaysempty, Freedaystorage, salesperson_id1) {
+        $("#divmainsummary").show();
+        $("#divsummary").hide();
+
+
+        document.getElementById('txtDescription').value = TariffDescription;
+        document.getElementById('txtTariffID').value = tariffID;
+        document.getElementById('ddlshippingline').value = lineid;
+        document.getElementById('ddlCHA').value = chaid;
+        document.getElementById('ddlcustomer').value = customerid;
+
+        document.getElementById('txtFromDate').value = EffectiveFROM;
+        document.getElementById('txtToDate').value = EffectiveUpto;
+        document.getElementById('txtday').value = FreeDay;
+        document.getElementById('txtEmptyday').value = Freedaysempty;
+        document.getElementById('txtstorageday').value = Freedaystorage;
+        document.getElementById('ddlsales').value = salesperson_id1;
+
+
+
+    }
+
+</script>
+<script>
+        function validateSaveFunctions() {
+
+            var txtdrivername = document.getElementById('txtDescription').value;
+            var shipping = document.getElementById('ddlshippingline').value;
+            var cha = document.getElementById('ddlCHA').value;
+            var customer = document.getElementById('ddlcustomer').value;
+
+            document.getElementById("txtDescription").style.borderColor = "gainsboro";
+            document.getElementById("ddlshippingline").style.borderColor = "gainsboro";
+            document.getElementById("ddlCHA").style.borderColor = "gainsboro";
+            document.getElementById("ddlcustomer").style.borderColor = "gainsboro";
+            var blResult = Boolean;
+            blResult = true;
+
+
+            if (txtdrivername == "") {
+                //  document.getElementById('ContainerNo').style.borderColor = "red"
+                document.getElementById("txtDescription").style.borderColor = "red";
+                blResult = blResult && false;
+            }
+            if (shipping == "") {
+                //  document.getElementById('ContainerNo').style.borderColor = "red"
+                document.getElementById("ddlshippingline").style.borderColor = "red";
+                blResult = blResult && false;
+            }
+            if (cha == "") {
+                //  document.getElementById('ContainerNo').style.borderColor = "red"
+                document.getElementById("ddlCHA").style.borderColor = "red";
+                blResult = blResult && false;
+            }
+            if (customer == "") {
+                //  document.getElementById('ContainerNo').style.borderColor = "red"
+                document.getElementById("ddlcustomer").style.borderColor = "red";
+                blResult = blResult && false;
+            }
+
+            if (blResult == false) { alert('Please fill the required fields!'); }
+            return blResult;
+
+        };
+
+
+
+    $(document).ready(function () {
+        $('#btnUpload').click(function () {
+
+            $("#global-loader").fadeIn("slow");
+            ///Attach
+            var fileUpload = $("#fileJOAttachment").get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+
+
+            if (files.length == 0) {
+                alert("Please select File!!")
+                $("#global-loader").fadeOut("slow");
+                return false;
+            }
+            else {
+
+                var iSize = document.getElementById('fileJOAttachment').files[0].size / 1024
+                iSize = (Math.round((iSize / 1024) * 100) / 100)
+
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+
+                    fileData.append(files[i].name, files[i]);
+
+                }
+
+                // Adding one more key to FormData object
+                // fileData.append('username', 'Manas');
+                //fileData.append('MSNoFile', MSNO);
+                //fileData.append('DocumenttypeID', DocumenttypeID);
+
+            }
+            //attach
+            $.ajax({
+                url: "/export/AddExporttariffattachment",
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (response) {
+
+
+
+
+                    if (response != "") {
+
+                        $("#attchmentvalue").val(response);
+                        alert("Record saved successfully!");
+                        $("#global-loader").fadeOut("slow");
+
+                    } else {
+
+                    }
+
+                    @* document.location = '@Url.Action("DriverSummary", "Driver")';*@
+                },
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                    $("#global-loader").fadeOut("slow");
+                }
+            })
+        });
+    });
+
+
+    //function ViewDocument(entryid) {
+
+    //    $("#hfFileId").val(entryid);
+
+    //    $("#btnDownload")[0].click();
+    //    // alert(id)
+    //}
+
+
+    function ViewDocument(entryid, Filepath) {
+
+
+
+        if (Filepath == "0") {
+            swal("For specified tariff attachment not found, cannot proceed..!", "", "warning");
+            return false;
+        }
+
+
+
+
+
+
+
+
+        var data1 = { 'id': entryid };
+        var data = JSON.stringify(data1);
+
+
+        $.ajax({
+            url: '/LRClosing/DownLoadFiles',
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: data,
+            success: function (Data) {
+
+
+                var data = { 'Filepath': Data.FilePath }
+                var x = Data.FilePath.indexOf("\ImportTafiffAttchment");
+                x = Data.FilePath.slice(x);
+                window.open("../" + x, "_blank");
+                data = JSON.stringify(data);
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        });
+
+
+
+    }
+
+</script>

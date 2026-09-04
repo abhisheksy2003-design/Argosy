@@ -1,0 +1,565 @@
+﻿
+<div>
+    <style>
+        .mandatory{
+   color: #5ED84F !important;
+   display: block;
+    margin-bottom: .375rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+    </style>
+    <div class="page-header" style="margin-top:-15px;">
+        <h4 class="page-title">Master Details </h4>
+        <ol >
+            <li class="breadcrumb-item"><a onclick="getBack();" class="btn btn-added p-3" style="color:white;align-content:center;"><i class="fa fa-arrow-left" data-placement="bottom" title="Back"></i>  </a></li>
+
+        </ol>
+@model MvcBondEntities.BusinessEntities.MasterEntities
+
+    </div>
+@using (Html.BeginForm("UpdateMasterData", "Master", FormMethod.Post))
+    {
+    @Html.AntiForgeryToken()
+    <div class="row" style="margin-top:-20px;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-8 col-sm-12">
+                                <div class="row">
+                                    <div class="col-lg-4 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label" style="color:black;"> Code</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.HiddenFor(model => model.AGID, new { htmlAttributes = new { @class = "form-control", @id = "hdID", autocomplete = "off" } })
+                                                    @Html.EditorFor(model => model.AGaID, new { htmlAttributes = new { @class = "form-control code", @id = "custCode", autocomplete = "off", @readonly = true, placeholder = "NEW" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label"> Name</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+
+                                                    @Html.EditorFor(model => model.AGName, new { htmlAttributes = new { @class = "form-control", @id = "custName", autocomplete = "on" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Full Address</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @* @Html.EditorFor(model => model.shipperid, new { htmlAttributes = new { @class = "form-control Number", @id = "shipperid" } })*@
+                                                    @Html.EditorFor(model => model.AGAddress, new { htmlAttributes = new { @class = "form-control", @id = "custAddress", maxlength = 500, onblur = "myRequiredValidation('custAddress')" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Contact Person</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.AGAuthPerson, new { htmlAttributes = new { @class = "form-control", @id = "contactPerson", autocomplete = "on", maxlength = 50 } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Person Designation</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.AGAuthPersonDesig, new { htmlAttributes = new { @class = "form-control", @id = "designation", autocomplete = "on", maxlength = 50 } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                </div>
+                                <div class="row" style="display:none">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Contact Number 1</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.AGTelI, new { htmlAttributes = new { @class = "form-control", @id = "contactNo1", autocomplete = "off", maxlength = 50, onkeydown = "numericOnly(this,event)" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*</div>
+            <div class="row">*@
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Contact Number 2</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.AGTelII, new { htmlAttributes = new { @class = "form-control", @id = "contactNo2", autocomplete = "off", maxlength = 50, onkeydown = "numericOnly(this,event)" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*</div>
+            <div class="row">*@
+                                </div>
+                                <div class="row" style="display:none">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Fax Number</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.AGFax, new { htmlAttributes = new { @class = "form-control", @id = "fax", autocomplete = "off", maxlength = 50, onkeydown = "numericOnly(this,event)" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*</div>
+            <div class="row">*@
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Mobile Number</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.AGCellNo, new { htmlAttributes = new { @class = "form-control", @id = "cellNO", autocomplete = "off", maxlength = 50, onkeydown = "numericOnly(this,event)" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Email Address</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.AGEMail, new { htmlAttributes = new { @class = "form-control", @id = "emailID", maxlength = 255 } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label"> Tally Ledger</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.TallyLedger, new { htmlAttributes = new { @class = "form-control", @id = "txtTallyLedger", maxlength = 50 } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="display:none">
+                                    <div class="col-lg-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Website</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.AGWebsite, new { htmlAttributes = new { @class = "form-control", @id = "website", maxlength = 50 } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-sm-12" style="display:none">
+                                        <div class="form-group">
+                                            <label class="form-label">Grade</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @*@Html.EditorFor(model => model.FL, new { htmlAttributes = new { @class = "form-control", @id = "FL" } })*@
+                                                    @Html.DropDownListFor(model => model.AGGrade, new List<SelectListItem>
+                                         { new SelectListItem { Text = "--Select--", Value = ""},
+                                             new SelectListItem { Text = "A", Value = "A"},
+                                           new SelectListItem { Text = "B", Value = "B"},
+                                           new SelectListItem { Text = "C", Value = "C"},
+                                           new SelectListItem { Text = "D", Value = "D"},
+                                           new SelectListItem { Text = "E", Value = "E"},
+                                           }, new { @class = "form-select", autocomplete = "off", @id = "ddlGrade" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-12" style="display:none">
+                                        <div class="form-group">
+                                            <label class="form-label" style="visibility:hidden">Is Active</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    <div class="custom-controls-stacked">
+                                                        <label class="custom-control custom-checkbox">
+                                                            @* <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.CHA" checked="@Model.CHA">*@
+                                                            @Html.CheckBoxFor(m => m.IsContract, new { @id = "chkIsContract", @class = "custom-control-input", @checked = "checked" })
+                                                            <span class="custom-control-label">Is Contractual?</span>
+                                                        </label>
+                                                    </div>
+                                                    @*  @Html.CheckBoxFor(m => m.IsContract, new { @id = "isContract", @class = "custom-control-input" }) Is Contractual?*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row" style="display:none">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Line Agent Code</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.LineAgentCode, new { htmlAttributes = new { @class = "form-control", @id = "LineAgentCode", maxlength = 50 } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Remarks</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.EditorFor(model => model.AGRemarks, new { htmlAttributes = new { @class = "form-control", @id = "remarks", maxlength = 50 } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label" style="visibility:hidden">Is Active</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                <div class="custom-controls-stacked">
+                                                    <label class="custom-control custom-checkbox">
+                                                        @* <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.CHA" checked="@Model.CHA">*@
+                                                        @Html.CheckBoxFor(m => m.IsActive, new { @id = "chkIsActive", @class = "form-check-input", @checked = "checked" })
+                                                        <span class="custom-control-label">Is Active?</span>
+                                                    </label>
+                                                </div>
+                                                @*  @Html.CheckBoxFor(m => m.IsContract, new { @id = "isContract", @class = "custom-control-input" }) Is Contractual?*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                     <div class="form-group">
+                                        <label class="form-label"></label>
+                                        <div class="row gutters-xs">
+                                            <div class="col d-flex gap-2">
+                                                <button class="btn btn-save px-4" id="btnSave" title="Save">Save</button>
+                                                <button type="button" class="btn btn-cancel px-4" name="clearProfile" title="clear" id="clearValue" onclick="window.location.reload();">Clear </button>
+                                                @* <input type="button" name="clearProfile" value="Clear" class="btn cursor display_none" title="clear" id="clearValue" />*@
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                 
+                            </div>
+
+                            <div class="col-lg-4 col-sm-12">
+                                <div class="row">
+                                    <div class="col-lg-12 col-sm-12">
+                                        <div class="form-group">
+                                            <div class="custom-controls-stacked">
+                                                <label class="custom-control custom-checkbox" >
+                                                    @* <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.CHA" checked="@Model.CHA">*@
+                                                    @Html.CheckBoxFor(m => m.CHA, new { @id = "chkcha", @class = "form-check-input" })
+                                                    <span class="custom-control-label">CHA</span>
+                                                </label>
+                                                <label class="custom-control custom-checkbox"   >
+                                                    @*<input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.shippers" checked="@Model.shippers">*@
+                                                    @Html.CheckBoxFor(m => m.shippers, new { @id = "chkShipper", @class = "form-check-input" })
+                                                    <span class="custom-control-label">Exporter</span>
+                                                </label>
+                                                <label class="custom-control custom-checkbox" style="display:none"   >
+                                                    @*<input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.ShipLines" checked="@Model.ShipLines">*@
+                                                    @Html.CheckBoxFor(m => m.IsFreightForwarder, new { @id = "chkFreightForwarder", @class = "form-check-input" })
+
+                                                    <span class="custom-control-label">Forwarder</span>
+                                                </label>
+                                                <label class="custom-control custom-checkbox"   >
+                                                    @*  <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.Importer" checked="@Model.Importer">*@
+                                                    @Html.CheckBoxFor(m => m.Importer, new { @id = "chkImporter", @class = "form-check-input" })
+
+                                                    <span class="custom-control-label">Importer</span>
+                                                </label>
+                                                <label class="custom-control custom-checkbox">
+                                                    @*  <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.Customer" checked="@Model.Customer">*@
+                                                    @Html.CheckBoxFor(m => m.Customer, new { @id = "chkCustomer", @class = "form-check-input" })
+                                                    <span class="custom-control-label">Customer</span>
+                                                </label>
+                                                <label class="custom-control custom-checkbox" >
+                                                    @*  <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.Customer" checked="@Model.Customer">*@
+                                                    @Html.CheckBoxFor(m => m.ShipLines, new { @id = "chkShipLines", @class = "form-check-input" })
+                                                    <span class="custom-control-label">ShipLines</span>
+                                                </label>
+                                                <label class="custom-control custom-checkbox">
+                                                    @*  <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.Customer" checked="@Model.Customer">*@
+                                                    @Html.CheckBoxFor(m => m.Vendor, new { @id = "chkvendor", @class = "form-check-input" })
+                                                    <span class="custom-control-label">Vendor</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+</div>
+
+<script>
+    function myRequiredValidation(TextField) {
+
+        // alert("#" + TextField);
+
+        if ($("#" + TextField).val() == "") {
+            $("#" + TextField).removeClass("form-control is-valid state-valid")
+            $("#" + TextField).addClass("form-control is-invalid state-invalid")
+            //  document.getElementById(TextField).style.borderColor = "red"
+        } else {
+            // alert("hi")
+            $("#" + TextField).removeClass("form-control is-invalid state-invalid")
+            $("#" + TextField).addClass("form-control is-valid state-valid")
+            // document.getElementById(TextField).style.borderColor = "Gainsboro"
+        }
+    };
+</script>
+
+<script>
+
+
+
+    $('#btnSave').click(function () {
+        debugger;
+        var chkcha = $("#chkcha").is(":checked");
+        var chkShipper = $("#chkShipper").is(":checked")
+        var chkFreightForwarder = $("#chkFreightForwarder").is(":checked")
+        var chkImporter = $("#chkImporter").is(":checked")
+        var chkCustomer = $("#chkCustomer").is(":checked")
+        var chkShipLines = $("#chkShipLines").is(":checked")
+        var chkvendor = $("#chkvendor").is(":checked")
+
+        if (chkcha == true || chkShipper == true || chkShipLines == true || chkImporter == true || chkCustomer == true || chkvendor == true || chkFreightForwarder == true  ) {
+
+            
+        }
+        else
+        {
+            alert("Please select at least one master!");
+            return false;
+        }
+
+        if ($("#AGID").val() == "") {
+
+
+            var res = checkCodeExist();
+            // alert(res);
+            if (res == 1) {
+                alert("Code already Exists");
+                return false;
+            }
+
+        }
+        var res1 = CheckNameExist();
+        // alert(res1);
+
+        if (res1 == 1) {
+            alert("Name already Exist");
+            return false;
+        }
+
+       
+        var txtcustAddress = document.getElementById('custAddress').value;
+        var custCode = document.getElementById('custCode').value;
+        var custName = document.getElementById('custName').value;
+
+        var blResult = Boolean;
+        blResult = true;
+
+        //if (custCode == "") {
+        //    //  document.getElementById('ContainerNo').style.borderColor = "red"
+        //    $("#custCode").removeClass("form-control is-valid state-valid")
+        //    $("#custCode").addClass("form-control is-invalid state-invalid")
+        //    blResult = blResult && false;
+        //}
+        if (custName == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#custName").removeClass("form-control is-valid state-valid")
+            $("#custName").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (txtcustAddress == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#custAddress").removeClass("form-control is-valid state-valid")
+            $("#custAddress").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+
+
+
+        if (blResult == false) { alert('Please fill the required fields!'); }
+        return blResult;
+      
+        
+    
+        //$('#btnRemoveCSS').click(function () {
+    
+       
+      
+    });
+</script>
+
+
+
+<script>
+
+    function getBack() {
+        // alert("hi")
+        $("#divSummary").show()
+        $('#divUpdateCustomerData').hide()
+       
+    }
+</script>
+
+<script>
+    $("#emailID").on("blur", function () {
+        isEmail($("#emailID").val());
+
+    });
+    function isEmail(email) {
+        var regex = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+        var res1 = regex.test(email);
+        $("#emailID").removeClass();
+        if (email == "") {
+            alert('Please Enter Email Id!');
+            $("#emailID").addClass("form-control is-invalid state-invalid")
+            // document.getElementById('email').value = ""
+            return false;
+        }
+        if (res1 == false) {
+            alert('Please Enter valid Email Id!');
+            $("#emailID").addClass("form-control is-invalid state-invalid")
+            //  document.getElementById('Email').value = ""
+            return res1;
+        }
+        else {
+
+            $("#emailID").addClass("form-control is-valid state-valid")
+        }
+    }
+
+    function isNumber(contactID, contactNO) {
+        console.log(contactNO)
+        var regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+        var res2 = regex.test(parseInt(contactNO));
+        $(contactID).removeClass();
+        if (contactNO == "") {
+            $(contactID).addClass("form-control is-invalid state-invalid")
+            alert('Please Enter valid Contact Number!');
+        }
+        if (res2 == false) {
+            $(contactID).addClass("form-control is-invalid state-invalid")
+            alert('Please Enter valid Contact Number!');
+        }
+        else {
+            $(contactID).addClass("form-control is-valid state-valid")
+        }
+    }
+
+    function numericOnly(element, e) {
+        console.log(e.keyCode)
+        // Allow: backspace, delete, tab, escape, enter and . - , ;
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190, 45, 44, 59, 189, 109, 188, 186]) !== -1 ||
+            // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+            // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            console.log(e.keyCode)
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+
+    }
+</script>
+
+ 
+
+<script>
+
+    $("#custName").on("blur", function () {
+
+        CheckNameExist()
+    });
+
+    function CheckNameExist()
+    {
+       // alert("hi")
+        var data = JSON.stringify({
+            'Name': $("#custName").val(),
+            'ID': $("#AGID").val()
+
+        });
+        var str = "";
+
+        $.ajax(
+               {
+                   url: '/Master/CheckExisitMasterName',
+                   type: 'Post',
+                   data: data,
+                   async: false,
+                   contentType: 'application/json; charset=utf-8',
+                   success: function (data) {
+                       $("#custName").removeClass();
+
+                       //alert(data);
+                       str = data;
+
+                       if (data == 0) {
+
+                           $("#custName").addClass("form-control is-valid state-valid");
+
+                       } else {
+
+                           $("#custName").addClass("form-control is-invalid state-invalid");
+
+                       }
+                   },
+
+                   //error: function () {
+                   //    alert("error");
+                   //}
+               });
+
+       // alert(str);
+        return str;
+
+      
+    }
+</script>

@@ -1,0 +1,508 @@
+﻿
+@{
+
+    ViewBag.Title = "SACMaster";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+ 
+
+<div class=" content-area overflow-hidden" id="divCreate">
+ 
+
+    <div class="page-header">
+        <div class="page-header-title">
+            <ul class="breadcrumb-title">
+                <li class="breadcrumb-item">
+                    <a href="index.html">
+                        <i class="icofont icofont-home"></i>
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#!">Master</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#!">SAC </a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="OpenWOSummary();" id="addlocallistbtn" data-modal="modal-13">
+                <i class="fa-solid fa-plus"></i> Add SAC
+            </button>
+        </div>
+    </div>
+
+    <div class="page-body">
+
+        <!-- Add Contact Start Model start-->
+        <div class="card col-sm-12 col-lg-12">
+            <div class="card-header">
+                <h5>SAC MASTER</h5>
+
+                <div class="card-header-right">
+                    <i class="icofont icofont-rounded-down"></i>
+                    <i class="icofont icofont-refresh"></i>
+                    <i class="icofont icofont-close-circled"></i>
+                </div>
+            </div>
+
+
+            <div class="card-block col-sm-12 col-lg-12">
+                <div class="row" style="display:none;">
+                    <div class="col-sm-3 col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label">New</label>
+                            @Html.TextBox("ID", null, new { @class = "form-control", @id = "ID", name = "HSNCode", autocomplete = "off", @readonly = "Readonly" })
+                            @*, @placeholder = "New"*@
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-lg-8">
+                        <div class="form-group">
+                            <label class="form-label">HSN/SAC Code <span style="color:red">*</span></label>
+                            @Html.TextBox("HSNCode", null, new { @class = "form-control", @id = "txthsn", name = "HSNCode", autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-lg-4">
+                        <div class="form-group">
+                            <label class="form-label">GST %  <span style="color:red">*</span></label>
+                            @Html.DropDownList("ddlGstDropdown", (IEnumerable<SelectListItem>)ViewBag.GstDropdown, "--Select--", new { @class = "form-control custom-select", @id = "ddlGstDropdown", name = "ddlGstDropdown", autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <div class="form-group">
+                            <label class="form-label">Descriptions  <span style="color:red">*</span></label>
+                            @Html.TextArea("Descriptions", null, new { @class = "form-control", @id = "txtDescriptions", name = "Descriptions", autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none;">
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Effective from  <span style="color:red">*</span></label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txtFromDate", null, new { @class = "form-control datePickerPOD1 EffectiveFromValidation", @Value = DateTime.Now.ToString("dd MMM yyyy"), onkeyup = "allowAlphaNumericSpace(this)" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Effective To  <span style="color:red">*</span></label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txtToDate", null, new { @class = "form-control DPCostDefine EffectiveFromValidation", @Value = ("31 Dec " + DateTime.Now.Year.ToString() + ""), onkeyup = "allowAlphaNumericSpace(this)" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="form-label"></label>
+                    <div class="row gutters-xs">
+                        <div class="col">
+                            @*<input type="submit" id="Save" name="save" value="Save" class="btn btn-success" />*@
+                            <button id="btnSave" class="btn btn-success" onclick="return SaveWareHouse();">Save</button>
+                            <input type="button" name="clear" value="Clear" class="btn btn-danger" onclick="Clear()" title="clear" id="clearValue" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+           
+        </div>
+    </div>
+</div>
+
+<div class=" content-area" id="divCreateSummary" style="display:none">
+   
+    <div class="page-header">
+        <div class="page-header-title">
+            <ul class="breadcrumb-title">
+                <li class="breadcrumb-item">
+                    <a href="index.html">
+                        <i class="icofont icofont-home"></i>
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#!">Master</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#!">SAC LIST</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="BackToWorkOrder();" id="addlocallistbtn" data-modal="modal-13">
+                <i class="fa-solid fa-plus"></i> Add SAC
+            </button>
+        </div>
+    </div>
+
+    <div class="page-body">
+
+        <!-- Add Contact Start Model start-->
+        <div class="card col-sm-12 col-lg-12">
+            <div class="card-header">
+                <h5>SAC LIST</h5>
+
+                <div class="card-header-right">
+                    <i class="icofont icofont-rounded-down"></i>
+                    <i class="icofont icofont-refresh"></i>
+                    <i class="icofont icofont-close-circled"></i>
+                </div>
+            </div>
+
+
+            <div class="card-block col-sm-12 col-lg-12">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-3">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Search</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("Search", null, new { @class = "form-control", @id = "search", name = "HSNCode", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label" style="visibility:hidden"> '</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="button" id="btnShow" value="Show" class="btn btn-primary" onclick="ShowSSRSummary();" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="float-left mt-5" id="button_">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblWorkOrderOpenList" style="width:100%;"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#ID").val('New');
+        ShowSSRSummary();
+    });
+
+    function BackToWorkOrder() {
+        $("#divCreate").show();
+        $("#divCreateSummary").hide();
+        $("#ID").val('New');
+
+    }
+    function OpenWOSummary() {
+        $("#divCreate").hide();
+        $("#divCreateSummary").show();
+    }
+
+    function SaveWareHouse() {
+
+        var HSNCode = $("#txthsn").val();
+        var Descripction = $("#txtDescriptions").val();
+        var HSNCodeID = $("#ID").val();
+        var GSTID = $("#ddlGstDropdown").val();
+        var EffectiveFrom = $("#txtFromDate").val();
+        var EffectiveTo = $("#txtToDate").val();
+        var isValid = true;
+        if (HSNCodeID == 'New' || HSNCodeID == undefined || HSNCodeID == '') {
+            HSNCodeID = 0;
+        }
+                if (HSNCode == "" || HSNCode == undefined) {
+            isValid = isValid && false;
+            $("#txthsn").addClass("is-invalid state-invalid");
+        } else {
+            $("#txthsn").removeClass("is-invalid state-invalid");
+        }
+
+
+                        if (Descripction == "" || Descripction == undefined) {
+            isValid = isValid && false;
+            $("#txtDescriptions").addClass("is-invalid state-invalid");
+        } else {
+            $("#txtDescriptions").removeClass("is-invalid state-invalid");
+        }
+
+
+         if (GSTID == "" || GSTID == undefined || GSTID == '--Select--') {
+            isValid = isValid && false;
+            $("#ddlGstDropdown").addClass("is-invalid state-invalid");
+        } else {
+            $("#ddlGstDropdown").removeClass("is-invalid state-invalid");
+        }
+
+        // if (EffectiveFrom == "") {
+        //    isValid = isValid && false;
+        //    $("#txtFromDate").addClass("is-invalid state-invalid");
+        //} else {
+        //    $("#txtFromDate").removeClass("is-invalid state-invalid");
+        //}
+
+        //  if (EffectiveTo == "") {
+        //    isValid = isValid && false;
+        //    $("#txtToDate").addClass("is-invalid state-invalid");
+        //} else {
+        //    $("#txtToDate").removeClass("is-invalid state-invalid");
+        //}
+
+
+
+        //if (Date(EffectiveFrom) > Date(EffectiveTo)) {
+        //    alert("Effective from is greater than effective to date.");
+        //    isValid = isValid && false;
+        //    $("#txtToDate").val('');
+        //}
+
+        if (isValid) {
+            var Elements = {};
+            Elements.HSNCodeID = HSNCodeID;//OfficeID;
+            Elements.HSNCodes = HSNCode;//OfficeID;
+            Elements.Descriptions = Descripction;
+            Elements.GSTID = GSTID;
+            Elements.EffectiveFrom = EffectiveFrom;
+            Elements.EffectiveTo = EffectiveTo;
+
+            var data = { 'data': Elements }
+            data = JSON.stringify(data);
+
+        @*expTariffMaster Is Entities Name *@
+            //This Is For Pass Data Through AJAX Script
+            $.ajax({
+                url: "/Master/SaveHSNCode",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    alert(result)
+                    window.location.href = '@Url.Action("SACMaster", "Master")';
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        } else {
+          alert("Please fill all required fields.");
+        }
+    }
+
+    function ShowSSRSummary() {
+        var Search = document.getElementById('search').value;
+        var data1 = { 'Search': Search };
+        data = JSON.stringify(data1);
+        $.ajax({
+            url: "/Master/gethsnlist",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                //alert(jsonResult)
+                $("#reportTable").empty();
+                FillDataTable($("#tblWorkOrderOpenList"), data, "CancelFinalOutList", "CancelFinalOutList")
+                //  alert(jsonResult)
+                var table = $('#tblWorkOrderOpenList').DataTable();
+                var buttons = new $.fn.dataTable.Buttons(table, {
+                    buttons: [
+
+                        {
+                            extend: 'excelHtml5',
+                            //text: '<i class="fa fa-file-excel-o text-white"></i>',
+                            text: '<i class="fa fa-file-excel-o" data-toggle="tooltip" data-placement="bottom" title="Export To Excel" data-original-title="Export To Excel"></i>',
+                            titleAttr: 'Excel',
+                            className: 'btn btn-primary'
+                        }
+                    ]
+                }).container().appendTo($('#button_'));
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+
+
+    }
+
+         $(function () {
+
+        $("#txthsn").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+
+
+            //Regex for Valid Characters i.e. Alphabets and Numbers.
+            var regex = /^[0-9]*$/;
+
+            //Validate TextBox value against the Regex.
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                //$("#lblError").html("Only Alphabets and Numbers allowed.");
+            }
+
+            return isValid;
+        });
+
+      });
+
+
+    function EditHSNDetails(ID) {
+        debugger;
+        var Search = document.getElementById('search').value;
+
+        var data1 = { 'HSNCodeID': ID };
+        data = JSON.stringify(data1);
+        $.ajax({
+            url: "/Master/GetHSNDetailsForEdit",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (response) {
+                $('#ID').val(response.HSNCodeID) ;
+                $('#txthsn').val(response.HSNCodes);
+                $('#txtDescriptions').val(response.Descriptions);
+                if (response.GSTID == 0) {
+                    $('#ddlGstDropdown').val($('#ddlGstDropdown option:first').val());
+                }
+                else {
+                    $('#ddlGstDropdown').val(response.GSTID);
+                }
+                $("#txtFromDate").val(response.EffectiveFrom);
+                $("#txtToDate").val(response.EffectiveTo);
+                if (response.HSNCodes != "") {
+                    $("#txthsn").attr("disabled", "disabled");
+                } else {
+                     $("#txthsn").removeAttr("disabled", "disabled");
+                }
+                //     if (response.Descriptions != "") {
+                //    $("#txtDescriptions").attr("disabled", "disabled");
+                //} else {
+                //     $("#txtDescriptions").removeAttr("disabled", "disabled");
+                //}
+                $("#divCreate").show();
+                $("#divCreateSummary").hide();
+            },
+        //    error: function (errormessage) {
+        //        alert("error");
+        //        alert(errormessage.responseText);
+        //    }
+        //});
+            failure: function (response) {
+                alert("Something went wrong. ");
+               
+            },
+            error: function (error) {
+                alert("Something went wrong. ");
+            }
+        });
+    }
+
+
+    function FillDataTable(tableName, data, title, fileName) {
+
+        //Check if table dose not exist then return error message.
+        try {
+            if (tableName == null) {
+                alert("table not exist.");
+            }
+
+            //Check Data Table has if already initialize then need to destroy first!
+            if ($.fn.DataTable.isDataTable(tableName)) {
+                tableName.DataTable().destroy();
+                tableName.empty();
+            }
+
+            var parseJSONResult = jQuery.parseJSON(data);
+
+            if (parseJSONResult != null && parseJSONResult.length > 0) {
+                //Get dynmmic column.
+                var dynamicColumns = [];
+                var i = 0;
+                $.each(parseJSONResult[0], function (key, value) {
+                    var obj = { sTitle: key };
+                    dynamicColumns[i] = obj;
+                    i++;
+                });
+                //fetch all records from JSON result and make row data set.
+                var rowDataSet = [];
+                var i = 0;
+                $.each(parseJSONResult, function (key, value) {
+                    var rowData = [];
+                    var j = 0;
+                    $.each(parseJSONResult[i], function (key, value) {
+                        rowData[j] = value;
+                        j++;
+                    });
+                    rowDataSet[i] = rowData;
+
+                    i++;
+                });
+                tableName.dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "aaData": rowDataSet,
+                    "bInfo": true,
+                    "deferRender": true,
+                    "bPaginate": true,
+                    "bFilter": true,
+                    "paging": true,
+                    "order": [],
+                    "columns": dynamicColumns,
+                    //"dom": "Bfrtip",
+                    "buttons": [{
+                        "extend": 'excel',
+                        "title": title,
+                        "filename": fileName
+                    }]
+                });
+            }
+        }
+        catch (ex) {
+            alert(ex.message);
+        }
+    }
+
+
+
+        $(".EffectiveFromValidation").change(function () {
+
+        var FromDate = $("#txtFromDate").val();
+            var ToDate = $("#txtToDate").val();
+            if (FromDate != "" && ToDate != "") {
+                if (Date.parse(FromDate) >= Date.parse(ToDate)) {
+                    alert("Effective From Date cannot be greater than Effective To Date.");
+                    $("#txtToDate").val('');
+                }
+        }
+        })
+    function Clear() {
+        location.reload();
+    }
+
+     function allowAlphaNumericSpace(thisInput) {
+        thisInput.value = thisInput.value.split(/[^0-9. ]/).join('');
+    }
+</script>

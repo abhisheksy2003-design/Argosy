@@ -1,0 +1,181 @@
+﻿@{
+    Layout = null;
+    var details = ViewBag.Details as System.Data.DataTable;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link href="~/css/printstyle.css" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+            background: #f7f7f7;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 6px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .no-border td, .no-border th {
+            border: none !important;
+        }
+
+        .main-container {
+            width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 15px;
+            box-shadow: 0px 0px 8px #ccc;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .section-title {
+            background: #fcbd021f;
+            padding: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid #000;
+            text-align: left;
+        }
+
+        .header-table td {
+            border: none !important;
+            padding: 2px 5px;
+        }
+
+        hr {
+            border: 2px solid orange;
+            margin: 10px 0;
+        }
+
+        .yellow-row {
+            background: #fcbd021f;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="main-container">
+
+        <!-- Header -->
+        <table class="header-table no-border">
+            <tr>
+                <td style="width:25%">
+                    <img src="~/assets/images/companylogo.jpg" height="90" />
+                </td>
+                <td style="text-align:center; width:75%">
+                    <div style="font-size:20px; font-weight:bold">@ViewBag.CompanyName</div>
+                    <div style="font-size:13px">@ViewBag.CompanyAddress</div>
+                </td>
+            </tr>
+        </table>
+
+        <hr />
+
+        <!-- Report Title -->
+        <div class="title">CARTING ALLOW SLIP</div>
+
+        <br />
+
+        <!-- Primary Information -->
+        <table>
+            <tr>
+                <th style="width:50%; text-align:left;">
+                    <p><b>Carting No:</b> @ViewBag.CartingNo</p>
+                    <p><b>SB No:</b> @ViewBag.SBNo</p>
+                    <p><b>SB Date:</b> @ViewBag.SBDate</p>
+                    <p><b>Cargo Type:</b> @ViewBag.CargoType</p>
+                </th>
+
+                <th style="width:50%; text-align:left;">
+                    <p><b>Acc. Holder:</b> @ViewBag.Acc_Holder</p>
+                    <p><b>CHA:</b> @ViewBag.CHA</p>
+                    <p><b>Exporter:</b> @ViewBag.Exporter</p>
+                    <p><b>Consignee:</b> @ViewBag.Consignee</p>
+                </th>
+            </tr>
+        </table>
+
+        <br />
+
+        <!-- Details Section Title -->
+        <div class="section-title">Carting Details</div>
+
+        <!-- Carting Details Table -->
+        <table>
+            <thead>
+                <tr class="yellow-row">
+                    <th>Vehicle No</th>
+                    <th>Cargo Description</th>
+                    <th>Pkgs</th>
+                    <th>Weight</th>
+                    <th>Carting Equipment</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (ViewBag.Details != null)
+                {
+                    foreach (System.Data.DataRow dr in ViewBag.Details.Rows)
+                    {
+                        <tr>
+                            <td style="text-align:center">@dr["VehicelNo"]</td>
+                            <td style="text-align:center">@dr["CargoDescrition"]</td>
+                            <td style="text-align:center">@dr["SBQty"]</td>
+                            <td style="text-align:center">@dr["SBWeight"]</td>
+                            <td style="text-align:center">@dr["Equipment"]</td>
+                            
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+
+        <br />
+
+        <!-- Footer Note -->
+        <table>
+            <tr>
+                <th style="text-align:left;">
+                    <p><b>Terms & Conditions:</b></p>
+                    <p>This is a system-generated slip. Signature & stamp not required.</p>
+                </th>
+
+                <th style="text-align:center;">
+                    <br /><br /><br />
+                    <p>Authorized Signatory</p>
+                </th>
+            </tr>
+        </table>
+
+    </section>
+
+</body>
+</html>

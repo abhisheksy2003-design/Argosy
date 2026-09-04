@@ -1,0 +1,414 @@
+﻿
+@{
+    ViewBag.Title = "EmptyOut";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<style>
+    /*.table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }*/
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+
+    .hiderow {
+        display: none;
+    }
+</style>
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<div class=" content-area" id="DIvCompantMaster">
+    <div class="page-header" style="margin-top:-10px;">
+        <h4 class="page-title" id="New">Empty Out</h4>
+        <div class="form-group">
+            <label class="form-label"></label>
+            <div class="row gutters-xs">
+                <div class="col">
+                    <button type="button" class="btn btn-success" title="Summary list" onclick="ViewSummary();">Summary</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-10 col-lg-12" style="margin-top:-35px;">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-lg-4 col-sm-4">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Container No</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input ID="txtContainerNo" type="text" placeholder="Container No" maxlength="11" class="form-control text-uppercase" onchange="CheckContainerNo();" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-4">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Out Date</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtOutDate", null, new { @class = "form-control form_datetime1", @id = "txtOutDate", name = "txtOutDate", autocomplete = "on", @Value = DateTime.Now.ToString("dd MMM yyyy hh:mm") })
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-5 col-sm-12" id="divCustomerName">
+                            <div class="form-group">
+                                <label class="form-label">Location</label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" placeholder="Location" class="form-control" id="ddlFrom" />
+                                        <input type="hidden" class="form-control" id="hdnFromId" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-3">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Vehicle No</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input ID="txtVehicleNo" type="text" placeholder="Vehicle No" class="form-control text-uppercase" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Remarks</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input ID="txtRemarks" type="text" placeholder="Remarks" class="form-control text-uppercase" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 col-xs-4">
+                            <div class="form-group">
+                                <div class="row gutters-xs">
+                                    <div class="col d-flex gap-2">
+                                        <button class="btn btn-save px-4" id="btnSave" onclick="return Save();"> Save</button>
+                                        <button class="btn btn-cancel px-4" type="button" onclick="window.location.reload();">
+                                            Clear
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" content-area" id="DivSummary" style="display:none">
+    <div class="page-header" style="margin-top:-5px;">
+        <h4 class="page-title">Empty out Summary</h4>
+        <div class="ibox-content  text-right">
+            <a onclick="getBack();" class="btn btn-added" style="color:white;align-content:center;">   Add</a>
+        </div>
+    </div>
+    <div class="row" style="margin-top:-20px;">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">From Date <span class="text-danger">*</span></label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtFromdate", null, new
+                                        {
+                                            @class = "form-control form_datetime1 ",
+                                       @id = "txtFromdate",
+                                            autocomplete = "off",
+                                            @Value = DateTime.Now.ToString("dd MMM yyyy 00:00")
+                                        })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">To Date <span class="text-danger">*</span></label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtTodate", null, new
+                                        {
+                                            @class = "form-control form_datetime1 ",
+                                       @id = "txtTodate",
+                                            autocomplete = "off",
+                                            @Value = DateTime.Now.ToString("dd MMM yyyy 23:59")
+                                        })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label" style="visibility:hidden">.</label>
+                                <div class="row gutters-xs">
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-icon btn-filters"
+                                                title="Show Summary" id="btnShow" onclick="ShowSummary()">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblEmptyOutSummary"></table>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+
+    function getBack() {
+
+        $("#DIvCompantMaster").show();
+        $("#DivSummary").hide();
+
+    }
+
+    function ViewSummary() {
+
+        $("#DIvCompantMaster").hide();
+        $("#DivSummary").show();
+        ShowSummary();
+    }
+
+    function ShowSummary() {
+        try {
+
+            var fromDate = $("#txtFromdate").val();
+            var toDate = $("#txtTodate").val();
+
+            // Prepare data object
+            var data = {
+                fromDate: fromDate,
+                toDate: toDate
+            };
+
+            $.ajax({
+                url: "/Export/GetEmptyOutSummary",
+                data: JSON.stringify(data),
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    RepTableDataJsonwopaging($("#tblEmptyOutSummary"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+
+
+
+    $(document).ready(function () {
+        AutomCom();
+
+    });
+
+
+    function AutomCom() {
+        debugger;
+
+        $("#ddlFrom").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/BookingEntry/getLocation",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.AGName,
+                                val: item.AGID,
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlFrom").val(i.item.label);
+                $("#hdnFromId").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+
+    };
+
+</script>
+<script>
+    function CheckContainerNo() {
+        debugger;
+        var ContainerNo = $("#txtContainerNo").val();
+        var data1 = {
+            'ContainerNo': ContainerNo
+        };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            url: "/Export/Checkemptyinvenotry",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+
+                if (data != "0") {
+
+                } else {
+                    alert('ContainerNo not geta in');
+                    $("#txtContainerNo").val('')
+                    $("#txtContainerNo").focus();
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+
+    }
+    function Save() {
+        var ContainerNo = $("#txtContainerNo").val();
+        var OutDate = $("#txtOutDate").val();
+
+        var FromId = $("#hdnFromId").val();
+        var VehicleNo = $("#txtVehicleNo").val();
+        var Remarks = $("#txtRemarks").val();
+
+        if (ContainerNo == "") {
+            alert("Please select Container No.");
+
+            event.preventDefault();
+            $('#txtContainerNo').focus();
+            return false;
+        }
+        if (FromId == 0) {
+            alert("Please select Location.");
+
+            event.preventDefault();
+            $('#ddlFrom').focus();
+            return false;
+        }
+        if (VehicleNo == "") {
+            alert("Please select VehicelNo.");
+
+            event.preventDefault();
+            $('#txtVehicleNo').focus();
+            return false;
+        }
+
+
+        var data1 = {
+            'ContainerNo': ContainerNo, 'OutDate': OutDate, 'FromId': FromId, 'VehicleNo': VehicleNo, 'Remarks': Remarks
+        };
+        var data = JSON.stringify(data1);
+          $.ajax({
+              url: "/Export/SavEmptyOut",
+                            data: data,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                              success: function (data) {
+                                  //alert(data);
+                                  $('#btnSave').removeAttr('disabled', 'disabled');
+
+                                  var array = data.split(',');
+                                  var b = array[0];
+                                  var c =  array[1] ;
+                                  alert("Record saved successfully");
+                                      //PrintWo(c )
+                          document.location = '@Url.Action("EmptyOut", "Export")';
+
+
+
+                            },
+                            error: function (errormessage) {
+                                alert(errormessage.responseText);
+                            }
+                        });
+    }
+    function PrintEmptyOut(EmptyOutNo) {
+
+
+        var data1 = { 'EmptyOutNo': EmptyOutNo };
+        data = JSON.stringify(data1);
+
+        $.ajax({
+            url: '/Export/ExportPrintEmptyOut',
+            type: 'Post',
+            data: data,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+
+                var myWindow = window.open("", "MsgWindow1", 'width=' + screen.availWidth + ',height=' + screen.availHeight + ',resizable=no');
+                myWindow.close();
+                var myWindow = window.open("", "MsgWindow1", 'width=' + screen.availWidth + ',height=' + screen.availHeight + ',resizable=no');
+                myWindow.document.write(response);
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        });
+    };
+</script>

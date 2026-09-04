@@ -1,0 +1,320 @@
+﻿
+@{
+    ViewBag.Title = "Party Wise Hold Entry";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<div class=" content-area" id="add">
+    <div class="page-header">
+        <h2>Hold Entry (Customers)</h2>
+        <div class="form-group">
+            <label class="form-label"></label>
+            <div class="row gutters-xs">
+                <div class="col">
+                    @*<button type="button" class="btn btn-icon btn-teal" name="summarylist" title="Summary list" id="summarylist" onclick="ViewSummary();">
+                            <i class="fa fa-file-text"></i>
+                        </button>*@
+                    <button type="button" class="btn btn-icon btn-info" name="HoldDetailsList" title="List Of Hold" id="HoldDetailsList" onclick="ViewHoldList();"><i class="fa fa-bars"></i></button>
+                    <button type="button" class="btn btn-icon btn-success" name="ReleasedList" title="List Of Realeased" id="ReleasedList" onclick="ViewReleaseList();"><i class="fa fa-bars"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12 col-lg-3">
+                    <div class="form-group label-floating">
+                        <label class="form-label">Hold Date</label>
+                        @Html.Editor("Hold Date", new { htmlAttributes = new { @class = "form-control form_datetime1", @id = "HoldDate", @Value = DateTime.Now.ToString("dd MMM yyyy 07:59"), @readonly = "disable" } })
+                        @*@Html.TextBox("dtFrom", null, new { @class = "form-control datePicker1", @id = "dtFrom", autocomplete = "off" })*@
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label mandatory">Activity</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.DropDownList("Activity", (IEnumerable<SelectListItem>)ViewBag.Activity, "--Select--", new { @class = "form-control" })
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="divsearchcerteria">
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label mandatory">Hold Customer Type</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.DropDownList("ddlHoldCustomerWise", new List<SelectListItem>
+                                   { new SelectListItem { Text = "Billed To Party", Value = "Billed To Party"},
+                                       new SelectListItem { Text = "CHA", Value = "CHA"},
+                                     new SelectListItem { Text = "Customer", Value = "Customer"},
+                                     new SelectListItem { Text = "Line", Value = "Line"},
+                                     new SelectListItem { Text = "Shipper", Value = "Shipper"},
+                                     }, new { @class = "form-control", autocomplete = "off", @id = "ddlHoldCustomerWise", onchange = "getParticularDiv()" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label fieldHidden" id="namee"></label>
+                        @*<label class="form-label fieldHidden" id="dCHA">CHA</label>
+                            <label class="form-label fieldHidden" id="dCustomer">Customer Name</label>
+                            <label class="form-label fieldHidden" id="dLine">Line</label>
+                            <label class="form-label fieldHidden" id="dShipper">Shipper</label>*@
+                        @*<label class="form-label">Customer Name</label>*@
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <input type="text" class="form-control" id="ddlPartyName" />
+                                <input type="hidden" class="form-control" id="PartyId" />
+                                @*@Html.DropDownListFor(model => model.BillParty, (IEnumerable<SelectListItem>)ViewBag.Customer, "--Select--", new { @class = "form-control", @id = "ddlCustomerName", name = "ddlCustomerName", autoComplete = "on" })*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label mandatory">Hold Reasons</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <input id="txtHoldReasons" placeholder="Enter Hold Reasons" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-sm-12">
+                    <label class="form-label">Hold Remarks</label>
+                    <textarea class="form-control" id="HoldRemarks"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="form-label"></label>
+                    <div class="row gutters-xs">
+                        <div class="col">
+                            <button id="btnHold" class="btn btn-success btn-xs" onclick="Hold();">Hold</button>
+                            @*<button id="btnReleased" class="btn btn-success btn-xs" onclick="Released();">Released</button>*@
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="HoldDetailsListss"></div>
+<div id="ReleaseList"></div>
+<script>
+
+    $(document).ready(function () {
+        AutomCom();
+
+
+
+
+        getParticularDiv();
+    });
+
+    function getParticularDiv() {
+
+       // $(".fieldHidden").hide();
+        var id = $("#ddlHoldCustomerWise").val();
+        $("#namee").html(id)
+
+    }
+
+
+
+    function AutomCom() {
+
+        $("#ddlPartyName").autocomplete({
+
+            source: function (request, response) {
+                $.ajax({
+                    url: "/ImportReceipt/getAutoCustomerList",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //
+                        response($.map(data, function (item) {
+                            //
+                            return {
+                                label: item.AGName,
+                                val: item.AGID
+                            };
+                        }))
+                    },
+                    error: function (error) {
+                        let str = error.responseText;
+                        var a = str.indexOf("<title>") + 7;
+                        var b = str.indexOf("</title>");
+                        str = str.substring(a, b);
+                        alert("Something went wrong: " + str);
+                    }
+                })
+            },
+            select: function (e, i) {
+
+                $("#ddlPartyName").val(i.item.label);
+                $("#PartyId").val(i.item.val);
+            },
+
+            minLength: 1
+
+        });
+
+
+
+    }
+    $(document).ready(function () {
+
+
+        $(function () {
+            //  var today = new Date();
+
+            $('.datePicker1').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true
+                //endDate: new Date()
+            })
+                .on('changeDate', function (e) {
+
+                    $('.datepicker').hide();
+                });
+        });
+    });
+
+    function Hold() {
+        
+         var blResult = true;
+
+         var HoldDate = document.getElementById('HoldDate').value;
+         var Activity = $("#Activity option:selected").val();
+        var Hold_To = $("#ddlHoldCustomerWise option:selected").val();
+        var Hold_TO_ID = $("#ddlPartyName option:selected").val();
+        var Hold_TO_ID = $("#PartyId").val();
+         var Hold_Reason = document.getElementById('txtHoldReasons').value;
+         var HoldReamrks = document.getElementById('HoldRemarks').value;
+
+
+
+        if (Activity == "") {
+            
+            document.getElementById("Activity").style.borderColor = "red";
+             alert('Please Select Activity...')
+             event.preventDefault();
+             blResult = blResult && false;
+        }
+        
+         if (Hold_To == "") {
+             document.getElementById("ddlHoldCustomerWise").style.borderColor = "red";
+             alert('Please Select Hold Party Type...')
+            event.preventDefault();
+            return;
+        }
+         if (Hold_TO_ID == "") {
+             document.getElementById("ddlPartyName").style.borderColor = "red";
+             document.getElementById("PartyId").style.borderColor = "red";
+             alert('Please Select Hold Customer Type...')
+            event.preventDefault();
+            return;
+         }
+        if (Hold_Reason == "") {
+             document.getElementById("txtHoldReasons").style.borderColor = "red";
+             alert('Please Enter Hold Reasons...')
+             event.preventDefault();
+             return;
+         }
+        var HoldDetails = {};
+         HoldDetails.HoldDate = HoldDate;
+         HoldDetails.Activity = Activity;
+         HoldDetails.Hold_To = Hold_To;
+        HoldDetails.Hold_TO_ID = Hold_TO_ID;
+        HoldDetails.Hold_TO_ID = Hold_TO_ID;
+         HoldDetails.Hold_Reason = Hold_Reason;
+         HoldDetails.HoldReamrks = HoldReamrks;
+
+
+
+         var data = { 'HoldDetails': HoldDetails };
+        data = JSON.stringify(data);
+$.ajax({
+    url: "/Master/SaveHoldDetails",
+    data: data,
+type: "POST",
+contentType: "application/json; charset=utf-8",
+dataType: "json",
+success: function (result) {
+    alert('Specified Party Hold Successfully...')
+window.location.href = '@Url.Action("PartyWiseHoldEntry", "Master")';
+},
+error: function (errormessage) {
+alert(errormessage.responseText);
+}
+});
+
+    }
+
+</script>
+<script>
+
+    function ViewHoldList() {
+
+
+        $.ajax({
+            url: "/Master/HoldDetailsList",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+
+                $("#add").hide();
+                $('#HoldDetailsListss').html(response);
+
+                $('#HoldDetailsListss').show();
+            }
+        });
+
+
+
+    }
+
+
+    function ViewReleaseList() {
+
+
+        $.ajax({
+            url: "/Master/ReleaseDetailsList",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $("#add").hide();
+                $('#ReleaseList').html(response);
+                $('#ReleaseList').show();
+            }
+        });
+
+
+
+    }
+</script>

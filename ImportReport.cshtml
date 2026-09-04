@@ -1,0 +1,230 @@
+﻿
+@{
+    ViewBag.Title = "ImportReport";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+} 
+<style>
+   /* .table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }
+*/
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+
+    .hiderow {
+        display: none;
+    }
+</style>
+@*<script src="~/js/GetTableJsonwopaging.js"></script>*@
+
+
+<div class=" content-area" id="divsummary">
+    <div class="page-header">
+        <h4 class="page-title">Import Report</h4>
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Report Type</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                            @*<input id="txtTypeOfVehicle" placeholder="Type Of Vehicle" type="text" class="form-control" />*@
+                                            @Html.DropDownList("txtReportType", (IEnumerable<SelectListItem>)ViewBag.Reporttype, "--Select--", new { @class = "form-select", @id = "txtReportType", name = "txtReportType", autocomplete = "off", @onblur = "SearchOn()" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-lg-3" id="divFromDate">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">From</label>
+                                    @Html.TextBox("FromDate", null, new { @id = "FromDate", @class = "form-control form_datetime1", @Value = DateTime.Now.AddDays(-1).ToString("dd MMM yyyy 08:00") })
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-lg-3" id="divToDate">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">To</label>
+                                    @Html.TextBox("ToDate", null, new { @id = "ToDate", @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 23:59") })
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+
+                                            <button class="btn btn-filters" id="TripSearch" type="button" onclick="Show()"> <img src="~/assets/images/icons/search-whites.svg" alt="img"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        @*@Html.ActionLink("Export To Excel", "ImportExportToExcel", null, new { @class = "btn btn-success btn-md" })*@
+                        <button class="btn btn-success" title="Export To Excel"  type="button" onclick="DownloadExcelReport();"><i class="fa fa-file-excel-o m-1" ></i>Export To Excel</button>
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                        <thead>
+
+                                            <tr></tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function SearchOn() {
+
+        var ReportType = $("#txtReportType").val();
+
+        if (ReportType == "Loaded Inventory") {
+           
+            $("#divFromDate").hide()
+        }
+        else {
+            $("#divFromDate").show()
+}
+        
+    }
+    function Show() {
+        $("#global-loader").fadeIn("fast");
+
+        
+
+        var fromdate = $("#FromDate").val();
+        var todate = $("#ToDate").val();
+        var ReportType = $("#txtReportType").val();
+        var data1 = { 'ReportType': ReportType, 'fromdate': fromdate, 'todate': todate  };
+        data = JSON.stringify(data1);
+
+        $.ajax({
+            type: 'POST',
+            url: '/BookingEntry/GetImportReport',
+            data: data,
+            // data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (Data) {
+                $("#example2").empty();
+                RepTableDataJsonwopaging($("#example2"), Data, "Voucher Closed Details", "VoucherClosedDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+        $("#global-loader").fadeOut("slow");
+    }
+    $(window).on("load", function (e) {
+        $("#global-loader").fadeOut("slow");
+    })
+         function DownloadExcelReport() {
+             console.log('you cllae');
+        //window.location = '@Url.Action("ImportExportToExcel", "BookingEntry")?';
+             var url = "/BookingEntry/ImportExportToExcel";
+
+             window.location = url;
+
+    }
+</script>
+
+<script>
+    //// <reference path="GetTableJsonwopaging.js" />
+    function RepTableDataJsonwopaging(tableName, data, title, fileName) {
+        //debugger;
+        //Check if table dose not exist then return error message.
+        try {
+            if (tableName == null) {
+                alert("table not exist.");
+            }
+
+            //Check Data Table has if already initialize then need to destroy first!
+            if ($.fn.DataTable.isDataTable(tableName)) {
+                tableName.DataTable().destroy();
+                tableName.empty();
+            }
+
+            var parseJSONResult = jQuery.parseJSON(data);
+
+            if (parseJSONResult != null && parseJSONResult.length > 0) {
+                //Get dynmmic column.
+                var dynamicColumns = [];
+                var i = 0;
+                $.each(parseJSONResult[0], function (key, value) {
+                    var obj = { sTitle: key };
+                    dynamicColumns[i] = obj;
+                    i++;
+                });
+                //fetch all records from JSON result and make row data set.
+                var rowDataSet = [];
+                var i = 0;
+                $.each(parseJSONResult, function (key, value) {
+                    var rowData = [];
+                    var j = 0;
+                    $.each(parseJSONResult[i], function (key, value) {
+                        rowData[j] = value;
+                        j++;
+                    });
+                    rowDataSet[i] = rowData;
+
+                    i++;
+                });
+                tableName.dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "aaData": rowDataSet,
+                    "bInfo": false,
+                    "bPaginate": true,
+                    "bFilter": true,
+                    "paging": true,
+                    "order": [],
+                    "pageLength": 10,
+                    "columns": dynamicColumns
+                    //"dom": "Bfrtip"
+                    //"buttons": [{
+                    //    "extend": 'excel',
+                    //    "title": title,
+                    //    "filename": fileName
+                    //}]
+
+
+
+                });
+            }
+
+
+        }
+        catch (ex) {
+            alert(ex.message);
+        }
+    }
+</script>

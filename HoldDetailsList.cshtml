@@ -1,0 +1,207 @@
+﻿<div>
+
+    @model IEnumerable<TrackerMVCEntities.BusinessEntities.PartyWiseHold>
+
+
+
+    <div class="page-header">
+        <h4 class="page-title">Hold Details List</h4>
+      
+        <div class="form-group">
+            <label class="form-label"></label>
+            <div class="row gutters-xs">
+                <div class="col">
+                    @*<button type="button" class="btn btn-icon btn-orange" name="gst" title="GST" id="gst"><i class="fa fa-google"></i></button>*@
+                    @*<button type="button" class="btn btn-icon btn-teal" name="summarylist" title="Summary list" id="summarylist" onclick="ViewSummaryTrolley();"><i class="fa fa-file-text"></i></button>*@
+                    <a onclick="window.location = '@Url.Action("PartyWiseHoldEntry", "Master")' " class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-plus" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Add"></i> </a>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblHoldList" style="width:100%">
+                                    <thead>
+                                        <tr>
+
+                                  
+                                            <th></th>
+                                            <th>Sr No.</th>
+                                            <th>Hold Date</th>
+                                            <th>Activity</th>
+                                            <th>Hold Customer Type</th>
+
+                                            <th>Customer Name</th>
+                                            <th>Hold Reason</th>
+                                            <th>Hold Remarks</th>
+                                            <th>Hold By</th>
+                                            <th>Hold On</th>
+
+
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody style="box-sizing :border-box;">
+                                        @foreach (var d in Model)
+                                        {
+                                        <tr>
+                                            <td><button class="btn btn-primary btn-sm" onclick="OpenPopupModel(@Html.DisplayFor(m => d.HoldID))">Released</button></td>
+
+                                            <td>@Html.DisplayFor(m => d.HoldID)</td>
+                                            <td>@Html.DisplayFor(m => d.HoldDate)</td>
+                                            <td>@Html.DisplayFor(m => d.Activity)</td>
+                                            <td>@Html.DisplayFor(m => d.Hold_To)</td>
+                                            <td>@Html.DisplayFor(m => d.Hold_To_Name)</td>
+                                            <td>@Html.DisplayFor(m => d.Hold_Reason)</td>
+                                            <td>@Html.DisplayFor(m => d.HoldReamrks)</td>
+                                            <td>@Html.DisplayFor(m => d.DisplayHoldedBy)</td>
+                                            <td>@Html.DisplayFor(m => d.HoldedOn)</td>
+
+
+                                        </tr>
+
+
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="mModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+            <h4 class="modal-title">Released</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          
+        </div>
+
+            @*<div class="modal-header">
+            <h4 class="modal-title">Released</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+           </div>*@
+            
+
+
+
+            <div class="modal-body">
+                <form id="myForm">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label">Remarks</label>
+                                    @Html.TextArea("Remarks", null, new { @class = "form-control", @id = "Remarks", name = "Remarks", autocomplete = "off", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="UpdateDetails()">Update</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+            var GlobalID;
+            $(document).ready(function () {
+                $('#tblHoldList').DataTable({
+                    "bLengthChange": true,
+                    "bInfo": true,
+                    "bPaginate": true,
+                    "paging":true,
+                    "paging": true,
+                    "dom": 'Bfrtip',
+                    "buttons": [{
+                        "extend": 'excel',
+                        "title": 'HoldEntryList',
+                        "filename": 'HoldLists'
+
+                    }
+                    ]
+                });
+
+
+
+            });
+
+            function OpenPopupModel(id) {
+                GlobalID = id;
+                $("#mModal").modal('show');
+            }
+
+    function UpdateDetails() {
+        //alert("Released Successfully...");
+        var HoldID = GlobalID
+        var Rem = $("#Remarks").val();
+        console.log("Remark : "+ Rem);
+                if (Rem == "" ) {
+                    return false;
+        }
+
+        element = {};
+        element.HoldID = HoldID;
+        element.ReleasedRemarks = Rem
+        var data = { 'ReleasedRemarks': element }
+        console.log(data);
+              data = JSON.stringify(data);
+        $.ajax({
+            type: "POST",
+            url: "/Master/HoldEntryReleased",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+              
+                if (response.Status == 1) {
+                    alert(response.Message);
+                    document.location = '@Url.Action("PartyWiseHoldEntry", "Master")';
+                } else {
+                    alert("Data not updated")
+                }
+                $("#cute-loader").fadeOut("slow");
+
+                //getBack();
+            },
+
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+            }
+
+</script>
+
+
+
+
+
+
+

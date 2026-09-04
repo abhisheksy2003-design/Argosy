@@ -1,0 +1,310 @@
+﻿
+@{
+    ViewBag.Title = "ThirdPartyVehicle";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<div class=" content-area overflow-hidden" id="divCreate">
+    <script src="~/js/GetTableJson.js"></script>
+    <div class=" content-area overflow-hidden" id="divCreate">
+        <div class="page-header">
+            <h4 class="page-title">Third Party Vehicle</h4>
+            <li class="breadcrumb-item">
+                <a onclick="OpenWOSummary();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-file-text" data-placement="bottom" title="Open Work Order Summary"></i> </a>
+            </li>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Entry ID</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                            <input id="txtEntryID" type="text" class="form-control" value="NEW" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Entry Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                            <input id="txtEntryDate" type="datetime-local" class="form-control" value="@ViewBag.Date" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-lg-3 col-sm-8">
+                                <div class="form-group">
+                                    <label class="form-label">Vehicle No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtvehicleno", null, new { @class = "form-control ", @id = "txtvehicleno", Placeholder = "Vehicle No", @autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Transporter</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+
+                                            @Html.DropDownList("TransporterList", (IEnumerable<SelectListItem>)ViewBag.Transpoter, "--Select--", new { @class = "form-control", @id = "TransporterList", name = "TransporterList", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Vehicle Group</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <select class="form-control" id="ddlvehiclegroup">
+                                                <option value="0">--Select--</option>
+
+                                                <option value="TP">TP</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">&nbsp;</label>
+                                    <label class="custom-switch">
+                                        <input type="checkbox" name="custom-switch-checkbox" id="chkIsActive" value="true" checked class="custom-switch-input">
+                                        <span class="custom-switch-indicator"></span>
+                                        <span class="custom-switch-description">Is Active?</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"></label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+
+
+                                    <button class="btn btn-success" onclick="Update()" title="Save"><b>Save</b></button>
+
+                                    <input type="button" name="clear" value="Clear" class="btn btn-outline-dark" title="clear" onclick="cleartextboxes();" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class=" content-area" id="divCreateSummary" style="display:none">
+    <div class="page-header">
+        <h4 class="page-title">Vehicle List</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="BackToWorkOrder();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Add Work Order"></i> </a>
+            </li>
+        </ol>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+
+                        <div class="row">
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Search</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+
+                                            @Html.TextBox("txtsbno", null, new { @class = "form-control ", @id = "txtsearch", name = "txtsbno", autocomplete = "on" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="button" id="btnShow" value="Show" class="btn btn-primary" onclick="ShowSSRSummary();" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.ActionLink("Export To Excel", "ExportToExcelThirdPartyReport", null, new { @class = "btn btn-primary btn-md" })
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblWorkOrderOpenList" style="width:100%;"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function BackToWorkOrder() {
+        $("#divCreate").show();
+        $("#divCreateSummary").hide();
+    }
+    function OpenWOSummary() {
+        $("#divCreate").hide();
+        $("#divCreateSummary").show();
+    }</script>
+
+<script>
+
+    function Update1() {
+        debugger;
+        var Vehicleno = $("#txtvehicleno").val().trim();
+        var TransID = $("#TransporterList").val().trim();
+        var vehiclegroup = $("#ddlvehiclegroup").val().trim();
+
+
+
+
+
+        if (Vehicleno == "" ) {
+            document.getElementById('txtinvoiceno').style.borderColor = "red";
+            alert("Please Fill Vehicle No !")
+
+            return false;
+        }
+
+
+        if (TransID == 0 ) {
+            document.getElementById('TransporterList').style.borderColor = "red";
+            alert("Please Select Transporter Name !")
+
+            return false;
+        }
+
+        var data1 = { "Vehicleno": Vehicleno, "TransID": TransID, "vehiclegroup": vehiclegroup };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: 'POST',
+            url: '/Master/SaveVehicleDetails',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                alert(data);
+                document.location = '@Url.Action("ThirdPartyVehicle", "Master")';
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+</script>
+<script>
+    function cleartextboxes() {
+    document.location = '@Url.Action("ThirdPartyVehicle", "Master")';
+    }
+</script>
+
+<script>
+
+    function ShowSSRSummary() {
+
+
+        debugger;
+        var search = document.getElementById('txtsearch').value;
+        var data1 = { 'search': search };
+        data = JSON.stringify(data1);
+        $.ajax({
+            url: "/Master/Search",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                //alert(jsonResult)
+                $("#reportTable").empty();
+                RepTableDataJson($("#tblWorkOrderOpenList"), data, "ExpensesTypeMaster", "ExpensesTypeMaster")
+                //  alert(jsonResult)
+
+                //var PKGSDestuff = 0;
+                //for (var i = 0; i < data.length; i++) {
+                //  PKGSDestuff += parseInt(data[i].PKGSDestuff);
+                //}
+
+                //$('#txttotalpkgs').val(PKGSDestuff);
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+</script>
+
+<script type="text/javascript">
+    function Update() {
+        var TrailerNumber = $("#txtvehicleno").val().trim();
+
+        var data1 = { 'TrailerNumber': TrailerNumber };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Master/AjaxCheckTrailerNumber",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response == 1) {
+                    alert("Specified Trailer No already have exists. Cannot proceed!");
+                    document.getElementById('txtvehicleno').value = "";
+                }
+                else {
+                    Update1();
+                }
+
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>
+
+

@@ -1,0 +1,377 @@
+﻿
+@{
+    ViewBag.Title = "GenerateGatePass";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style>
+    /*.table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }*/
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+
+    .hiderow {
+        display: none;
+    }
+</style>
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<div id="Divaddlocation">
+    <div class="page-header">
+        <h4 class="page-title">Container Out Date Entry</h4>
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">Search On</label>
+                                    @Html.DropDownList("ddlSearchOn", new List<SelectListItem>
+                                    {
+                                   new SelectListItem { Text = "Select", Value = "Select"},
+                                      new SelectListItem { Text = "IGM-Item No", Value = "IGM-Item No"},
+                                    new SelectListItem { Text = "Container", Value = "Container"},
+                                      }, new { @class = "form-select", autocomplete = "off", @id = "ddlSearchOn", onblur = "SearchOn()" })
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" style="display:none" id="divIGMNO">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">IGM No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtIGMNo" type="text" placeholder="IGM No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" style="display:none" id="divitemNo">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Item No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtItemNo" type="text" placeholder="Item No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" style="display:none" id="divContainer">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Container No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtContainerNo" type="text" placeholder="Container No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+
+                                            <button class="btn btn-filters" id="TripSearch" type="button" onclick="ShowConIgm()"> <img src="~/assets/images/icons/search-whites.svg" alt="img"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BOE No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtBOENo" type="text" placeholder="BOE No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BOE Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtBOEDate", null, new { @class = "form-control datePicker1", @id = "txtBOEDate", name = "txtBOEDate", autocomplete = "on", @Value = DateTime.Now.ToString("dd MMM yyyy") })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12" style="display:none;">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">OOC No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtOOCNo" type="text" placeholder="OOC No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" style="display:none;">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">OOC Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtOOCDate", null, new
+                                            {
+                                                @class = "form-control datePicker1",
+                                                @id = "txtOOCDate",
+                                                name = "txtOOCDate",
+                                                autocomplete = "on"@*, @Value = DateTime.Now.ToString("dd MMM yyyy hh:mm")*@})
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Out Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtOOCDate", null, new { @class = "form-control datePicker1", @id = "txtOutDate", name = "txtOutDate", autocomplete = "on", @Value = DateTime.Now.ToString("dd MMM yyyy") })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">Delivery Type</label>
+                                    @Html.DropDownList("ddlDeliveryType", new List<SelectListItem>
+                                    {
+                                   new SelectListItem { Text = "Select", Value = "Select"},
+                                      new SelectListItem { Text = "Loaded", Value = "Loaded"},
+                                    new SelectListItem { Text = "Destuff", Value = "Destuff"},
+                                      }, new { @class = "form-select", autocomplete = "off", @id = "ddlDeliveryType" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="table-responsive">
+                                <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                    <thead>
+
+                                        <tr></tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"></label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @*<input type="submit" id="Save" name="save" value="Save" class="btn btn-success" />*@
+                                <button class="btn btn-submit" id="Save" onclick="Save()" title="Save">Save</button>
+                                <button type="button" class="btn btn-cancel" onclick="Clear()" name="clearProfile" title="clear" id="clearValue">Clear</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function Clear() {
+
+        location.reload();
+
+    }
+     function SearchOn() {
+        debugger;
+        var Search = $("#ddlSearchOn").val();
+
+        if (Search == "IGM-Item No") {
+            $("#divIGMNO").show()
+            $("#divitemNo").show()
+            $("#divContainer").hide()
+        }
+        if (Search == "Container") {
+            $("#divIGMNO").hide()
+            $("#divitemNo").hide()
+            $("#divContainer").show()
+        }
+        if (Search == "Select") {
+            $("#divIGMNO").hide()
+            $("#divitemNo").hide()
+            $("#divContainer").hide()
+        }
+    }
+    function ShowConIgm() {
+        $("#global-loader").fadeOut("slow");
+
+        var IGMNo = $("#txtIGMNo").val();
+        var ItemNo = $("#txtItemNo").val();
+        var ContainerNo = $("#txtContainerNo").val();
+        var data1 = { 'IGMNo': IGMNo, 'ItemNo': ItemNo, 'ContainerNo': ContainerNo };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GetDetailsGatePass",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example2").empty();
+                RepTableDataJsonwopaging($("#example2"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+                BOEFetch();
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+    function BOEFetch() {
+        var IGMNo = $("#txtIGMNo").val();
+        var ItemNo = $("#txtItemNo").val();
+        var ContainerNo = $("#txtContainerNo").val();
+        try {
+             var data1 = { 'IGMNo': IGMNo, 'ItemNo': ItemNo, 'ContainerNo': ContainerNo };
+
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/BookingEntry/FetchdatBOE",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    data = JSON.parse(data);
+
+
+                    $("#txtBOENo").val(data[0].BOENo);
+                    $("#ddlDeliveryType").val(data[0].DeliveryType);
+                    $("#txtBOEDate").val(data[0].BOEDate);
+
+
+
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+
+    }
+        function Save() {
+
+
+         debugger;
+         ///ddlentryType
+
+
+            var BOENo = $("#txtBOENo").val();
+            var BOEDate = $("#txtBOEDate").val();
+            var OOCNo = $("#txtOOCNo").val();
+            var OOCDate = $("#txtOOCDate").val();
+
+            var DeliveryType = $("#ddlDeliveryType").val();
+            var OutDate = $("#txtOutDate").val();
+
+
+
+            var SelectedData = new Array();
+            var tablearray = new Array();
+
+            var table = document.getElementById("example2");
+
+            var row;
+            for (var i = 1; i < table.rows.length; i++) {
+
+                row = table.rows[i];
+                IgmNo = row.cells[0].innerText;
+                ItemNo = row.cells[1].innerText;
+                Jono = row.cells[2].innerText;
+                ContainerNo = row.cells[3].innerText;
+
+                Size = row.cells[4].innerText;
+                qty = row.cells[5].innerText;
+                Weight = row.cells[6].innerText;
+
+                SelectedData.push({
+                    'IgmNo': IgmNo, 'ItemNo': ItemNo, 'Jono': Jono, 'ContainerNo': ContainerNo,
+                    'Size': Size, 'qty': qty, 'Weight': Weight
+                })
+            }
+
+            var data1 = {
+                'Debitdata': SelectedData, 'BOENo': BOENo, 'BOEDate': BOEDate, 'OOCNo': OOCNo, 'OOCDate': OOCDate, 'OutDate': OutDate, 'DeliveryType': DeliveryType
+            };
+         var data = JSON.stringify(data1);
+
+
+
+                          $.ajax({
+                              url: "/BookingEntry/SaveGatePassDetails",
+                            data: data,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                              success: function (data) {
+                                  //alert(data);
+                                  $('#btnSave').removeAttr('disabled', 'disabled');
+
+                                  /*PrintLoadedgatepass(c)*/
+                                  alert(data);
+
+                          document.location = '@Url.Action("GenerateGatePass", "BookingEntry")';
+
+
+                            },
+                            error: function (errormessage) {
+                                alert(errormessage.responseText);
+                            }
+                        });
+
+
+    }
+    /*function PrintLoadedgatepass(GPNo) {
+
+        var data1 = { 'GPNo': GPNo };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            url: "/Gate/PrintGateInLoadedDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            // dataType: "json",
+            success: function (response) {
+
+                var myWindow = window.open("", "MsgWindow1");
+                myWindow.close();
+                var myWindow = window.open("", "MsgWindow1");
+                myWindow.document.write(response);
+            },
+
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+*/
+</script>

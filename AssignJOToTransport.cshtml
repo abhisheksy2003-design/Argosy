@@ -1,0 +1,418 @@
+﻿
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style>
+    .table thead th, .text-wrap table thead th {
+        background-color: #9f78ff;
+        color: white;
+    }
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<div class=" content-area" id="DIvCompantMaster">
+    <div class="page-header">
+        <h4 class="page-title" id="New">Assign JO To Transport</h4>
+        <ol class="breadcrumb" style="background-color: #FAFBFE">
+            <li class="breadcrumb-item">
+                <a onclick="ShowSummary();" id="ShowSummary" class="btn btn-josph btn-success" style="color:white;align-content:center;"><i class="fa fa-file-text" data-toggle="tooltip" data-placement="bottom" title="Summary" data-original-title="Back"></i>  </a>
+            </li>
+        </ol>
+    </div>
+
+    <div class="col-sm-12 col-lg-12">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-3">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Booking JO No</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input ID="txtBookingJONo" type="text" placeholder="New" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-xs-4">
+                            <div class="form-group">
+                                <label class="form-label mandatory" style="visibility:hidden">.</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#largeModal" onclick="OpenTariffDetails();"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12" id="divCustomerName">
+                            <div class="form-group">
+                                <label class="form-label">Customer</label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" readonly="readonly" placeholder="Customer" class="form-control" id="ddlCustomer" />
+                                        <input type="hidden" class="form-control" id="hdnCustomerId" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Sub Customer</label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" readonly="readonly" placeholder="Sub Customer" class="form-control" id="ddlSubCustomer" />
+                                        <input type="hidden" class="form-control" id="hdnSubCustomerId" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12" id="divCustomerName">
+                            <div class="form-group">
+                                <label class="form-label">Transporter</label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" placeholder="Transporter" class="form-control" id="ddlTransporter" />
+                                        <input type="hidden" class="form-control" id="hdnTransporterId" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">No Of Vehicles</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        <input id="txtNoOfVehicles" placeholder="No Of Vehicles" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-lg-1 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">No of 20'</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        <input id="txtNoof20" placeholder="No of 20'" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">No of 40'</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        <input id="txtNoof40" placeholder="No of 40'" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1 col-xs-4">
+                            <div class="form-group">
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button class="btn btn-success btn-xs" id="btnSave" onclick="return Save();">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="largeModal" class="modal fade">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content ">
+                                <div class=" content-area">
+                                    <div class="modal-header pd-x-20">
+                                        <h4 class="page-title">List of Pending Booking</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body pd-20">
+                                        <div class="card-body hero-feature">
+                                            <div class="row">
+                                                
+                                                <div class="col-lg-3 col-sm-12 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label mandatory">Search</label>
+                                                        <div class="row gutters-xs">
+                                                            <div class="col">
+                                                                @Html.TextBox("TXtSearchOn", null, new { @class = "form-control", @id = "TXtSearchOn", name = "TXtSearchOn", autocomplete = "off", placeholder = "Search By Party Name or GST No" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-2 col-sm-12">
+                                                    <div class="form-group" style="padding-top:26px;">
+                                                        <div class="row gutters-xs">
+                                                            <div class="col">
+                                                                <button class="btn btn-primary" id="btnSearch" type="button" onclick="GetDetailsForTariffSearch()"><i class="fe fe-search"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                                    <div class="table-responsive push scrolling-table-container">
+                                                        <table class="table table-bordered table-hover tbl-cart text-nowrap" id="example3" style="width:100%">
+                                                            <thead style="background-color: #8969eb;text-align: center;font-family: monospace;">
+                                                                <tr></tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- modal-dialog -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" content-area" id="divsummary" style="display:none">
+    <div class="page-header">
+        <h4 class="page-title">
+            Booking Search Entry
+        </h4>
+        <ol class="breadcrumb" style="background-color: #FAFBFE">
+            <li class="breadcrumb-item">
+                <a onclick="Back();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Add Work Order"></i> </a>
+            </li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+
+                        <div class="row">
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Search</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                            @Html.TextBox("txtsearch", null, new { @class = "form-control ", @id = "txtsearch", name = "txtsearch", autocomplete = "on" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+
+                                            <button class="btn btn-primary" id="TripSearch" type="button" onclick="Showdetails()"><i class="fe fe-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                        <thead>
+
+                                            <tr></tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function ShowSummary() {
+        $("#DIvCompantMaster").hide();
+        $("#divsummary").show();
+    }
+    function Back() {
+        $("#DIvCompantMaster").show();
+        $("#divsummary").hide();
+    }
+    $(window).on("load", function (e) {
+
+    })
+    function OpenTariffDetails() {
+
+        $("#largeModal").modal('show')
+        GetDetailsForTariffSearch
+    }
+    function GetDetailsForTariffSearch() {
+        $("#global-loader").fadeOut("slow");
+ 
+ 
+        var Search = $("#TXtSearchOn").val();
+
+        var data1 = {  'Search': Search };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GetTariffDetailsForSearch",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example3").empty();
+                RepTableDataJsonwopaging($("#example3"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+    function GetDetails(BookingNo, Name, Name, NoOfVehicles, Noof20, Noof40) {
+        
+        $("#txtBookingJONo").val(BookingNo)
+        $("#ddlCustomer").val(Name)
+        $("#ddlSubCustomer").val(Name)
+
+        $("#txtNoOfVehicles").val(NoOfVehicles)
+        $("#txtNoof20").val(Noof20)
+        $("#txtNoof40").val(Noof40)
+        $("#largeModal").modal('hide')
+    }
+</script>
+<script>
+
+    function Save() {
+      
+        var BookingEntryNo = document.getElementById('txtBookingJONo').value;
+        var ddlCustomer = document.getElementById('ddlCustomer').value;
+        var ddlSubCustomer = document.getElementById('ddlSubCustomer').value;
+        var txtNoOfVehicles = document.getElementById('txtNoOfVehicles').value;
+        var txtNoof20 = document.getElementById('txtNoof20').value;
+        var txtNoof40 = document.getElementById('txtNoof40').value;
+        var hdnTransporterId = document.getElementById('hdnTransporterId').value;
+      
+        var data1 = {
+            'BookingEntryNo': BookingEntryNo, 'ddlCustomer': ddlCustomer, 'ddlSubCustomer': ddlSubCustomer, 'txtNoOfVehicles': txtNoOfVehicles, 'txtNoof20': txtNoof20, 'txtNoof40': txtNoof40,
+            'hdnTransporterId': hdnTransporterId};
+        data = JSON.stringify(data1);
+
+                $.ajax({
+                    url: "/BookingEntry/AssignSave",
+                    data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                         alert("Record Save !");
+                         window.location.href = '@Url.Action("AssignJOToTransport", "BookingEntry")';
+
+
+                },
+                    error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                   }
+                });
+
+    }
+</script>
+<script type="text/javascript">
+
+
+
+
+    $(document).ready(function () {
+        AutomCom();
+
+    });
+
+
+    function AutomCom() {
+        debugger;
+        $("#ddlTransporter").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/BookingEntry/GetDetTransport",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.AGName,
+                                val: item.AGID,
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlTransporter").val(i.item.label);
+                $("#hdnTransporterId").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+
+    };
+
+</script>

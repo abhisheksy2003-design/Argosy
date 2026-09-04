@@ -1,0 +1,737 @@
+﻿@model MvcBondEntities.BusinessEntities.CategorywiseInvoice
+@{
+    ViewBag.Title = "ImportReceipt";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+@*<link href="~/css/printstyle.css" rel="stylesheet" />*@
+<script src="~/js/GetTableJson.js"></script>
+<script src="~/UserScripts/ImportReceiptController.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+
+<div class=" content-area overflow-hidden" id="DivReceiptGenDet">
+    <div>
+        <div class="page-header">
+            <h4 class="page-title">Other Invoice</h4>
+            <div class="form-group">
+                <label class="form-label"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Invoice No.</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtInvoiceNo", null, new { @class = "form-control ", @id = "txtInvoiceNo", autocomplete = "off", @readonly = "Readonly", Placeholder = "NEW" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Work Year</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("ddlwyear", null, new { @class = "form-control", @id = "ddlwyear", @name = "ddlwyear", autocomplete = "off", @readonly = true, placeholder = "2024-25" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Invoice Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TxtInvoiceDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 08:00") })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Valid Upto Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TxtvalidDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 08:00") })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">GST No</label>
+                                    @Html.TextBox("txtGSTNo", null, new { @class = "form-control", @id = "txtGSTNo", name = "txtGSTNo", disabled = "disabled", autocomplete = "off", @Value = ViewBag.GSTNo })
+                                    <input ID="txtstatecode" type="hidden" />
+                                    <input ID="txtGSTid" type="hidden" />
+                                    <input ID="TxtRegisterType" type="hidden" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">GST Name</label>
+                                    @Html.TextBox("txtGSTName", null, new { @class = "form-control", @id = "txtGSTName", name = "txtGSTName", disabled = "disabled", autocomplete = "off", @Value = ViewBag.GSTName })
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                <div class="form-group" style="padding-top:26px;">
+                                    <button class="btn btn-filters me-2" id="gstSearch" type="button" onclick="LoadGSTSearch()"> <img src="~/assets/images/icons/search-whites.svg" alt="img"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Invoice Type</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.DropDownList("ddlInvoiceType", (IEnumerable<SelectListItem>)ViewBag.InvoiceType, "--Select--", new { @class = "form-select", @id = "ddlInvoiceType", name = "ddlInvoiceType", autocomplete = "off" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">IGM No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtIGMNo", null, new { @class = "form-control", @id = "txtIGMNo", name = "txtIGMNo", autocomplete = "off", @Value = ViewBag.IGMNo })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Item No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtItemNo", null, new { @class = "form-control", @id = "txtItemNo", name = "txtItemNo", autocomplete = "off", @Value = ViewBag.ItemNo })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BOE No.</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtBOENo", null, new { @class = "form-control", @id = "txtBOENo", name = "txtBOENo", autocomplete = "off", placeholder = "BOE No", @Value = ViewBag.BENo })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BOE Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtBOEDate", null, new { @class = "form-control  form_datetime1 ", @id = "txtBOEDate", name = "txtBOEDate", Value = DateTime.Now.ToString("dd MMM yyyy HH:mm"), autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BL No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtBLNo", null, new { @class = "form-control", @id = "txtBLNo", name = "txtBLNo", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">CFSInvoiceNo</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtCfsiInvoiceID", null, new { @class = "form-control", @id = "txtCfsiInvoiceID", name = "txtCfsiInvoiceID", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">CFSInvoiceDate</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtCfsiInvoiceDate", null, new { @class = "form-control  form_datetime1 ", @id = "txtCfsiInvoiceDate", name = "txtCfsiInvoiceDate", Value = DateTime.Now.ToString("dd MMM yyyy HH:mm"), autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">CFSAmount</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtCfsiAmount", null, new { @class = "form-control", @id = "txtCfsiAmount", name = "txtCfsiAmount", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Container No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TxtContainerno", null, new { @class = "form-control", @id = "TxtContainerno", @name = "TxtContainerno", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Shipping Line</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.DropDownList("ddlLineName", (IEnumerable<SelectListItem>)ViewBag.ShippingLineList, "--Select--", new { @class = "form-select", @id = "ddlLineName", name = "ddlLineName", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Shipper</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.DropDownList("ddlShippers", (IEnumerable<SelectListItem>)ViewBag.Shippers, "--Select--", new { @class = "form-select", @id = "ddlShippers", name = "ddlShippers", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">CHA</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.DropDownList("ddlCHA", (IEnumerable<SelectListItem>)ViewBag.CHAList, "--Select--", new { @class = "form-select", @id = "ddlCHA", name = "ddlCHA", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Consignee</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TxtConsignee", null, new { @class = "form-control", @id = "TxtConsignee", @name = "TxtConsignee", autocomplete = "off", @Value = ViewBag.EDIImporter })
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Accounting Head</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.DropDownList("ddlaccountingHead", (IEnumerable<SelectListItem>)ViewBag.AccountHead, "--Select--", new { @class = "form-control", @id = "ddlaccountingHead", name = "ddlaccountingHead", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Amount</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("TxtAmt", null, new { @class = "form-control", @id = "TxtAmt", @name = "TxtAmt", autocomplete = "off", @type = "number" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Tax Code</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.DropDownList("TxtTaxcode", (IEnumerable<SelectListItem>)ViewBag.TaxName, "--Select-- ", new { @class = "form-control", @id = "TxtTaxcode", name = "TxtTaxcode", autocomplete = "off", onchange = "GetGSTDetails()" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" style="display:none;">
+                                <div class="form-group label-floating">
+                                    <label class="form-label mandatory">Company</label>
+                                    @*@Html.DropDownList("ddlCompany", (IEnumerable<SelectListItem>)ViewBag.Company, "--Select--", new { @class = "form-control", @id = "ddlCompany", name = "ddlCompany", autocomplete = "off" })*@
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                <div class="form-group" style="padding-top:25px">
+                                    <button class="btn btn-primary" type="button" id="btnShowIGMItem" name="Show" onclick="Filldetailsintbl()"><i class="fa fa-check"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="example1">
+                                        <thead>
+                                            <tr>
+                                                <th class="wd-10p sorting">Amount</th>
+                                                <th class="wd-10p sorting">Account ID</th>
+                                                <th class="wd-10p sorting">Account header</th>
+                                                <th class="wd-10p sorting">Group ID</th>
+                                                <th class="wd-10p sorting">Container No</th>
+                                                <th class="wd-10p sorting">IGST</th>
+                                                <th class="wd-10p sorting">CGST</th>
+                                                <th class="wd-10p sorting">SGST</th>
+                                                <th class="wd-10p sorting">InDate</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                <div class="form-group label-floating">
+                                    <label class="form-label mandatory">Amount</label>
+                                    @Html.TextBox("txtNetAmount", null, new { @class = "form-control", @id = "txtNetAmount", name = "txtNetAmount", autocomplete = "off", @readonly = true })
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                <div class="form-group label-floating">
+                                    <label class="form-label mandatory">SGST</label>
+                                    @Html.TextBox("txtSGST", null, new { @class = "form-control", @id = "txtSGST", name = "txtSGST", autocomplete = "off", @readonly = true })
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                <div class="form-group label-floating">
+                                    <label class="form-label mandatory">CGST</label>
+                                    @Html.TextBox("txtCGST", null, new { @class = "form-control", @id = "txtCGST", name = "txtCGST", autocomplete = "off", @readonly = true })
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                <div class="form-group label-floating">
+                                    <label class="form-label mandatory">IGST</label>
+                                    @Html.TextBox("txtSGST", null, new { @class = "form-control", @id = "txtIGST", name = "txtIGST", autocomplete = "off", @readonly = true })
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                <div class="form-group label-floating">
+                                    <label class="form-label mandatory">Grand Total</label>
+                                    @Html.TextBox("txtGrandTotal", null, new { @class = "form-control", @id = "txtGrandTotal", name = "txtGrandTotal", autocomplete = "off", @readonly = true })
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <div class="form-group label-floating">
+                                    <label class="form-label mandatory">Remarks</label>
+                                    @Html.TextBox("TxtRemakrs", null, new { @class = "form-control", @id = "TxtRemakrs", name = "TxtRemakrs", autocomplete = "off" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 col-xs-6">
+                                <div class="form-group">
+                                    <div class="row gutters-xs">
+                                        <div class="col d-flex gap-2">
+                                            <button class="btn btn-save px-4" type="button" id="btnSave" onclick="SaveDetails();">Save</button>
+                                            <button class="btn btn-cancel px-4" type="button" title="Clear" id="clearValue" onclick="Clear()">Clear</button>
+
+                                            <input value="@ViewBag.TINUMBER" type="hidden" id="TxtTinNumber" />
+                                            <input type="hidden" id="TxtSgstGet" />
+                                            <input type="hidden" id="CGSTGet" />
+                                            <input type="hidden" id="IGSTGet" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal  fade" id="TestModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" id='myModalContent'>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#example1').dataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+            "bPaginate": false,
+            // "bFilter": false,
+            "paging": false,
+            "order": [],
+            "aoColumnDefs": [
+                {
+                    'bSortable': false,
+                    'aTargets': [0]
+                }
+
+            ]
+        })
+
+    })
+
+    function LoadGSTSearch() {
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "/ImportInvoice/ImportProformaGSTSearch",
+            //data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                //alert(response);
+                $('#TestModal').modal('show');
+                $('#myModalContent').html(response);
+            },
+            failure: function (response) {
+                alert(response);
+                alert(response.responseText);
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        })
+    }
+
+</script>
+
+<script>
+
+    function GetGSTDetails() {
+        $("#loader").fadeIn("slow");
+
+        var TaxID = $("#TxtTaxcode").val();
+        var data1 = { 'TaxID': TaxID };
+        var data = JSON.stringify(data1);
+
+        if (TaxID !== "") {
+            $.ajax({
+                type: "POST",
+                url: "/Finance/GetGSTDetailsForCalculate",
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $("#TxtSgstGet").val(data.SGST);
+                    $("#CGSTGet").val(data.CGST);
+                    $("#IGSTGet").val(data.IGST);
+                    $("#loader").fadeOut("slow");
+
+                },
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                    $("#loader").fadeOut("slow");
+                }
+            })
+        }
+    }
+
+
+
+    function Filldetailsintbl() {
+        debugger;
+        var dblNetTotal = 0;
+        var dblIGST = 0;
+        var dblSGST = 0;
+        var dblCGST = 0;
+        var SGSTcal1 = 0;
+
+        var CGSTcal1 = 0;
+        var IGSTcal1 = 0;
+
+        var AccountName = $("#ddlaccountingHead option:Selected").text();
+        var AccountID = $("#ddlaccountingHead option:Selected").val();
+        var Group = $("#TxtTaxcode option:Selected").val();
+        var Amount = $("#TxtAmt").val();
+        var ContainerNo = $("#TxtContainerno").val();
+        var GSTName = $("#txtGSTName").val();
+        var GSTNO = $("#txtGSTNo").val();
+        var Tinnumber = $("#TxtTinNumber").val();
+        debugger
+        var SGSTcal = $("#TxtSgstGet").val();
+        var CGSTcal = $("#CGSTGet").val();
+        var IGSTcal = $("#IGSTGet").val();
+        var InDate = "";
+        var checkGST = GSTNO.substring(0, 2)
+
+        if (AccountName == "" || AccountName == "--Select--") {
+            document.getElementById("ddlaccountingHead").style.borderColor = "red";
+            alert('Please Select Account Name!')
+            event.preventDefault();
+            return;
+        }
+        if (Group == 0) {
+            document.getElementById("TxtTaxcode").style.borderColor = "red";
+            alert('Please Select tax Name!')
+            event.preventDefault();
+            return;
+        }
+        if (Amount == "") {
+            document.getElementById("TxtAmt").style.borderColor = "red";
+            alert('Please  Enter Amount!')
+            event.preventDefault();
+            return;
+        }
+
+
+        if (GSTName == "") {
+            document.getElementById("txtGSTName").style.borderColor = "red";
+            alert('Please  Enter GST No!')
+            event.preventDefault();
+            return;
+        }
+
+
+        if (checkGST == "27") {
+            var dblIGST = 0;
+            var dblSGST = dblSGST + Number(Amount) * SGSTcal / 100;
+            var dblCGST = dblCGST + Number(Amount) * CGSTcal / 100;
+
+        } else {
+            var dblIGST = dblIGST + Number(Amount) * IGSTcal / 100;
+            var dblSGST = 0;
+            var dblCGST = 0;
+
+        }
+
+        var t = $('#example1').DataTable();
+
+        t.row.add([
+            Amount,
+            AccountID,
+            AccountName,
+            Group,
+            ContainerNo,
+            dblIGST,
+            dblCGST,
+            dblSGST,
+            InDate
+        ]).draw(false);
+
+
+        var table = document.getElementById("example1");
+        var row;
+        for (var i = 1; i < table.rows.length; i++) {
+            row = table.rows[i];
+            Amount = row.cells[0].innerText;
+            AccountID = row.cells[1].innerText;
+            AccountName = row.cells[2].innerText;
+            GroupID = row.cells[3].innerText;
+            ContainerNo = row.cells[4].innerText;
+            IGST1 = row.cells[5].innerText;
+            CGST1 = row.cells[6].innerText;
+            SGST1 = row.cells[7].innerText;
+            InDate = row.cells[8].innerText;
+
+            var dblNetTotal = dblNetTotal + Number(Amount);
+            IGSTcal1 = IGSTcal1 + Number(IGST1);
+            CGSTcal1 = CGSTcal1 + Number(CGST1);
+            SGSTcal1 = SGSTcal1 + Number(SGST1);
+
+        }
+        $("#txtNetAmount").val(dblNetTotal);
+        $("#txtSGST").val(SGSTcal1);
+        $("#txtCGST").val(CGSTcal1);
+        $("#txtIGST").val(IGSTcal1);
+        $("#txtGrandTotal").val(dblNetTotal + SGSTcal1 + CGSTcal1 + + IGSTcal1);
+
+
+    }
+
+
+
+</script>
+
+<script>
+
+
+    function SaveDetails() {
+        $("#loader").fadeIn("slow");
+        var InvoiceNo = "New"
+        var WorkYear = $("#ddlwyear").val();
+        var InvoiceDate = $("#TxtInvoiceDate").val();
+        var validDate = $("#TxtvalidDate").val();
+        var GSTNo = $("#txtGSTNo").val();
+        var GSTName = $("#txtGSTName").val();
+        var IGMType = $("#ddlInvoiceType option:selected").text();
+        var IGMNo = $("#txtIGMNo").val();
+        var ItemNo = $("#txtItemNo").val();
+        var BlNo = $("#txtBLNo").val();
+        var CFSInvoiceNo = $("#txtCfsiInvoiceID").val();
+        var CFSInvoiceDate = $("#txtCfsiInvoiceDate").val();
+        var CFSAmount = $("#txtCfsiAmount").val();
+        var BOENo = $("#txtBOENo").val();
+        var BOEDate = $("#txtBOEDate").val();
+        var Containerno = $("#TxtContainerno").val();
+        var Consignee = $("#TxtConsignee").val();
+        var GSTID = $("#txtGSTid").val();
+        var TotalAmt = $("#txtNetAmount").val();
+        var SGST = $("#txtSGST").val();
+        var CGST = $("#txtCGST").val();
+        var IGST = $("#txtIGST").val();
+        var GrandAmt = $("#txtGrandTotal").val();
+        var Remarks = $("#TxtRemakrs").val();
+        var Shippers = $("#ddlShippers option:selected").val();
+        var LineName = $("#ddlLineName option:selected").val();
+        var Cha = $("#ddlCHA option:selected").val();
+        var InDate = "";
+
+
+        if (GSTName == "") {
+            document.getElementById("txtGSTName").style.borderColor = "red";
+            alert('Please  Select GSTNo!')
+            $("#loader").fadeOut("slow");
+            event.preventDefault();
+            return;
+        }
+        if (IGMNo == "") {
+            document.getElementById("txtIGMNo").style.borderColor = "red";
+            alert('Please  Enter IGMNo!')
+            $("#loader").fadeOut("slow");
+            event.preventDefault();
+            return;
+        }
+        if (ItemNo == "") {
+            document.getElementById("txtItemNo").style.borderColor = "red";
+            alert('Please Enter ItemNo!')
+            $("#loader").fadeOut("slow");
+            event.preventDefault();
+            return;
+        }
+        if (BlNo == "") {
+            document.getElementById("txtBLNo").style.borderColor = "red";
+            alert('Please  Enter BlNo!')
+            $("#loader").fadeOut("slow");
+            event.preventDefault();
+            return;
+        }
+
+        if (Containerno == "") {
+            document.getElementById("TxtContainerno").style.borderColor = "red";
+            alert('Please  Enter Containerno!')
+            $("#loader").fadeOut("slow");
+            event.preventDefault();
+            return;
+        }
+
+
+            var SelectedData = new Array();
+            var tablearray = new Array();
+            var table = document.getElementById("example1");
+            var row;
+            for (var i = 1; i < table.rows.length; i++) {
+                row = table.rows[i];
+                Amount = row.cells[0].innerText;
+                AccountID = row.cells[1].innerText;
+                AccountName = row.cells[2].innerText;
+                GroupID = row.cells[3].innerText;
+                ContainerNo = row.cells[4].innerText;
+                IGSTADD = row.cells[5].innerText;
+                CGSTADD = row.cells[6].innerText;
+                SGSTADD = row.cells[7].innerText;
+                InDate = row.cells[8].innerText;
+
+                SelectedData.push({
+                    'Amount': Amount, 'AccountID': AccountID, 'AccountName': AccountName, 'GroupID': GroupID, 'ContainerNo': ContainerNo,
+                    'IGSTADD': IGSTADD, 'CGSTADD': CGSTADD, 'SGSTADD': SGSTADD,'InDate' : InDate
+                })
+            }
+            var data1 = {
+                'InvoiceDetails': SelectedData, 'InvoiceNo': InvoiceNo, 'WorkYear': WorkYear, 'InvoiceDate': InvoiceDate, 'validDate': validDate,
+                'GSTNo': GSTNo, 'GSTName': GSTName, 'GSTID': GSTID, 'IGMNo': IGMNo, 'ItemNo': ItemNo, 'BlNo': BlNo, 'Containerno': Containerno,
+                'BOENo': BOENo, 'BOEDate': BOEDate, 'Consignee': Consignee, 'IGMType': IGMType, 'CFSInvoiceNo': CFSInvoiceNo, 'CFSInvoiceDate': CFSInvoiceDate, 'CFSAmount': CFSAmount,
+                'TotalAmt': TotalAmt, 'SGST': SGST, 'CGST': CGST, 'IGST': IGST, 'GrandAmt': GrandAmt, 'Remarks': Remarks, 'Shippers': Shippers, 'LineName': LineName, 'Cha': Cha
+        };
+
+
+            var data = JSON.stringify(data1);
+
+           $.ajax({
+               url: "/Finance/SaveOtherInvoicesDetails",
+             data: data,
+             type: "POST",
+             contentType: "application/json; charset=utf-8",
+             dataType: "json",
+               success: function (data) {
+                  /* alert(data);*/
+                   @*swal("Good Job!", data, "success");
+                   document.location = '@Url.Action("OtherInvoice", "Finance")';
+                   $("#loader").fadeOut("slow");*@
+
+                   if (data.Status != 0) {
+
+                       swal("Good Job!", "Record Added Successfully!!", "success").then(function () {
+                          // TaxInvoicePrint(data.Data, data.RequestNo, "MTY");
+                             document.location = '@Url.Action("OtherInvoice", "Finance")';
+                             $("#loader").fadeOut("slow");
+                             @*if (InvFor == "Proforma")
+                             { PrintInvoceno(data.Data, data.RequestNo, InvoiceType) }
+                             else {
+                                 window.location.href = '@Url.Action("Receipt", "Receipt")?igmno=' + data.Data;
+                               TaxInvoicePrint(data.Data, data.RequestNo, InvoiceType)
+                             }*@
+
+                         });
+                   }
+             },
+             error: function (errormessage) {
+                 alert(errormessage.responseText);
+                 $("#loader").fadeOut("slow");
+             }
+         });
+
+
+
+
+    }
+
+    function Clear() {
+
+        document.location = '@Url.Action("OtherInvoice", "Finance")';
+
+       }
+
+
+</script>
+
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
+

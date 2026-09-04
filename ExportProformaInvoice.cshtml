@@ -1,0 +1,2579 @@
+﻿
+@{
+    ViewBag.Title = "Import Proforma Invoice";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+
+}
+
+<style>
+
+   /* .table thead th, .text-wrap table thead th {
+        background-color: #9f78ff;
+        color: white;
+    }*/
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        color: #fff;
+        background-color: #FF9F43 !important;
+    }
+</style>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="~/js/GetTableJsonPagging.js"></script>
+@*<div id="global-loader"></div>*@
+<div class=" content-area" id="diImpProfroma">
+    <div class="page-header d-flex align-items-center justify-content-between">
+        <h4 class="page-title mb-0">Export- Proforma Invoice</h4>
+
+        <div class="card-body p-0">
+            <div class="btn-list d-flex justify-content-end">
+                <a href="#" class="btn btn-success me-2" onclick="showtodayperforma()">
+                    Today's Proforma Invoice
+                </a>
+                <a href="#" class="btn btn-primary" onclick="showAdditionalchrges()">
+                    Additional Charges
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+
+
+        <div class="card-body p-6">
+            <div class="wizard-container">
+                <div class="wizard-card m-0" id="wizardProfile">
+                    <form>
+
+                        <div class="tab-pane">
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-6">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label">Invoice No</label>
+                                                @Html.TextBox("TxtInvoiceNo", "New", new { @class = "form-control", @id = "TxtInvoiceNo", name = "TxtInvoiceNo", autocomplete = "off", @placeholder = "New", @readonly = true, @disabled = true })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">Invoice Date</label>
+                                                @Html.TextBox("txtInvoiceDate", null, new { @class = "form-control  form_datetime1 ", @id = "txtInvoiceDate", name = "txtInvoiceDate", Value = DateTime.Now.ToString("dd MMM yyyy HH:mm"), autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-5 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">Bill Type</label>
+                                                @Html.DropDownList("ddlMovmentType", (IEnumerable<SelectListItem>)ViewBag.BillType, "--Select--", new { @class = "form-select", @id = "ddlMovmentType", name = "ddlMovmentType", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">Valid Upto Date</label>
+                                                @Html.TextBox("TxtValidDate", null, new { @class = "form-control  form_datetime1 ", @id = "TxtValidDate", name = "TxtValidDate", Value = DateTime.Now.ToString("dd MMM yyyy HH:mm"), autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">Container No</label>
+                                                @Html.TextBox("TxtContainerno", null, new { @class = "form-control", @id = "TxtContainerno", name = "TxtContainerno", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                            <div class="form-group" style="padding-top:25px">
+                                                <button class="btn btn-outline-primary" type="button" id="btnShowIGMItem" name="Show" onclick="GetContainerDetails()"><i class="fa fa-check"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">Invoice Type</label>
+                                                @Html.DropDownList("ddlInvoiceType", (IEnumerable<SelectListItem>)ViewBag.InvoiceType, "--Select--", new { @class = "form-control form-control-lg", @id = "ddlInvoiceType", name = "ddlInvoiceType", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">SB No</label>
+                                                @Html.TextBox("TxtSBNO", null, new { @class = "form-control", @id = "TxtSBNO", name = "TxtSBNO", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                            <div class="form-group" style="padding-top:25px">
+                                                <button class="btn btn-outline-primary" type="button" id="btnShowIGMItem" name="Show" onclick="GetSBNumberDetails()"><i class="fa fa-check"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">GST No</label>
+                                                @Html.TextBox("txtGSTNo", null, new { @class = "form-control", @id = "txtGSTNo", name = "txtGSTNo", disabled = "disabled", autocomplete = "off" })
+                                                <input ID="txtstatecode" type="hidden" />
+                                                <input ID="txtGSTid" type="hidden" />
+                                                <input ID="TxtRegisterType" type="hidden" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">GST Party Name</label>
+                                                @Html.TextBox("txtGSTName", null, new { @class = "form-control", @id = "txtGSTName", name = "txtGSTName", disabled = "disabled", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group" style="padding-top:26px;">
+                                                <button class="btn btn-filters" id="gstSearch" type="button" onclick="LoadGSTSearch()"> <img src="~/assets/images/icons/search-whites.svg" alt="img"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Tariff ID</label>
+                                                @Html.TextBox("TxtTariffID", null, new { @class = "form-control", @id = "TxtTariffID", name = "TxtTariffID", autocomplete = "off", @readonly = true, disabled = "disabled" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-4 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Tariff Desc</label>
+                                                @Html.DropDownList("ddlTariffDesc", (IEnumerable<SelectListItem>)ViewBag.Tariffmaster, "--Select--", new { @class = "form-select", @id = "ddlTariffDesc", name = "ddlTariffDesc", autocomplete = "off", onchange = "GetTariffID()" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="display:none">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Company</label>
+                                                @Html.DropDownList("ddlCompany", (IEnumerable<SelectListItem>)ViewBag.Company, new { @class = "form-control", @id = "ddlCompany", name = "ddlCompany", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                            <div class="form-group" style="padding-top:25px">
+                                                <button class="btn btn-primary" type="button" id="btnCalculate" name="Calculate" onclick="OnCalculateClick()">Calculate</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="visibility:hidden">
+                                        <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">BL No</label>
+                                                @Html.TextBox("TxtBlNO", null, new { @class = "form-control", @id = "TxtBlNO", name = "TxtBlNO", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                            <div class="form-group" style="padding-top:25px">
+                                                <button class="btn btn-primary" type="button" id="btnShowIGMItem" name="Show" onclick="GetBLNumberWiseDetails()"><i class="fa fa-check"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-lg-6">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label">Customer</label>
+                                                @Html.DropDownList("ddlCustomer", (IEnumerable<SelectListItem>)ViewBag.Customer, "--Select--", new { @class = "form-select", @id = "ddlCustomer", name = "ddlCustomer", autocomplete = "off", @readonly = true })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label">CHA</label>
+                                                @Html.DropDownList("ddlcha", (IEnumerable<SelectListItem>)ViewBag.Cha, "--Select--", new { @class = "form-select", @id = "ddlcha", name = "ddlcha", autocomplete = "off", @readonly = true })
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label">Exporter</label>
+                                                @Html.DropDownList("ddlImporter", (IEnumerable<SelectListItem>)ViewBag.Shipper, "--Select--", new { @class = "form-select", @id = "ddlImporter", name = "ddlImporter", autocomplete = "off", @readonly = true })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label">Line</label>
+                                                @Html.TextBox("TxtLineID", null, new { @class = "form-control", @id = "TxtLineID", name = "TxtLineID", autocomplete = "off", @readonly = true })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label">Line Name</label>
+                                                @Html.TextBox("TxtLine", null, new { @class = "form-control", @id = "TxtLine", name = "TxtLine", autocomplete = "off", @readonly = true })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Cargo Desc</label>
+                                                @Html.TextBox("TxtCargoDesc", null, new { @class = "form-control", @id = "TxtCargoDesc", name = "TxtCargoDesc", autocomplete = "off", @readonly = true })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Port Name</label>
+                                                @Html.TextBox("TxtPortName", null, new { @class = "form-control", @id = "TxtPortName", name = "TxtPortName", autocomplete = "off", @readonly = true })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="display:none">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Remarks</label>
+                                                @Html.TextBox("TxtRemaks", null, new { @class = "form-control", @id = "TxtRemaks", name = "TxtRemaks", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Commodity</label>
+                                                @Html.DropDownList("ddlCommodity", (IEnumerable<SelectListItem>)ViewBag.Comodity, "--Select--", new { @class = "form-select", @id = "ddlCommodity", name = "ddlCommodity", autocomplete = "off", onchange = "GetTaxValueID()" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Tax</label>
+                                                @Html.DropDownList("TxtTaxID", (IEnumerable<SelectListItem>)ViewBag.Tax_Services, "--Select--", new { @class = "form-select", @id = "TxtTaxID", name = "TxtTaxID", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="display:none">
+                                        <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Trans Type</label>
+                                                @Html.DropDownList("ddlTransType", (IEnumerable<SelectListItem>)ViewBag.Transtype, "--Select--", new { @class = "form-control", @id = "ddlTransType", name = "ddlTransType", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Stuff Location</label>
+                                                @Html.DropDownList("ddlstufflocation", (IEnumerable<SelectListItem>)ViewBag.Location, "--Select--", new { @class = "form-control", @id = "ddlstufflocation", name = "ddlstufflocation", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">No of Loc</label>
+                                                @Html.TextBox("TxtNooflocation", null, new { @class = "form-control", @id = "TxtNooflocation", name = "TxtNooflocation", autocomplete = "off" })
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row" style="display:none">
+                                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">Free Days LDD</label>
+                                                @Html.TextBox("TxtFreeDaysLDD", null, new { @class = "form-control", @id = "TxtFreeDaysLDD", name = "TxtFreeDaysLDD" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">Empty</label>
+                                                @Html.TextBox("TxtEmpty", null, new { @class = "form-control", @id = "TxtEmpty", name = "TxtEmpty" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">Storage</label>
+                                                @Html.TextBox("TxtStorage", null, new { @class = "form-control", @id = "TxtStorage", name = "TxtStorage" })
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-3 col-xs-12 col-md-3">
+                                            <div class="form-group label-floating" style="padding-top:30px">
+                                                <input type="checkbox" class="checkbox origin" name="checklist[]" id="chkDelLoc" onchange="OnDelLocChange()">
+                                                <span>Pick Up Location</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating" style="padding-top:25px">
+                                                @Html.TextBox("TxtPickuplocation", null, new { @class = "form-control", @id = "TxtPickuplocation", name = "TxtPickuplocation", autocomplete = "off" })
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row" style="visibility:hidden">
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">RR NO</label>
+                                                @Html.TextBox("TxtRRNo", null, new { @class = "form-control", @id = "TxtRRNo", name = "TxtRRNo", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-label mandatory">RR Date</label>
+                                                @Html.TextBox("TxtRRDate", null, new { @class = "form-control  form_datetime1 ", @id = "TxtRRDate", name = "TxtRRDate", Value = DateTime.Now.ToString("dd MMM yyyy HH:mm"), autocomplete = "off" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="ContainerDetails">
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-12">
+                                    <div class="panel panel-primary">
+                                        <div class="tab-menu-heading">
+                                            <div class="tabs-menu ">
+                                                <!-- Tabs -->
+                                                <ul class="nav nav-tabs nav-justified">
+                                                    <li class="nav-item"><a href="#tab1" class="nav-link active" data-toggle="tab">Container Details</a></li>
+                                                    <li class="nav-item"><a href="#tab2" class="nav-link" data-toggle="tab">Shipping Bill Details</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body tabs-menu-body">
+                                            <div class="tab-content">
+                                                <div class="tab-pane active " id="tab1">
+                                                    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblContainerDets">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="wd-15p sorting">Select</th>
+
+                                                                        <th class="wd-15p sorting">Container No</th>
+                                                                        <th class="wd-15p sorting">Size</th>
+                                                                        <th class="wd-15p sorting">Container type</th>
+                                                                        <th class="wd-15p sorting">Cargo type</th>
+                                                                        <th class="wd-15p sorting">In date </th>
+                                                                        <th class="wd-15p sorting">Stuffing date </th>
+                                                                        <th class="wd-15p sorting">GP date </th>
+                                                                        <th class="wd-15p sorting">Entry Days </th>
+                                                                        <th class="wd-15p sorting">Loaded Days </th>
+                                                                        <th class="wd-15p sorting">Pick Up  </th>
+                                                                        <th class="wd-15p sorting">Transport type  </th>
+                                                                        <th class="wd-15p sorting">Net Weight  </th>
+                                                                        <th class="wd-15p sorting">tare Weight  </th>
+                                                                        <th class="wd-15p sorting">Gross Weight  </th>
+                                                                        <th class="wd-15p sorting">Movmement Type  </th>
+                                                                        <th class="wd-15p sorting">SB Number</th>
+                                                                        <th class="wd-15p sorting">Line ID</th>
+                                                                        <th class="wd-15p sorting">Sl Name</th>
+                                                                        <th class="wd-15p sorting">Port</th>
+                                                                        <th class="wd-15p sorting">Port Name</th>
+                                                                        <th class="wd-15p sorting">Pick up Location ID</th>
+                                                                        <th class="wd-15p sorting">Stuff Loc ID</th>
+                                                                        <th class="wd-15p sorting">No of Stuff Location</th>
+                                                                        <th class="wd-15p sorting">Entry ID</th>
+
+
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane  " id="tab2">
+                                                    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblshippingdetails">
+                                                                <thead>
+                                                                    <tr>
+
+                                                                        <th class="wd-15p sorting">SB Number</th>
+                                                                        <th class="wd-15p sorting">SB Date</th>
+                                                                        <th class="wd-15p sorting">Carting Date</th>
+                                                                        <th class="wd-15p sorting">Stuffing Date</th>
+                                                                        <th class="wd-15p sorting">Total Days</th>
+                                                                        <th class="wd-15p sorting">Carting Qty	</th>
+                                                                        <th class="wd-15p sorting">Carting Weight</th>
+                                                                        <th class="wd-15p sorting">Area</th>
+                                                                        <th class="wd-15p sorting">Space</th>
+                                                                        <th class="wd-15p sorting">Cargo Descriptions</th>
+                                                                        <th class="wd-15p sorting">Vehicle No</th>
+                                                                        <th class="wd-15p sorting">entryid</th>
+                                                                        <th class="wd-15p sorting">CargoWeight</th>
+                                                                        <th class="wd-15p sorting">TotalPKGS</th>
+
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="Charges">
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                        <span style="color:blue;font-size:larger;font-weight:bolder">Charges to be Collected</span>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblCharges">
+                                                <thead>
+                                                    @*<tr>
+
+                                                        </tr>*@
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group label-floating" style="padding-top:30px">
+                                    <input type="checkbox" class="checkbox origin" name="checklist[]" id="chkAdditional" onclick="OnAdditionalChange()">
+                                    <span>Additional Applicable</span>
+                                </div>
+                                <div class="row" style="display:none" id="divprroformaadditionclick">
+                                    <div class="col-lg-5 col-sm-5 col-xs-12 col-md-6">
+                                        <div class="row">
+                                            <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+                                                <div class="form-group label-floating">
+                                                    <label class="form-label mandatory">Account Name</label>
+                                                    @Html.DropDownList("ddlAccountHead", (IEnumerable<SelectListItem>)ViewBag.Accountmaster, "--Select--", new { @class = "form-select", @id = "ddlAccountHead", name = "ddlAccountHead", autocomplete = "off" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="col">*@
+                                        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory">Container No</label>
+                                                @Html.TextBox("txtContainerNoAdd", null, new { @class = "form-control mr-2", @id = "txtContainerNoAdd", name = "txtContainerNoAdd", autocomplete = "off", @Value = ViewBag.ContainerNoAdditional })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group label-floating">
+                                                <label class="form-label mandatory m-2">Amount</label>
+                                                @Html.TextBox("txtAmountAdd", null, new { @class = "form-control", @id = "txtAmountAdd", name = "txtAmountAdd", autocomplete = "off", @Value = ViewBag.AmountAdd })
+                                                <input type="hidden" id="txtsetserialno" value="0" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12">
+                                            <div class="form-group" style="padding-top:26px;">
+                                                <button class="btn btn-primary m-2" id="btnAdd" type="button" onclick="OnAdditionaladd()"><i class="fa fa-check"></i></button>
+                                            </div>
+                                        </div>
+                                        @* </div>*@
+                                    </div>
+                                    <div class="col-lg-7 col-sm-12 col-xs-12 col-md-7">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblproformaAdditionalCharges">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="wd-15p sorting">SR No</th>
+                                                                <th class="wd-15p sorting">Account Name</th>
+                                                                <th class="wd-15p sorting">Container No</th>
+                                                                <th class="wd-15p sorting">Amount</th>
+                                                                <th class="wd-15p sorting">Account ID</th>
+                                                                <th class="wd-15p sorting"></th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                        <div class="form-group label-floating">
+                                            <label class="form-label mandatory">Amount</label>
+                                            @Html.TextBox("txtNetAmount", null, new { @class = "form-control", @id = "txtNetAmount", name = "txtNetAmount", autocomplete = "off", disabled = "disabled", @Value = ViewBag.NetAmount })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <div class="form-group label-floating">
+                                            <label class="form-label mandatory">SGST</label>
+                                            @Html.TextBox("txtSGST", null, new { @class = "form-control", @id = "txtSGST", name = "txtSGST", autocomplete = "off", disabled = "disabled", @Value = ViewBag.SGST })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <div class="form-group label-floating">
+                                            <label class="form-label mandatory">CGST</label>
+                                            @Html.TextBox("txtCGST", null, new { @class = "form-control", @id = "txtCGST", name = "txtCGST", autocomplete = "off", disabled = "disabled", @Value = ViewBag.CGST })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <div class="form-group label-floating">
+                                            <label class="form-label mandatory">IGST</label>
+                                            @Html.TextBox("txtIGST", null, new { @class = "form-control", @id = "txtIGST", name = "txtIGST", autocomplete = "off", disabled = "disabled", @Value = ViewBag.IGST })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                                        <div class="form-group label-floating">
+                                            <label class="form-label mandatory">KFC</label>
+                                            @Html.TextBox("TxtKFCamount", null, new { @class = "form-control", @id = "TxtKFCamount", name = "TxtKFCamount", disabled = "disabled", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                        <div class="form-group label-floating">
+                                            <label class="form-label mandatory">Grand Total</label>
+                                            @Html.TextBox("txtGrandTotal", null, new { @class = "form-control", @id = "txtGrandTotal", name = "txtGrandTotal", disabled = "disabled", autocomplete = "off", @Value = ViewBag.GrandTotal })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group label-floating">
+                                            <label class="form-label mandatory">Remarks</label>
+                                            @Html.TextBox("TxtRemarksUSD", null, new { @class = "form-control", @id = "TxtRemarksUSD", name = "TxtRemarksUSD", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-3" style="margin-top:20px;">
+                                        <div class="form-group">
+                                            <button id="btnsave" class="btn btn-save px-4" onclick="SavePerformaDetails()">Save</button>
+                                            <input type="button" name="clearProfile" value="Clear" class="btn btn-cancel px-4" title="clear" id="clearValue" onclick="Clear()" />
+                                            <input type="hidden" id="lblWeight" />
+                                            <input type="hidden" id="lblPkgs" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </form>
+                </div>
+            </div> <!-- wizard container -->
+        </div>
+    </div>
+</div>
+<div class="modal  popover-content" id="TestModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" id='myModalContent'>
+        </div>
+    </div>
+</div>
+<div class=" content-area" id="ditodayinvoice" style="display:none; margin-top:-8px;" >
+    <div class="page-header">
+        <h4 class="page-title">Export porforma Invoice List</h4>
+        <div class="ibox-content  text-right">
+            <a onclick="getBack();" class="btn btn-added p-3" style="color:white;align-content:center;"><i class="fa fa-arrow-left" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Back"></i>  </a></li>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Search</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.DropDownList("--Select--", new List<SelectListItem>
+                                          { new SelectListItem { Text = "ALL", Value = "ALL"},
+                                              new SelectListItem { Text = "Container No", Value = "Container No"},
+                                              new SelectListItem { Text = "Invoice NO", Value = "Invoice NO"},
+                                            new SelectListItem { Text = "BOE No", Value = "BOE No"},
+                                            new SelectListItem { Text = "BL Number", Value = "BL Number"},
+                                            new SelectListItem { Text = "GST Party Name", Value = "GST Party Name"},
+                                            }, new { @class = "form-select", autocomplete = "off", @id = "ddlsummarysearchcerteria" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12" id="divsearchtext" style="display:none">
+                            <div class="form-group">
+                                <label class="form-label" id="lblgetlable"></label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtSearchtext", null, new { @class = "form-control ", @id = "txtSearchtext", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12" id="divItemnno" style="display:none">
+                            <div class="form-group">
+                                <label class="form-label" id="lblitemno"></label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtItemno", null, new { @class = "form-control ", @id = "txtItemno", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12" id="divCustomerName" style="display:none">
+                            <div class="form-group">
+                                <label class="form-label">Customer Name</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.DropDownList("ddlcustomerName", (IEnumerable<SelectListItem>)ViewBag.Customer, "--Select--", new { @class = "form-control", @id = "ddlcustomerName", name = "ddlcustomerName", autocomplete = "off", onchange = "ChangeDeliveryType()" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">From Date</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("TxtFromdate", null, new { @class = "form-control form_datetime1 ", @id = "TxtFromdate", autocomplete = "off", @Value = DateTime.Now.ToString("dd MMM yyyy 00:00") })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">To Date</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("TxtTodate", null, new { @class = "form-control form_datetime1 ", @id = "TxtTodate", autocomplete = "off", @Value = DateTime.Now.ToString("dd MMM yyyy 23:59") })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label" style="visibility:hidden">.</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-outline-primary" name="clearProfile" title="clear" id="btnShow" onclick="GetViewExportTodayPerforma()">Show</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <button class="btn btn-success" id="btnSearch" title="Export To Excel" type="button"><i class="fa fa-file-excel-o m-1" onclick="GetExcelFile()"></i>Export To Excel</button>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblviewtodayporformadetails"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" content-area" id="divadditionialchanrges" style="display:none; margin-top:-8px;">
+    <div class="page-header">
+        <h4 class="page-title">Add Additional Charges</h4>
+        <div class="ibox-content  text-right">
+            <a onclick="getBack();" class="btn btn-added p-3" style="color:white;align-content:center;"><i class="fa fa-arrow-left" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Back"></i>  </a></li>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="row">
+                                <div class="col-lg-5 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Work Order No</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.TextBox("TXtWorkorderno", "NEW", new { @class = "form-control ", @id = "TXtWorkorderno", autocomplete = "off", @readonly = "Readonly", Placeholder = "NEW" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Work Date</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.TextBox("ddlworkyear", null, new { @class = "form-control  form_datetime1 ", @id = "ddlworkyear", name = "ddlworkyear", Value = DateTime.Now.ToString("dd MMM yyyy HH:mm"), autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Search</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.DropDownList("--Select--",new List<SelectListItem>{
+                                           new SelectListItem  { Text="SB Number", Value= "SB Number"},
+                                           new SelectListItem  { Text="Container No", Value= "Container No"},
+                                           new SelectListItem  { Text="BL Number", Value= "BL Number"}
+                                           },new {@class= "form-select", @id="ddlsearchon"})
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label" id="lbladdget">SB No</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.TextBox("TxtadditionalNo", null, new { @class = "form-control ", @id = "TxtadditionalNo", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-1 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label" style="visibility:hidden">.</label>
+                                        <button class=" btn btn-filters" id="btnShow" title="Show" onclick="GetAddtionalupdatedetails()" type="button">
+                                            <img src="~/assets/images/icons/search-whites.svg" alt="img">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-2 col-sm-12">
+                                    <input type="number" class="form-control" id="txtfiedamt" placeholder="Amount For All" />
+                                </div>
+                                <div class="col-lg-2 col-sm-12">
+                                    <button class=" btn btn-outline-primary" id="btnShow" title="Add to all" onclick="addamounttoall()" type="button">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover tbl-cart text-wrap" id="tbladditionalcharges">
+                                        <thead>
+                                            <tr>
+                                                <th>Jo No</th>
+                                                <th>Container No</th>
+                                                <th class="wd-15p sorting">Size</th>
+                                                <th class="wd-15p sorting">Cargo type</th>
+                                                <th class="wd-15p sorting">Amount</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Accounting Head</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @*@Html.TextBox("TxtIgmNo", null, new { @class = "form-control ", @id = "TxtIgmNo", autocomplete = "off" })*@
+                                                @Html.DropDownList("ddladditionalAccountHead", (IEnumerable<SelectListItem>)ViewBag.Accountmaster, "--Select--", new { @class = "form-select", @id = "ddladditionalAccountHead", name = "ddladditionalAccountHead", autocomplete = "off" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-5 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Narration (if any)</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.TextBox("Txtremakrs", null, new { @class = "form-control ", @id = "Txtremakrs", autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label" style="visibility:hidden">.</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                <input type="button" id="btnShow" value="Save" class="btn btn-primary" onclick="Getadditionalchargessave()" />
+                                                <input type="button" id="btnShow" value="Clear" class="btn btn-cancel" onclick="Clearadditionalcharges()" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label" style="visibility:hidden">.</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <label class="form-label">Other charges details</label>
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover tbl-cart text-wrap" id="tbladditionalSummaryViewcharges">
+                                        <thead>
+                                            <tr></tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Codes By Trailers Location-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" content-area" id="divcargotype" style="display:none">
+    <div class="page-header">
+        <h4 class="page-title">Change Cargo Type</h4>
+        <div class="ibox-content  text-right">
+            <a onclick="getBack();" class="btn btn-primary btn-success" style="color:white;align-content:center;"><i class="fa fa-arrow-left" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Back"></i>  </a></li>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Container No</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("TxtSbNosearch", null, new { @class = "form-control ", @id = "TxtSbNosearch", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label" style="visibility:hidden">.</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-filters" name="clearProfile" title="Show Shipping Details" id="btnShow" onclick="BindContainerDetailsForCargoType()"> <img src="~/assets/images/icons/search-whites.svg" alt="img"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-6">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblcargotypedetails">
+                                    <thead>
+                                        <tr>
+                                            <th class="wd-15p sorting">Jo no</th>
+                                            <th class="wd-15p sorting">container no</th>
+                                            <th class="wd-15p sorting">Size</th>
+
+                                            <th class="wd-15p sorting">Cargo type</th>
+                                            <th class="wd-15p sorting">SB No</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label" style="visibility:hidden">.</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="button" id="btnShow" value="Save" class="btn btn-primary" onclick="ModifyCargoDetails()" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    var ContainerTypeLi = [];
+
+
+    ContainerTypeLi = @Html.Raw(Json.Encode(@ViewBag.CargotypeList));
+    ContainerTypeLi = JSON.parse(ContainerTypeLi);
+
+    function GetCargotypeddetails() {
+
+        $("#diImpProfroma").hide();
+        $("#ditodayinvoice").hide();
+        $("#divadditionialchanrges").hide();
+        $("#divcargotype").show();
+    }
+
+    function GetTariffID() {
+
+        Tariff = $("#ddlTariffDesc").val();
+        $("#TxtTariffID").val(Tariff);
+    }
+
+
+    $('#ddlsearchon').change(function (e) {
+        var SearchNO = $("#ddlsearchon").val();
+        // alert(SearchNO);
+        if (SearchNO == "SB No") {
+            $("#lbladdget").text("SB Number");
+            $("#divsearchtext").hide();
+            $("#TxtadditionalNo").val("");
+        }
+        if (SearchNO == "Container No") {
+            $("#divsearchtext").show();
+            $("#lbladdget").text("Container No");
+            $("#TxtadditionalNo").val("");
+        }
+        if (SearchNO == "BL Number") {
+            $("#divsearchtext").show();
+            $("#lbladdget").text("BL No");
+            $("#TxtadditionalNo").val("");
+
+        }
+
+
+
+
+
+    });
+
+        function showtodayperforma() {
+            $("#ditodayinvoice").show();
+        $("#divUpdateRmscustom").hide();
+        $("#divadditionialchanrges").hide();
+        $("#diImpProfroma").hide();
+    }
+    function getBack() {
+        $("#diImpProfroma").show();
+        $("#divadditionialchanrges").hide();
+        $("#divUpdateRmscustom").hide();
+        $("#ditodayinvoice").hide();
+        $("#divcargotype").hide();
+
+    }
+
+    function showAdditionalchrges() {
+
+        $("#divadditionialchanrges").show();
+        $("#diImpProfroma").hide();
+
+
+        var Containerno = $("#TxtContainerno").val();
+        var number = $("#TxtSBNO").val();
+        if (Containerno != "") {
+            $("#TxtadditionalNo").val(Containerno);
+            $("#lbladdget").text("Container No");
+            $("#ddlsearchon").val('Container No')
+        } else {
+            var number = $("#TxtadditionalNo").val(number);
+            $("#lbladdget").text("SB Number");
+            $("#ddlsearchon").val('SB Number')
+        }
+
+
+    }
+
+    function GetAddtionalupdatedetails() {
+        var SearchOn = $("#ddlsearchon option:selected").val();
+        var number = $("#TxtadditionalNo").val();
+
+
+        var data1 = { 'SearchOn': SearchOn, 'number': number };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            type: "POST",
+            url: "/Export/GetExportAdditionalcharges",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $('#tbladditionalcharges').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+                    "paging": false,
+                    "aaData": data,
+                    "columns": [
+                        { "data": "JONo" },
+                        { "data": "ContainerNo" },
+                        { "data": "Size" },
+                        { "data": "Cargotype" },
+                        {
+                            "data": "Amount",
+                            "render": function (data, type, row, meta) {
+
+                                data = '<input type=\"number\" name=\"TxtAmount[]\" style=\"width: 150px;\" class=\"form-control addamount\" id=\"TXtAmount\"  value="' + row.Amount + '">';
+                                return data;
+                            }
+                        },
+                    ],
+                })
+
+                getadditionichargesdetails();
+            },
+
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+
+                alert("Something went wrong: " + str);
+
+            }
+        })
+    }
+
+    function checkItemcount() {
+
+        var table = $('#tbladditionalcharges').DataTable();
+
+        if (table.rows().count() == 0) {
+
+            return false;
+        }
+        return true;
+    }
+
+
+    function Getadditionalchargessave() {
+
+        var WorkorderNo = $("#TXtWorkorderno").val();
+        var Workorderyear = $("#ddlworkyear").val();
+        var accountheadID = $("#ddladditionalAccountHead option:selected").val();
+        var additionnarritioin = $("#Txtremakrs").val();
+        var Number = $("#TxtadditionalNo").val();
+
+        var itemcount = checkItemcount();
+        if (itemcount == false) {
+            alert("please add Container no in table")
+        }
+        else {
+
+            var SelectedData = new Array();
+            var tablearray = new Array();
+
+            var table = document.getElementById("tbladditionalcharges");
+
+            var row;
+            for (var i = 1; i < table.rows.length; i++) {
+
+                row = table.rows[i];
+                jono = row.cells[0].innerText;
+                COntainerNo = row.cells[1].innerText;
+                Size = row.cells[2].innerText;
+                Containertype = row.cells[3].innerText;
+                amount = row.cells[4].childNodes[0].value;
+
+                if (amount > 0) {
+                    SelectedData.push({ 'jono': jono, 'COntainerNo': COntainerNo, 'Size': Size, 'Containertype': Containertype, 'amount': amount })
+
+                }
+
+            }
+
+            var data1 = {
+                'Invoicedata': SelectedData, 'WorkorderNo': WorkorderNo, 'Workorderyear': Workorderyear, 'accountheadID': accountheadID,
+                'additionnarritioin': additionnarritioin, 'Number': Number
+            };
+            var data = JSON.stringify(data1);
+
+
+            $.ajax({
+                url: "/Export/SaveExportadditionalchargesdetails",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    alert("Record saved successfully");
+                    Clearadditionalcharges();
+
+
+                },
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                }
+            });
+
+
+        }
+    }
+    function Clearadditionalcharges() {
+
+        $("#ddladditionalAccountHead").val('');
+        //$("#Txtremakrs").val('');
+        //$("#TxtadditionalNo").val('');
+
+        //$("#txtfiedamt").val('');
+
+
+        //var table = $('#tbladditionalcharges').DataTable();
+        //table.clear();
+        //table.draw();
+
+        //var table1 = $('#tbladditionalSummaryViewcharges').DataTable();
+        //table1.clear();
+        //table1.draw();
+    }
+
+
+    function getadditionichargesdetails() {
+        $("#global-loader").fadeIn("slow");
+
+        $.ajax({
+            type: "POST",
+            url: "/Export/GetExportsummaryaddtionalcharges",
+           // data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+
+                $("#tbladditionalSummaryViewcharges").empty();
+                RepTableDataJsonwopaging($("#tbladditionalSummaryViewcharges"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+
+                alert("Something went wrong: " + str);
+                $("#global-loader").fadeOut("slow");
+            }
+            //})
+        })
+    }
+
+    function canceladditionchages(WONO) {
+
+
+
+        var data1 = { 'WONO': WONO };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/Export/ExportCanceladditionalcharges",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                alert("record cancelled successfully!");
+                getadditionichargesdetails()
+
+            },
+
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+
+                alert("Something went wrong: " + str);
+                $("#global-loader").fadeOut("slow");
+            }
+            //})
+        })
+    }
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$('#example2').DataTable({
+        //    "bLengthChange": false,
+        //    "bInfo": false,
+        //    "bPaginate": false,
+        //    //"bFilter": false,
+        //    "paging": false
+        //    //"dom": 'Bfrtip',s
+        //    //"buttons": [{
+        //    //    "extend": 'excel',
+        //    //    "title": 'VoucherDetails',
+        //    //    "filename": 'VoucherDetails_List'
+
+        //    //}
+        //    //]
+        //});
+
+
+    });
+    $(window).on("load", function (e) {
+        $("#global-loader").fadeOut("slow");
+
+        $("#ddlCommodity").val(0);
+        $("#ddlInvoiceType").val('Handling');
+    })
+
+
+
+    function LoadGSTSearch() {
+        $.ajax({
+            type: "POST",
+            url: "/Export/ExportProformaGSTSearch",
+            //data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                //alert(response);
+                $('#TestModal').modal('show');
+                $('#myModalContent').html(response);
+            },
+            failure: function (response) {
+                alert(response);
+                alert(response.responseText);
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        })
+    }
+</script>
+
+<script>
+
+
+    function GetContainerDetails() {
+        var Containerno = $("#TxtContainerno").val();
+
+
+
+        var data1 = { 'Containerno': Containerno };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Export/CheckContaineralready_in_invoiceDone",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+
+                if (data.message != "") {
+
+
+                    swal({
+                        title: "" + data.message + "",
+                        text: "",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                        .then((willDelete) => {
+                            if (willDelete) {
+
+                                GetContainerDetails1();
+
+
+                            } else {
+                                $("#global-loader").fadeOut("slow");
+                                document.location = '@Url.Action("ExportProformaInvoice", "Export")';
+
+                            }
+                        });
+                } else {
+                    GetContainerDetails1();
+                }
+
+
+
+
+
+            },
+             error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+
+    }
+
+
+
+    function GetContainerDetails1() {
+        var Containerno = $("#TxtContainerno").val();
+        var MovementType = $("#ddlMovmentType option:selected").text();
+
+        if (Containerno == "") {
+            document.getElementById("TxtContainerno").style.borderColor = "red";
+            alert('please add the Container no!')
+
+            return;
+        }
+
+        $("#global-loader").fadeIn("slow");
+
+        var data1 = { 'Containerno': Containerno, 'MovementType': MovementType };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Export/GetContainerWiseProformaDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                if (data.ContainerDetails == "") {
+                    alert("Record not found!");
+
+                    $("#global-loader").fadeOut("slow");
+                    return false;
+                }
+
+                $("#ddlCustomer").val(data.ContainerDetails[0].AGID);
+                $("#ddlcha").val(data.ContainerDetails[0].CHAID);
+
+                $("#TxtLine").val(data.ContainerDetails[0].SLName);
+                $("#TxtLineID").val(data.ContainerDetails[0].LineID);
+                $("#TxtCargoDesc").val(data.ContainerDetails[0].CargoDesc);
+                $("#TxtPortName").val(data.ContainerDetails[0].PortName);
+                $("#TxtSBNO").val(data.ContainerDetails[0].SBNumber);
+                $("#ddlImporter").val(data.ContainerDetails[0].shipperID);
+
+
+                if (data.ContainerDetails[0].Transport_Type == "Rail") {
+                    $("#ddlTransType").val(1);
+                }
+                if (data.ContainerDetails[0].Transport_Type == "Road") {
+                    $("#ddlTransType").val(2);
+                }
+
+                //$("#ddlImporter").val(data.GetContainerListList[0].ImporterID);
+
+                if (data.ContainerDetails[0].MovementType == "Factory Stuff") {
+                    $("#ddlMovmentType").val(2);
+                }
+                if (data.ContainerDetails[0].MovementType == "Dock Stuff") {
+                    $("#ddlMovmentType").val(1);
+                }
+
+
+                $('#tblContainerDets').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+
+                    "bFilter": false,
+                    "paging": false,
+                    "aaData": data.ContainerDetails,
+                    "columns": [
+                        {
+
+                            "data": "ContainerNo",
+                            "render": function (data, type, row, meta) {
+                                data = '<input type=\"checkbox\" name=\"checklist[]\" class=\"checklist\" checked id=\"checklist\"   value="' + data + '">';
+                                return data;
+
+                            }
+                        },
+                        { "data": "ContainerNo" },
+                        { "data": "Size" },
+                        { "data": "ContainerType" },
+                        { "data": "CargoType" },
+                        { "data": "indate" },
+                        { "data": "StuffingDate" },
+                        { "data": "Gpdate" },
+                        { "data": "EmptyDays" },
+                        { "data": "LoadedDays" },
+                        { "data": "PickUP" },
+                        { "data": "Transport_Type" },
+                        { "data": "NetWeight" },
+                        { "data": "TareWeight" },
+                        { "data": "GrossWeight" },
+                        { "data": "MovementType" },
+                        { "data": "SBNumber" },
+                        { "data": "LineID" },
+                        { "data": "SLName" },
+                        { "data": "Port" },
+                        { "data": "PortName" },
+                        { "data": "PickupLocID" },
+                        { "data": "StuffLocID" },
+                        { "data": "NoOfStuffLoc" },
+                        { "data": "entryID" },
+
+
+
+
+
+                    ],
+                })
+
+
+                $('#tblshippingdetails').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+
+                    "bFilter": false,
+                    "paging": false,
+                    "aaData": data.ShippingDetails,
+                    "columns": [
+
+                        { "data": "SBNumber" },
+                        { "data": "SBDate" },
+                        { "data": "CartingDate" },
+                        { "data": "StuffingDate" },
+                        { "data": "TotalDays" },
+                        { "data": "CartingQty" },
+                        { "data": "CartingWeight" },
+                        { "data": "Area" },
+                        { "data": "Space" },
+                        { "data": "CargoDescriptions" },
+                        { "data": "VehicleNo" },
+                        { "data": "entryid" },
+                        { "data": "CargoWeight" },
+                        { "data": "TotalPKGS" },
+                    ],
+                })
+
+
+                ///GetContainerWiseSlabdetails(data.ContainerDetails[0].AGID)
+                document.getElementById("gstSearch").click();
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+
+    function GetContainerWiseSlabdetails(CustomerID) {
+
+        $("#global-loader").fadeIn("slow");
+
+        var data1 = { 'CustomerID': CustomerID };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Export/GetContainerWiseProformaDetailsSBDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                $("#TxtTariffID").val(data.TariffID);
+                $("#ddlTariffDesc").val(data.TariffID);
+
+
+
+
+
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+
+    // get data by SB Number
+
+    function GetSBNumberDetails() {
+        var SBNumber = $("#TxtSBNO").val();
+        var BillType = $("#ddlMovmentType option:selected").text();
+
+        if (BillType == "--Select--") {
+            document.getElementById("ddlMovmentType").style.borderColor = "red";
+            alert('please select Bill Type!')
+
+            return;
+        }
+
+
+        if (SBNumber == "") {
+            document.getElementById("TxtSBNO").style.borderColor = "red";
+            alert('please add the SB no!')
+
+            return;
+        }
+
+
+
+        $("#global-loader").fadeIn("slow");
+
+        var data1 = { 'SBNumber': SBNumber, 'BillType': BillType };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Export/GetSBWiseProformaDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+
+                if (data.ContainerDetails == "") {
+                    alert("Record not found!");
+
+                    $("#global-loader").fadeOut("slow");
+                    return false;
+                }
+
+
+                $("#ddlCustomer").val(data.ContainerDetails[0].AGID);
+                $("#ddlcha").val(data.ContainerDetails[0].CHAID);
+
+                $("#TxtLine").val(data.ContainerDetails[0].shippername);
+                $("#TxtLineID").val(data.ContainerDetails[0].shipperID);
+
+                $("#TxtPortName").val(data.ContainerDetails[0].PortName);
+                $("#TxtSBNO").val(data.ContainerDetails[0].SBNumber);
+
+
+                if (data.ContainerDetails[0].Transport_Type == "Rail") {
+                    $("#ddlTransType").val(1);
+                }
+                if (data.ContainerDetails[0].Transport_Type == "Road") {
+                    $("#ddlTransType").val(2);
+                }
+
+                $("#ddlImporter").val(data.ContainerDetails[0].shipperID);
+
+                if (data.ContainerDetails[0].MovementType == "Factory Stuff") {
+                    $("#ddlMovmentType").val(2);
+                }
+                if (data.ContainerDetails[0].MovementType == "Dock Stuff") {
+                    $("#ddlMovmentType").val(1);
+                }
+
+
+                $('#tblContainerDets').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+
+                    "bFilter": false,
+                    "paging": false,
+                    "aaData": data.ContainerDetails,
+                    "columns": [
+                        {
+
+                            "data": "ContainerNo",
+                            "render": function (data, type, row, meta) {
+                                data = '<input type=\"checkbox\" name=\"checklist[]\" class=\"checklist\" checked id=\"checklist\"   value="' + data + '">';
+                                return data;
+
+                            }
+                        },
+                        { "data": "ContainerNo" },
+                        { "data": "Size" },
+                        { "data": "ContainerType" },
+                        { "data": "CargoType" },
+                        { "data": "indate" },
+                        { "data": "StuffingDate" },
+                        { "data": "Gpdate" },
+                        { "data": "EmptyDays" },
+                        { "data": "LoadedDays" },
+                        { "data": "PickUP" },
+                        { "data": "Transport_Type" },
+                        { "data": "NetWeight" },
+                        { "data": "TareWeight" },
+                        { "data": "GrossWeight" },
+                        { "data": "MovementType" },
+                        { "data": "SBNumber" },
+                        { "data": "LineID" },
+                        { "data": "SLName" },
+                        { "data": "Port" },
+                        { "data": "PortName" },
+                        { "data": "PickupLocID" },
+                        { "data": "StuffLocID" },
+                        { "data": "NoOfStuffLoc" },
+                        { "data": "entryID" },
+
+
+
+
+
+                    ],
+                })
+
+
+                $('#tblshippingdetails').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+
+                    "bFilter": false,
+                    "paging": false,
+                    "aaData": data.ShippingDetails,
+                    "columns": [
+
+                        { "data": "SBNumber" },
+                        { "data": "SBDate" },
+                        { "data": "CartingDate" },
+                        { "data": "StuffingDate" },
+                        { "data": "TotalDays" },
+                        { "data": "CartingQty" },
+                        { "data": "CartingWeight" },
+                        { "data": "Area" },
+                        { "data": "Space" },
+                        { "data": "CargoDescriptions" },
+                        { "data": "VehicleNo" },
+                        { "data": "entryid" },
+                        { "data": "CargoWeight" },
+                        { "data": "TotalPKGS" },
+                    ],
+                })
+
+
+                GetContainerWiseSlabdetails(data.ContainerDetails[0].AGID)
+                document.getElementById("gstSearch").click();
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+    //Get BL Wise Details
+
+    function GetBLNumberWiseDetails() {
+        var BLNumber = $("#TxtBlNO").val();
+
+        if (BLNumber == "") {
+            document.getElementById("TxtBlNO").style.borderColor = "red";
+            alert('please add the BL no!')
+
+            return;
+        }
+
+
+
+
+        $("#global-loader").fadeIn("slow");
+
+        var data1 = { 'BLNumber': BLNumber };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Export/GetBLWiseWiseProformaDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+
+
+                $("#ddlCustomer").val(data.ContainerDetails[0].AGID);
+                $("#ddlcha").val(data.ContainerDetails[0].CHAID);
+
+                $("#TxtLine").val(data.ContainerDetails[0].shippername);
+                $("#TxtLineID").val(data.ContainerDetails[0].shipperID);
+
+                $("#TxtPortName").val(data.ContainerDetails[0].PortName);
+                $("#TxtSBNO").val(data.ContainerDetails[0].SBNumber);
+
+
+                if (data.ContainerDetails[0].Transport_Type == "Rail") {
+                    $("#ddlTransType").val(1);
+                }
+                if (data.ContainerDetails[0].Transport_Type == "Road") {
+                    $("#ddlTransType").val(2);
+                }
+
+                //$("#ddlImporter").val(data.GetContainerListList[0].ImporterID);
+
+
+
+
+                $('#tblContainerDets').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+
+                    "bFilter": false,
+                    "paging": false,
+                    "aaData": data.ContainerDetails,
+                    "columns": [
+                        {
+
+                            "data": "ContainerNo",
+                            "render": function (data, type, row, meta) {
+                                data = '<input type=\"checkbox\" name=\"checklist[]\" class=\"checklist\" checked id=\"checklist\"   value="' + data + '">';
+                                return data;
+
+                            }
+                        },
+                        { "data": "ContainerNo" },
+                        { "data": "Size" },
+                        { "data": "ContainerType" },
+                        { "data": "CargoType" },
+                        { "data": "indate" },
+                        { "data": "StuffingDate" },
+                        { "data": "Gpdate" },
+                        { "data": "EmptyDays" },
+                        { "data": "LoadedDays" },
+                        { "data": "PickUP" },
+                        { "data": "Transport_Type" },
+                        { "data": "NetWeight" },
+                        { "data": "TareWeight" },
+                        { "data": "GrossWeight" },
+                        { "data": "MovementType" },
+                        { "data": "SBNumber" },
+                        { "data": "LineID" },
+                        { "data": "SLName" },
+                        { "data": "Port" },
+                        { "data": "PortName" },
+                        { "data": "PickupLocID" },
+                        { "data": "StuffLocID" },
+                        { "data": "NoOfStuffLoc" },
+                        { "data": "entryID" },
+
+
+
+
+
+                    ],
+                })
+
+
+                $('#tblshippingdetails').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+
+                    "bFilter": false,
+                    "paging": false,
+                    "aaData": data.ShippingDetails,
+                    "columns": [
+
+                        { "data": "SBNumber" },
+                        { "data": "SBDate" },
+                        { "data": "CartingDate" },
+                        { "data": "StuffingDate" },
+                        { "data": "TotalDays" },
+                        { "data": "CartingQty" },
+                        { "data": "CartingWeight" },
+                        { "data": "Area" },
+                        { "data": "Space" },
+                        { "data": "CargoDescriptions" },
+                        { "data": "VehicleNo" },
+                        { "data": "entryid" },
+                        { "data": "CargoWeight" },
+                        { "data": "TotalPKGS" },
+                    ],
+                })
+
+
+                GetContainerWiseSlabdetails(data.ContainerDetails[0].AGID)
+
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+</script>
+@* calculate the details *@
+<script>
+    function checkItemcountForContainerTbl() {
+
+        var table = $('#tblContainerDets').DataTable();
+
+        if (table.rows().count() == 0) {
+
+            return false;
+        }
+        return true;
+
+    }
+    function OnCalculateClick() {
+        $("#global-loader").fadeIn("slow");
+        var tableshow = $('#tblContainerDets').DataTable();
+
+
+        var res = validateCalculate();
+        if (res == false) {
+            $("#global-loader").fadeOut("slow");
+            return false;
+        }
+
+        var itemcount = checkItemcountForContainerTbl();
+        if (itemcount == false) {
+            alert("No details selected for saving. Cannot proceed");
+            $("#global-loader").fadeOut("slow");
+            return false;
+        }
+        else {
+            var checkboxarray = [];
+            $('input[type=checkbox]').each(function () {
+                if (this.checked) {
+
+                    checkboxarray.push($(this).val());
+                }
+            });
+
+            var tablearrayCont = [];
+            var table = document.getElementById("tblContainerDets");
+            var row;
+            for (var i = 1; i < table.rows.length; i++) {
+                row = table.rows[i];
+                for (var k = 0; k < checkboxarray.length; k++) {
+                    var InvoiceNo = row.cells[0].childNodes[0].value;
+                    if (InvoiceNo == checkboxarray[k]) {
+
+
+
+                        row = table.rows[i];
+                        ContainerNo = row.cells[1].innerText;
+                        Size = row.cells[2].innerText;
+                        ContainerType = row.cells[3].innerText;
+                        CargoType = row.cells[4].innerText;
+                        indate = row.cells[5].innerText;
+                        StuffingDate = row.cells[6].innerText;
+                        Gpdate = row.cells[7].innerText;
+                        EmptyDays = row.cells[8].innerText;
+                        LoadedDays = row.cells[9].innerText;
+                        PickUP = row.cells[10].innerText;
+                        Transport_Type = row.cells[11].innerText;
+                        NetWeight = row.cells[12].innerText;
+                        TareWeight = row.cells[13].innerText;
+                        GrossWeight = row.cells[14].innerText;
+                        MovementType = row.cells[15].innerText;
+                        SBNumber = row.cells[16].innerText;
+                        LineID = row.cells[17].innerText;
+                        SLName = row.cells[18].innerText;
+                        Port = row.cells[19].innerText;
+                        PortName = row.cells[20].innerText;
+                        PickupLocID = row.cells[21].innerText;
+                        StuffLocID = row.cells[22].innerText;
+                        NoOfStuffLoc = row.cells[23].innerText;
+                        entryID = row.cells[24].innerText;
+                        tablearrayCont.push({
+                            'ContainerNo': ContainerNo, 'Size': Size, 'ContainerType': ContainerType,
+                            'CargoType': CargoType, 'indate': indate, 'StuffingDate': StuffingDate, 'Gpdate': Gpdate, 'EmptyDays': EmptyDays, 'LoadedDays': LoadedDays, 'PickUP': PickUP, 'Transport_Type': Transport_Type,
+                            'NetWeight': NetWeight, 'TareWeight': TareWeight, 'GrossWeight': GrossWeight, 'MovementType': MovementType, 'SBNumber': SBNumber, 'LineID': LineID, 'SLName': SLName, 'Port': Port, 'PortName': PortName,
+                            'PickupLocID': PickupLocID, 'StuffLocID': StuffLocID, 'NoOfStuffLoc': NoOfStuffLoc, 'entryID': entryID
+                        })
+
+
+                    }
+                }
+            }
+
+
+        }
+
+        var tableAccountadditional = [];
+        var checkcountoftable = $('#tblproformaAdditionalCharges').DataTable();
+
+        if (checkcountoftable.rows().count() > 0) {
+
+            var table1 = document.getElementById("tblproformaAdditionalCharges");
+            var row1;
+            for (var i = 1; i < table1.rows.length; i++) {
+                row1 = table1.rows[i];
+                AccountNameAdditional = row1.cells[1].innerText;
+                ContainernoAdditional = row1.cells[2].innerText;
+                AmountAdditional = row1.cells[3].innerText;
+                Accountadditional = row1.cells[4].innerText;
+
+                tableAccountadditional.push({
+                    'AccountNameAdditional': AccountNameAdditional, 'ContainernoAdditional': ContainernoAdditional, 'AmountAdditional': AmountAdditional,
+                    'Accountadditional': Accountadditional
+                })
+            }
+
+        }
+
+
+
+        if (tablearrayCont.length == 0) {
+            alert("Please select Container Details! cannot proceed.");
+            $("#global-loader").fadeOut("slow");
+            return false;
+        }
+        var InvoiceDate = $("#txtInvoiceDate").val();
+        var BlNo = $("#TxtBlNO").val();
+        var GSTNO = $("#txtGSTNo").val();
+        var GSTID = $("#txtGSTid").val();
+        var GSTName = $("#txtGSTName").val();
+        var TransType = $("#ddlTransType").val();
+        var PickUP = $("#TxtPickuplocation").val();
+        var StuffLocation = $("#ddlstufflocation").val();
+        var Commodity = $("#ddlCommodity").val();
+
+        var RRno = $("#TxtRRNo").val();
+        var RRDate = $("#TxtRRDate").val();
+        var Customer = $("#ddlCustomer").val();
+        var CHA = $("#ddlcha").val();
+        var Importer = $("#ddlImporter").val();
+        var Line = $("#TxtLine").val();
+        var CargoDesc = $("#TxtCargoDesc").val();
+        var Portname = $("#TxtPortName").val();
+        var Remakrs = $("#TxtRemaks").val();
+        var TariffID = $("#TxtTariffID").val();
+        var TariffDesc = $("#ddlTariffDesc").val();
+        var FreeDays = $("#TxtFreeDaysLDD").val();
+        var Empty = $("#TxtEmpty").val();
+        var Storage = $("#TxtStorage").val();
+        var StateCode1 = $("#txtstatecode").val();
+        var SBNO = $("#TxtSBNO").val();
+        var TAxID = $("#TxtTaxID").val();
+        var Containerno = $("#TxtContainerno").val();
+        var Movementtype = $("#ddlMovmentType option:selected").text();
+        var MovementtypeName = $("#ddlMovmentType option:selected").text();
+        var ValidUpto = $("#TxtValidDate").val();
+        var GSTtype = $("#TxtRegisterType").val();
+        var InvoiceType = $("#ddlInvoiceType option:selected").text();
+
+
+        var additionalcheck = document.getElementById('chkAdditional').checked;
+
+
+        StateCode = StateCode1.trim();
+        var data1 = {
+            'InvoiceDate': InvoiceDate, 'BlNo': BlNo, 'GSTNO': GSTNO, 'GSTID': GSTID, 'GSTName': GSTName, 'TransType': TransType, 'PickUP': PickUP, 'StuffLocation': StuffLocation,
+            'Commodity': Commodity, 'RRno': RRno, 'RRDate': RRDate, 'Customer': Customer, 'CHA': CHA, 'Importer': Importer, 'Line': Line, 'CargoDesc': CargoDesc, 'Portname': Portname, 'Remakrs': Remakrs,
+            'TariffID': TariffID, 'TariffDesc': TariffDesc, 'FreeDays': FreeDays, 'Empty': Empty, 'Storage': Storage, 'StateCode': StateCode,
+            'Movementtype': Movementtype, 'SBNO': SBNO, TAxID: TAxID, 'Containerno': Containerno,
+            'ValidUpto': ValidUpto, 'InvoiceType': InvoiceType,
+            'MovementtypeName': MovementtypeName, 'additionalcheck': additionalcheck, 'tablearrayCont': tablearrayCont, 'tableAccountadditional': tableAccountadditional, 'GSTtype': GSTtype
+        };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Export/CalculateExportPerformaDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+
+                $("#tblCharges").empty();
+                RepTableDataJsonwopaging($("#tblCharges"), data.GetContainerSHowList, "Voucher Details", "VoucherDetails_List");
+
+                $("#txtSGST").val(data.ContainerAmtShowList.SGST);
+                $("#txtCGST").val(data.ContainerAmtShowList.CGST);
+                $("#txtIGST").val(data.ContainerAmtShowList.IGST);
+                $("#txtNetAmount").val(data.ContainerAmtShowList.Amount);
+                $("#txtGrandTotal").val(data.ContainerAmtShowList.nettotal);
+                $("#TxtKFCamount").val(data.ContainerAmtShowList.KFC);
+                $("#TxtRemarksUSD").val(data.ContainerAmtShowList.Remarks);
+
+
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+
+
+
+
+    }
+
+    function validateCalculate() {
+        var ValiGSTNO = document.getElementById('txtGSTNo').value;
+        var ValiCommodity = document.getElementById('ddlCommodity').value;
+        var valitariffid = document.getElementById('TxtTariffID').value;
+        var valiCha = document.getElementById('ddlcha').value;
+        var valiInvoice = document.getElementById('ddlInvoiceType').value;
+
+        var Customer = document.getElementById('ddlCompany').value;
+
+
+
+
+        document.getElementById("txtGSTNo").style.borderColor = "gainsboro";
+        document.getElementById("ddlCommodity").style.borderColor = "gainsboro";
+        document.getElementById("TxtTariffID").style.borderColor = "gainsboro";
+        document.getElementById("ddlcha").style.borderColor = "gainsboro";
+        document.getElementById("ddlInvoiceType").style.borderColor = "gainsboro";
+        document.getElementById("ddlCompany").style.borderColor = "gainsboro";
+
+
+
+
+        var blResult = Boolean;
+        blResult = true;
+
+
+        if (ValiGSTNO == "") {
+            document.getElementById("txtGSTNo").style.borderColor = "red";
+            blResult = blResult && false;
+        }
+         
+        if (valitariffid == "") {
+            document.getElementById("TxtTariffID").style.borderColor = "red";
+            blResult = blResult && false;
+        }
+         
+        if (valiInvoice == "") {
+            document.getElementById("ddlInvoiceType").style.borderColor = "red";
+            blResult = blResult && false;
+        }
+        
+
+
+
+
+
+        if (blResult == false) { alert('Please fill the required fields!'); }
+        return blResult;
+    }
+
+      function SavePerformaDetails() {
+          debugger;
+        $("#global-loader").fadeIn("slow");
+          var InvoiceDate = $("#txtInvoiceDate").val();
+          var BlNo = $("#TxtBlNO").val();
+          var GSTNO = $("#txtGSTNo").val();
+          var GSTID = $("#txtGSTid").val();
+          var GSTName = $("#txtGSTName").val();
+          var TransType = $("#ddlTransType").val();
+          var PickUP = $("#TxtPickuplocation").val();
+          var StuffLocation = $("#ddlstufflocation").val();
+          var Commodity = $("#ddlCommodity").val();
+
+          var RRno = $("#TxtRRNo").val();
+          var RRDate = $("#TxtRRDate").val();
+          var Customer = $("#ddlCustomer option:selected").val();
+          var CHA = $("#ddlcha").val();
+          var Importer = $("#ddlImporter").val();
+          var Line = $("#TxtLine").val();
+          var CargoDesc = $("#TxtCargoDesc").val();
+          var Portname = $("#TxtPortName option:selected").val();
+          var Remakrs = $("#TxtRemarksUSD").val();
+          var TariffID = $("#TxtTariffID").val();
+          var TariffDesc = $("#ddlTariffDesc").val();
+          var FreeDays = $("#TxtFreeDaysLDD").val();
+          var Empty = $("#TxtEmpty").val();
+          var Storage = $("#TxtStorage").val();
+          var StateCode1 = $("#txtstatecode").val();
+          var SBNO = $("#TxtSBNO").val();
+          var TAxID = $("#TxtTaxID").val();
+
+          var Containerno = $("#TxtContainerno").val();
+          var Movementtype = $("#ddlMovmentType option:selected").text();
+          var netamount = $("#txtNetAmount").val();
+          var SGST = $("#txtSGST").val();
+          var CGST = $("#txtCGST").val();
+          var IGST = $("#txtIGST").val();
+
+          var GrandTotal = $("#txtGrandTotal").val();
+          var KFC = $("#TxtKFCamount").val();
+          var shipperID = $("#TxtLineID").val();
+          var ValidDate = $("#TxtValidDate").val();
+          var Company = $("#ddlCompany").val();
+          if (Movementtype == "" || Movementtype == "--Select--") {
+              document.getElementById("ddlMovmentType").style.borderColor = "red";
+              alert('Please select Movement type!');
+              $("#global-loader").fadeIn("slow");
+              return false;
+
+          }
+
+
+
+      var tableShippingbill = [];
+        var checkcountoftable = $('#tblshippingdetails').DataTable();
+
+        if (checkcountoftable.rows().count() > 0) {
+
+            var table1 = document.getElementById("tblshippingdetails");
+            var row1;
+            for (var i = 1; i < table1.rows.length; i++) {
+                row1 = table1.rows[i];
+                SBNumber = row1.cells[0].innerText;
+                SBDate = row1.cells[1].innerText;
+                CartingDate = row1.cells[2].innerText;
+                StuffingDate = row1.cells[3].innerText;
+                TotalDays = row1.cells[4].innerText;
+                CartingQty = row1.cells[5].innerText;
+                CartingWeight = row1.cells[6].innerText;
+                Area = row1.cells[7].innerText;
+                Space = row1.cells[8].innerText;
+                CargoDescriptions = row1.cells[9].innerText;
+                VehicleNo = row1.cells[10].innerText;
+                entryid = row1.cells[11].innerText;
+                CargoWeight = row1.cells[12].innerText;
+                TotalPKGS = row1.cells[13].innerText;
+
+                tableShippingbill.push({
+                    'SBNumber': SBNumber, 'SBDate': SBDate, 'CartingDate': CartingDate,
+                    'StuffingDate': StuffingDate, 'TotalDays': TotalDays, 'CartingQty': CartingQty, 'CartingWeight': CartingWeight, 'Area': Area, 'Space': Space,
+                    'CargoDescriptions': CargoDescriptions, 'VehicleNo': VehicleNo, 'entryid': entryid, 'CargoWeight': CargoWeight, 'TotalPKGS': TotalPKGS
+                })
+            }
+
+          }
+
+          var data1 = {
+              'InvoiceDate': InvoiceDate, 'BlNo': BlNo, 'GSTNO': GSTNO, 'GSTID': GSTID, 'GSTName': GSTName, 'TransType': TransType, 'PickUP': PickUP, 'StuffLocation': StuffLocation,
+              'Commodity': Commodity, 'RRno': RRno, 'RRDate': RRDate, 'Customer': Customer, 'CHA': CHA, 'Importer': Importer, 'Line': Line, 'CargoDesc': CargoDesc, 'Portname': Portname, 'Remakrs': Remakrs,
+              'TariffID': TariffID, 'TariffDesc': TariffDesc, 'FreeDays': FreeDays, 'Empty': Empty, 'Storage': Storage, 'StateCode': StateCode, 'Movementtype': Movementtype, 'SBNO': SBNO, TAxID: TAxID, 'Containerno': Containerno,
+              'netamount': netamount, 'SGST': SGST, 'CGST': CGST, 'IGST': IGST, 'GrandTotal': GrandTotal, 'shipperID': shipperID,
+              'ValidDate': ValidDate, 'tableShippingbill': tableShippingbill, 'KFC': KFC, 'Company': Company
+          };
+          var data = JSON.stringify(data1);
+
+        var r = confirm("Are u sure to save proforma invoice?");
+        if (r == true) {
+            $.ajax({
+                url: "/Export/SaveExpoerinvoicePerformaDetails",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var array = data.split(',');
+                    var b = array[0];
+                    var c = array[1];
+                    alert(b);
+
+
+
+                    var r = confirm("Do you want to print ?");
+                    if (r == true) {
+                        $("#global-loader").fadeOut("slow");
+                        PrintInvoice(c);
+                    } else {
+                          document.location = '@Url.Action("ExportProformaInvoice", "Export")';
+                    }
+
+
+
+
+
+
+                },
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                    $("#global-loader").fadeOut("slow");
+                }
+            });
+        } else {
+
+            alert("You Pressed Cancel!");
+            $("#global-loader").fadeOut("slow");
+        }
+
+
+
+
+    }
+
+    function GetViewExportTodayPerforma() {
+        var fromdate = $("#TxtFromdate").val();
+        var Todate = $("#TxtTodate").val();
+        var searchCerteria = $("#ddlsummarysearchcerteria").val();
+        var Searchtext = $("#txtSearchtext").val();
+        var Searchtext1 = $("#txtItemno").val();
+        //var customerName = $("#ddlcustomerName").val();
+        var data1 = { 'fromdate': fromdate, 'Todate': Todate, 'searchCerteria': searchCerteria, 'Searchtext': Searchtext, 'Searchtext1': Searchtext1 };
+        var data = JSON.stringify(data1);
+
+
+        $.ajax({
+            type: "POST",
+            url: "/Export/GetExportInvoiceporformadetails",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+
+                $("#tblviewtodayporformadetails").empty();
+                RepTableDataJsonwopaging($("#tblviewtodayporformadetails"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+
+            error: function (response) {
+
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+            //})
+        })
+
+    }
+
+    $('#ddlsummarysearchcerteria').change(function (e) {
+        var SearchNO = $("#ddlsummarysearchcerteria").val();
+        // alert(SearchNO);
+        if (SearchNO == "Container No") {
+            $("#lblgetlable").text("Container No");
+            $("#divsearchtext").show();
+            $("#divIgmno").hide();
+            $("#divItemnno").hide();
+            $("#divCustomerName").hide();
+            $("#txtSearchtext").val('');
+        }
+
+        if (SearchNO == "Invoice NO") {
+            $("#lblgetlable").text("Invoice NO");
+            $("#divsearchtext").show();
+            $("#txtSearchtext").val('');
+            $("#divIgmno").hide();
+            $("#divCustomerName").hide();
+            $("#divItemnno").hide();
+        }
+
+        if (SearchNO == "BL Number") {
+            $("#lblgetlable").text("BL Number");
+            $("#divsearchtext").show();
+            $("#divIgmno").hide();
+            $("#divItemnno").hide();
+            $("#divCustomerName").hide();
+            $("#txtSearchtext").val('');
+        }
+        if (SearchNO == "BOE No") {
+            $("#lblgetlable").text("BOE No");
+            $("#divsearchtext").show();
+            $("#divIgmno").hide();
+            $("#divItemnno").hide();
+            $("#divCustomerName").hide();
+            $("#txtSearchtext").val('');
+        }
+
+        if (SearchNO == "GST Party Name") {
+
+            $("#divCustomerName").show();
+            $("#divsearchtext").hide();
+            $("#divIgmno").hide();
+            $("#divItemnno").hide();
+        }
+
+    });
+</script>
+<script>
+    function PrintInvoice(InvoiceNo) {
+
+
+        var data1 = { 'InvoiceNo': InvoiceNo };
+        data = JSON.stringify(data1);
+
+        $.ajax({
+            url: '/Export/ExportInvoicePerformaPrint',
+            type: 'Post',
+            data: data,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+
+                var myWindow = window.open("", "MsgWindow1", 'width=' + screen.availWidth + ',height=' + screen.availHeight + ',resizable=no');
+                myWindow.close();
+                var myWindow = window.open("", "MsgWindow1", 'width=' + screen.availWidth + ',height=' + screen.availHeight + ',resizable=no');
+                myWindow.document.write(response);
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        });
+    };
+
+
+
+    function OnAdditionalChange() {
+
+
+        var ischecked = document.getElementById('chkAdditional').checked;
+
+        if (ischecked == true) {
+            $("#divprroformaadditionclick").show();
+        } else {
+            $("#divprroformaadditionclick").hide();
+        }
+
+    }
+
+
+    function OnAdditionaladd() {
+
+        var AccountName = $("#ddlAccountHead option:selected").text();
+        var ContainerNo = $("#txtContainerNoAdd").val();
+        var Amount = $("#txtAmountAdd").val();
+        var serialNo = $("#txtsetserialno").val();
+        var AccountID = $("#ddlAccountHead option:selected").val();
+
+        serialNo = Number(serialNo) + Number(1);
+
+        var exists = $('#tblproformaAdditionalCharges tr > td:contains(' + AccountName + ') + td:contains(' + ContainerNo + ')').length;
+
+        if (exists == 1) {
+
+            alert("container already added for this account head!");
+
+        } else {
+            var t = $('#tblproformaAdditionalCharges').DataTable();
+            t.row.add([
+                serialNo,
+                AccountName,
+                ContainerNo,
+                Amount,
+                AccountID,
+
+                "<button type=\"button\" class=\"btn btn-icon btn-primary btn-danger removebutton \" name=\"removebutton\" style=\"height:35px;\" onclick=\"CancelItem('" + serialNo + "')\"><i class=\"fe fe-trash\" style=\"font-size: 16px;\"></i></button>"
+
+            ]).draw(false);
+            $("#txtsetserialno").val(serialNo);
+        }
+
+
+    }
+    function CancelItem(serialNo) {
+        var table = $('#tblproformaAdditionalCharges').DataTable();
+        $('#tblproformaAdditionalCharges tbody').on('click', '.removebutton', function () {
+
+            table
+                .row($(this).parents('tr'))
+                .remove()
+                .draw();
+
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+    function BindContainerDetailsForCargoType() {
+        var SbNO = $("#TxtSbNosearch").val();
+        var data1 = { 'SbNO': SbNO };
+        var data = JSON.stringify(data1);
+        var SelectedItem = [];
+
+
+        $.ajax({
+            type: "POST",
+            url: "/Export/GetCargoDetailsForExportproforma",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                SelectedItem = data;
+
+                $('#tblcargotypedetails').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+                    "paging": false,
+                    "aaData": data,
+                    "bInfo": false,
+                    "bFilter": false,
+
+                    "columns": [
+                        { "data": "JONo" },
+                        { "data": "containerno" },
+                        { "data": "Size" },
+
+                        {
+                            "data": "Cargotypeid",
+                            "render": function (data, type, row, meta) {
+
+                                data = '<select  class="form-control" id="Cargotype' + row.containerno + '_' + row.JONo + '"  style="width:100px">'
+                                for (j = 0; j < ContainerTypeLi.length; j++) {
+
+                                    data += '<option value="' + ContainerTypeLi[j].Cargotypeid + '"> ' + ContainerTypeLi[j].Cargotype + '</option>'
+
+                                }
+
+                                data += '</select>';
+                                return data;
+
+                            }
+
+                        },
+                        { "data": "PKGS" },
+                    ],
+                })
+
+
+                for (i = 0; i < SelectedItem.length; i++) {
+
+                    var containerno = SelectedItem[i].containerno;
+                    var JONo = SelectedItem[i].JONo;
+                    var Cargotypeid = SelectedItem[i].Cargotypeid;
+
+
+
+                    var ddlM_ID = document.getElementById("Cargotype" + containerno + "_" + JONo);
+                    ddlM_ID.value = Cargotypeid;
+                }
+            },
+
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+            //})
+        })
+    }
+
+
+
+
+
+
+
+    function ModifyCargoDetails() {
+
+
+        var r = confirm("Any modification made in this screen are chargeable as Ammendment Charges. Sure to proceed?");
+        if (r == true) {
+
+            SBNO = $("#TxtSbNosearch").val();
+            var tablearray1 = [];
+            var table = document.getElementById("tblcargotypedetails");
+            var row;
+
+            for (var i = 1; i < table.rows.length; i++) {
+                var element1 = {};
+                row = table.rows[i];
+                element1.entryID = row.cells[0].innerText;
+                element1.containerno = row.cells[1].innerText;
+                element1.Size = row.cells[2].innerText;
+                element1.Cargotype = row.cells[3].childNodes[0].value;
+                element1.SBNO = row.cells[4].innerText;
+
+                tablearray1.push(element1);
+
+            }
+            var data1 = {
+                'SBNO': SBNO, 'Invoicedata': tablearray1
+            };
+            var data = JSON.stringify(data1);
+            $.ajax({
+                type: "POST",
+                url: "/Export/ExportCargoDetails",
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    alert(data);
+                    var table = $('#tblcargotypedetails').DataTable();
+
+                    table
+                        .clear()
+                        .draw();
+                    $("#TxtSbNosearch").val('')
+                },
+
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                }
+                //})
+            })
+        } else {
+            alert("you pressed Cancel!")
+        }
+    }
+
+
+    //function GetTaxValueID() {
+
+    //    var groupid = $("#ddlCommodity").val();
+
+
+
+
+    //    var data1 = {
+    //        'groupid': groupid
+    //    };
+    //    var data = JSON.stringify(data1);
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/Export/GetTaxIDDetails",
+    //        data: data,
+    //        contentType: "application/json; charset=utf-8",
+    //        success: function (data) {
+    //            $("#TxtTaxID").val(data);
+
+    //        },
+
+    //        error: function (error) {
+    //            let str = error.responseText;
+    //            var a = str.indexOf("<title>") + 7;
+    //            var b = str.indexOf("</title>");
+    //            str = str.substring(a, b);
+    //            alert("Something went wrong: " + str);
+    //        }
+    //        //})
+    //    })
+    //}
+
+
+
+    function addamounttoall() {
+        var amount1 = $("#txtfiedamt").val();
+
+
+        var table = document.getElementById("tbladditionalcharges");
+
+        var row;
+        for (var i = 1; i < table.rows.length; i++) {
+            row = table.rows[i];
+            row.cells[4].childNodes[0].value = amount1;
+
+
+
+        }
+        //var oTableStaticFlow = $('#tbladditionalcharges').DataTable();
+
+        //var amount = $("#txtfiedamt").val();
+
+        //$(".form-control addamount").val(amount);
+
+
+    }
+</script>

@@ -1,0 +1,391 @@
+﻿
+@{
+    ViewBag.Title = "IGMUploadViaExcel";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style>
+    /*.table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }*/
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="form-horizontal">
+                    <div class=" content-area overflow-hidden">
+                        <div class="page-header">
+                            <h4 class="page-title">IGM File Upload (Excel)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">File Type</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.DropDownList("filetype", (IEnumerable<SelectListItem>)ViewBag.IgmFileType, "--Select--", new { @class = "form-select", @id = "ddlfiletype", name = "ddlfiletype", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+
+                                <div class="form-group label-floating">
+                                    <label class="form-label" style="visibility:hidden"> Type</label>
+                                    <input type="file" id="TemplateUploader" name="filename">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 " style="display:none">
+                                <label class="form-label" style="visibility:hidden"> Type</label>
+                                <label class="form-label">Import</label>
+                                <div class="form-group label-floating">
+                                    <img id="FUploaderTemplate" alt="your image" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                <label class="form-label" style="visibility:hidden"> Type</label>
+                                <input type='button' onclick="AddTemplate()" class='btn btn-outline-primary btn-md  ' id="ImportTemplate" name='Import Template' value='Import' />
+                                <a href='@Url.Action("DownloadIMGTemplateOnly", "BookingEntry")' class="btn btn-outline-secondary"><i class="fa fa-download"></i></a>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered text_wrap th_Background text-nowrap" id="tblItemDetails" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="wd-15p sorting ">Sr No</th>
+                                            @*<th class="wd-15p sorting ">JO No</th>*@
+                                            <th class="wd-15p sorting">Origin</th>
+                                            <th class="wd-15p sorting">IGM No</th>
+                                            <th class="wd-15p sorting">Item No</th>
+                                            <th class="wd-15p sorting">BL Number </th>
+                                            <th class="wd-15p sorting">BL Date</th>
+                                            <th class="wd-10p sorting">Container No</th>
+                                            <th class="wd-10p sorting">Seal No</th>
+                                            <th class="wd-10p sorting">PKGS</th>
+                                            <th class="wd-15p sorting">PKGS Type</th>
+                                            <th class="wd-15p sorting">Cargo Weight</th>
+                                            <th class="wd-15p sorting">Consignee</th>
+                                            <th class="wd-15p sorting">Address</th>
+                                            <th class="wd-15p sorting">Notify Consignee</th>
+                                            <th class="wd-15p sorting">Notify Address</th>
+                                            <th class="wd-15p sorting">Goods Description</th>
+                                            <th class="wd-15p sorting">Item Status</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5" id="divsave">
+                            <div class="col-md-1 col-xs-4">
+                                <div class="form-group">
+                                    <div class="row gutters-xs">
+                                        <div class="col d-flex gap-2">
+                                            <button class="btn btn-save px-4" id="btnSave" onclick="OnSave();">Save</button>
+                                            <button class="btn btn-cancel px-4" type="button" onclick="window.location.reload();">
+                                                Clear
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+               
+
+                    <script>
+
+    $("#ddlfiletype").change(function () {
+
+
+        var filetype = $("#ddlfiletype option:selected").text();
+
+
+
+        if (filetype == "CGM" || filetype == "IGM") {
+            $("#divsave").hide();
+        } else {
+            $("#divsave").show();
+        }
+
+    });
+
+
+   var IGMDetailsItems = [];
+   var items = [];
+
+    $(document).ready(function () {
+          BindDetailTablesOnEdit();
+    });
+
+    function AddTemplate() {
+
+        var FileType = $("#ddlfiletype").val();
+        var fileUpload = $("#TemplateUploader").get(0);
+                var files = fileUpload.files;
+                var EXfileData = new FormData();
+
+                if (files.length == 0) {
+                    alert("Please select file");
+                    return false;
+                }
+
+                for (var i = 0; i < files.length; i++) {
+                    EXfileData.append(files[i].name, files[i]);
+                }
+
+        EXfileData.append('FileTypeId', FileType);
+
+
+        $.ajax({
+            url: '/BookingEntry/UploadExcelSheetAttachment',
+            type: "POST",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: EXfileData,
+            dataType: "json",
+            success: function (Data) {
+                items = [];
+                  document.getElementById("TemplateUploader").value = '';
+                     document.getElementById("FUploaderTemplate").value = '';
+                    $("#FUploaderTemplate").attr("src", "")
+
+                var rcount = 1;
+                 //rcount = items.length ;
+
+                if (Data.Status == 0) {
+                    if (Data.ItemList.length > 0) {
+
+                       items = Data.ItemList;
+
+                        console.log(items.length);
+
+                        for (k = 0; k < items.length; k++) {
+                            items[k].SrNo = rcount ++;
+                            items[k].SpecID = items[k].SrNo;
+                            //items[k].JoNo = items[k].SrNo;
+
+                        }
+                        console.log(items);
+
+
+
+                        BindDetailTablesOnEdit();
+                        //GetGrandTotal();
+
+                    }
+                }
+                else {
+
+                     alert(Data);
+                }
+
+
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+
+
+        });
+
+    }
+
+    function BindDetailTablesOnEdit() {
+           $('#tblItemDetails').DataTable({
+            "destroy": true,
+            "bLengthChange": false,
+            "aaData": items,
+            "bInfo": false,
+            "paging": false,
+            "aaSorting": [],
+            "aoColumnDefs": [
+               {
+                  'bSortable': true,
+                    'aTargets': [0]
+               }],
+             "columns": [
+                 //{
+                 //    "data": "SpecID",
+                 //    "className": "wd",
+                 //    "render": function (data, type, row, meta) {
+                 //        if (type === 'display') {
+                 //            data = '<input type="hidden" value="' + row.SpecID + '" /><button type="button" class="btn btn-icon btn-primary btn-sm  Editbtn " name="Editbtn" style="background:#9f78ff;height:35px;" onclick="EditSelectedItem(' + row.SpecID + ')"><i class="fa fa-edit" ></i></button>'
+                 //        }
+
+
+                 //        return data;
+                 //    }
+                 //},
+                 //{
+                 //    "data": "SpecID",
+                 //    "className": "wd",
+                 //    "render": function (data, type, row, meta) {
+                 //        if (type === 'display') {
+                 //            data = '<input type="hidden" value="' + row.SpecID + '" /><button type="button" class="btn btn-icon btn-primary btn-sm btn-danger removebutton "  name="removebutton" style="height:35px;" onclick="CancelSelectedItem(' + row.SpecID + ')"><i class="fa fa-trash" ></i></button>'
+                 //        }
+
+
+                 //        return data;
+                 //    }
+                 //},
+                 //{
+                 //   "data": "SpecID",
+                 //   "render": function (data, type, row, meta) {
+                 //       if (type === 'display') {
+
+                 //       data = '<a href="#" onclick="AddItemAttachments(' + row.SpecID + ')" data-placement="bottom" title="File Attachment" data-original-title="File Attachment"><i class="fa fa-paperclip fa-2x" style="color:#6c4cbb" aria-hidden="true"></i><span class="custom-switch-description" style="font-size:17px;color:#6c4cbb"><b><label id="lblCount_' + row.SpecID + '"></label></b></span></a>';
+
+                 //       }
+                 //       return data;
+                 //   }
+                 //},
+                 { "data": "SrNo" , "className": "" },
+
+                 { "data": "Origin" },
+                 { "data": "IGMNo" },
+                 { "data": "ItemNo" },
+                 { "data": "BLNo" },
+
+                 { "data": "BLDate" },
+                 { "data": "Container_No" },
+                 { "data": "SealNo1" },
+                 { "data": "PKGS1" },
+                 { "data": "PKGSType" },
+                 { "data": "CargoWeight" },
+                 { "data": "Consignee" },
+                 { "data": "Address" },
+                 { "data": "NotifyConsignee" },
+                 { "data": "NotifyAddress" },
+                 { "data": "GoodsDescription" },
+                 { "data": "Itemstatus" }
+
+
+             ]
+
+           });
+
+
+
+        var filetype = $("#ddlfiletype option:selected").text();
+
+
+        if (filetype == "IGM" || filetype == "CGM" && items.length > 1) {
+
+            alert("Record saved sucessfully.");
+
+
+
+        }
+
+    }
+
+    function OnSave() {
+
+
+        AssignElementsInArray();
+
+        if (IGMDetailsItems.length == 0 || IGMDetailsItems == '[]') {
+            alert("Please select file to import");
+            return false;
+        }
+
+
+        var data1 = { 'IGMDetailsElement': IGMDetailsItems }
+        data1 = JSON.stringify(data1);
+
+
+        console.log(IGMDetailsItems);
+        console.log(data1);
+
+        $("#global-loader").fadeIn("slow");
+
+            $.ajax({
+                type: "POST",
+                url: "/BookingEntry/SaveImportIGMDetails",
+                data: data1,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+
+                    if (data == "Record Saved Sucessfully") {
+                        alert(data);
+                        document.location = '@Url.Action("IGMUploadViaExcel", "BookingEntry")';
+                    } else {
+                        alert(data);
+                        $("#global-loader").fadeOut("slow");
+                        return false;
+                    }
+
+
+                },
+
+                error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                    $("#global-loader").fadeOut("slow");
+                }
+            });
+      }
+
+
+    function AssignElementsInArray() {
+
+        IGMDetailsItems = [];
+        IGMDetailsItems = items ;
+        //for (i = 0; i < items.length; i++) {
+        //    var SR=items[i].SrNo
+        //    if (items[i].SrNo == SR) {
+        //        var element = {};
+        //          element.JoNo = items[i].JoNo;
+        //          element.Origin = items[i].Origin;
+        //          element.IGMNo = items[i].IGMNo;
+        //          element.ItemNo = items[i].ItemNo;
+        //          element.BLNo = items[i].BLNo;
+        //          element.BLDate = items[i].BLDate;
+        //          element.Container_No = items[i].Container_No;
+        //          element.SealNo = items[i].SealNo;
+        //          element.PKGS = items[i].PKGS;
+        //          element.PKGSType = items[i].PKGSType;
+        //          element.CargoWeight = items[i].CargoWeight;
+        //          element.Consignee = items[i].Consignee;
+        //          element.Address = items[i].Address;
+        //          element.NotifyConsignee = items[i].NotifyConsignee;
+        //          element.NotifyAddress = items[i].NotifyAddress;
+        //          element.GoodsDescription = items[i].GoodsDescription;
+        //        IGMDetailsItems.push(element);
+        //    }
+
+        //}
+
+
+    }
+                    </script>
+

@@ -1,0 +1,1308 @@
+﻿﻿
+<!doctype html>
+
+
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="msapplication-TileColor" content="#0061da">
+    <meta name="theme-color" content="#1643a3">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+    <!-- Title -->
+    <title> @ViewBag.Title</title>
+
+    <!-- Include Bootstrap CDN -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css">
+
+
+    <!-- Tabs Style -->
+    <link href="~/plugins/tabs/style.css" rel="stylesheet" />
+
+    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+    @* code for autocomplete*@
+
+    <link rel="stylesheet" href="~/fonts/fonts/font-awesome.min.css">
+    <!-- Font Family-->
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    @* <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />*@
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/images/icons/VUfavicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
+
+    <!-- animation CSS -->
+    <link rel="stylesheet" href="~/assets/css/animate.css">
+
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="~/assets/plugins/select2/css/select2.min.css">
+
+    <!-- Datatable CSS -->
+    <link rel="stylesheet" href="~/assets/css/dataTables.bootstrap4.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="~/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/assets/plugins/fontawesome/css/all.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    @*<script src="~/js/vendors/jquery-3.2.1.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <!-- Title -->
+    <title> @ViewBag.Title</title>
+    <link rel="stylesheet" href="~/fonts/fonts/font-awesome.min.css">
+
+    <!-- Font Family-->
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa:300,400,700" rel="stylesheet">
+
+
+
+    <!-- Morris.js Charts Plugin -->
+    <link href="~/plugins/morris/morris.css" rel="stylesheet" />
+
+    <!---Font icons-->
+    <link href="~/plugins/iconfonts/plugin.css" rel="stylesheet" />
+    <!-- Data table css -->
+    <link href="~/plugins/datatable/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <!-- Slect2 css -->
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+    <!-- Tabs Style -->
+    <link href="~/plugins/tabs/style.css" rel="stylesheet" />
+    @*added for order controller*@
+    <link href="~/plugins/forn-wizard/css/material-bootstrap-wizard.css" rel="stylesheet" />
+   @* <script src="~/js/vendors/jquery-3.2.1.min.js"></script>*@
+    <script src="~/plugins/forn-wizard/js/jquery.bootstrap.js"></script>
+    <script src="~/plugins/forn-wizard/js/jquery.validate.min.js"></script>
+    <script src="~/plugins/forn-wizard/js/material-bootstrap-wizard.js"></script>
+    @*<script src="~/plugins/forn-wizard/js/PO-form-wizard.js"></script>*@
+
+
+
+    @*<style>
+            .global-loader1 {
+                position: fixed;
+                z-index: 50000;
+                background: url(../images/loader.svg) no-repeat 50% 50% rgba(255, 255, 255);
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                margin: 0 auto;
+            }
+        </style>*@
+    @*end  waiting event *@
+
+
+</head>
+<body class="">
+    <div id="global-loader">
+        <div class="whirly-loader"> </div>
+    </div>
+    <div class="main-wrapper">
+
+        <!-- Header -->
+        <div class="header">
+
+            <!-- Logo -->
+            <div class="header-left active">
+                <a href="#" class="logo">
+                    <img src="~/images/Ved.jpg" alt="logo" />
+                    @*<img src="~/assets/img/logo.png" alt="">*@
+                </a>
+                <a href="index.html" class="logo-small">
+                    @*<img src="~/assets/img/logo-small.png" alt="">*@
+                </a>
+                <a id="toggle_btn" href="javascript:void(0);">
+                </a>
+            </div>
+            <!-- /Logo -->
+
+            <a id="mobile_btn" class="mobile_btn" href="#sidebar">
+                <span class="bar-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </a>
+
+            <!-- Header Menu -->
+            <ul class="nav user-menu">
+
+                <!-- Search -->
+                <li class="nav-item">
+                    <div class="top-nav-search">
+
+                        <a href="javascript:void(0);" class="responsive-search">
+                            <i class="fa fa-search"></i>
+                        </a>
+                        <form action="#">
+                            <div class="searchinputs">
+                                <input type="text" placeholder="Search Here ...">
+                                <div class="search-addon">
+                                    <span><img src="~/assets/img/icons/closes.svg" alt="img"></span>
+                                </div>
+                            </div>
+                            <a class="btn shadow-none" id="searchdiv"><img src="~/assets/img/icons/search.svg" alt="img"></a>
+                        </form>
+                    </div>
+                </li>
+                <!-- /Search -->
+
+
+                <li class="nav-item dropdown has-arrow main-drop">
+                    <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
+                        <span class="user-img">
+                            <img src="~/assets/img/profiles/avator1.jpg" alt="">
+                            <span class="status online"></span>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu menu-drop-user">
+                        <div class="profilename">
+                            <div class="profileset">
+                                <span class="user-img">
+                                    <img src="~/assets/img/profiles/avator1.jpg" alt="">
+                                    <span class="status online"></span>
+                                </span>
+                                <div class="profilesets">
+                                    @*<h6>John Doe</h6>
+                                        <h5>Admin</h5>*@
+                                    @{
+                                        if (Session["username"] != null)
+                                        {
+                                            <h6 class="mb-1 text-black">@Session["username"].ToString()</h6>
+                                        }
+                                        else
+                                        {
+                                            <h6 class="mb-1 text-black">Guest</h6>
+                                        }
+
+                                    }
+                                    @{
+                                        if (Session["username"] != null)
+                                        {
+
+                                            @*<span class="text-center user-semi-title text-dark">@Session["Designation"].ToString()</span>*@
+                                        }
+                                        else
+                                        {
+                                            <h6 class="mb-1 text-black">Guest</h6>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <hr class="m-0">
+                            @*<a class="dropdown-item" href="profile.html"> <i class="me-2" data-feather="user"></i> My Profile</a>
+                                <a class="dropdown-item" href="generalsettings.html"><i class="me-2" data-feather="settings"></i>Settings</a>
+                                <hr class="m-0">*@
+                            <a class="dropdown-item logout pb-0" href="@Url.Action("Logout", "Home")"><img src="~/assets/img/icons/log-out.svg" class="me-2" alt="img">Logout</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!-- /Header Menu -->
+            <!-- Mobile Menu -->
+            <div class="dropdown mobile-user-menu">
+                <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="profile.html">My Profile</a>
+                    <a class="dropdown-item" href="generalsettings.html">Settings</a>
+                    <a class="dropdown-item" href="signin.html">Logout</a>
+                </div>
+            </div>
+            <!-- /Mobile Menu -->
+        </div>
+        <!-- Header -->
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        @{ Html.RenderAction("SideMenu", "Home");}
+                    </ul>
+                    @*<ul>
+                            <li class="active">
+                                <a href="index.html"><img src="~/assets/img/icons/dashboard.svg" alt="img"><span> Dashboard</span> </a>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/product.svg" alt="img"><span> Product</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="productlist.html">Product List</a></li>
+                                    <li><a href="addproduct.html">Add Product</a></li>
+                                    <li><a href="categorylist.html">Category List</a></li>
+                                    <li><a href="addcategory.html">Add Category</a></li>
+                                    <li><a href="subcategorylist.html">Sub Category List</a></li>
+                                    <li><a href="subaddcategory.html">Add Sub Category</a></li>
+                                    <li><a href="brandlist.html">Brand List</a></li>
+                                    <li><a href="addbrand.html">Add Brand</a></li>
+                                    <li><a href="importproduct.html">Import Products</a></li>
+                                    <li><a href="barcode.html">Print Barcode</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/sales1.svg" alt="img"><span> Sales</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="saleslist.html">Sales List</a></li>
+                                    <li><a href="pos.html">POS</a></li>
+                                    <li><a href="pos.html">New Sales</a></li>
+                                    <li><a href="salesreturnlists.html">Sales Return List</a></li>
+                                    <li><a href="createsalesreturns.html">New Sales Return</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/purchase1.svg" alt="img"><span> Purchase</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="purchaselist.html">Purchase List</a></li>
+                                    <li><a href="addpurchase.html">Add Purchase</a></li>
+                                    <li><a href="importpurchase.html">Import Purchase</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/expense1.svg" alt="img"><span> Expense</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="expenselist.html">Expense List</a></li>
+                                    <li><a href="createexpense.html">Add Expense</a></li>
+                                    <li><a href="expensecategory.html">Expense Category</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/quotation1.svg" alt="img"><span> Quotation</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="quotationList.html">Quotation List</a></li>
+                                    <li><a href="addquotation.html">Add Quotation</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/transfer1.svg" alt="img"><span> Transfer</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="transferlist.html">Transfer  List</a></li>
+                                    <li><a href="addtransfer.html">Add Transfer </a></li>
+                                    <li><a href="importtransfer.html">Import Transfer </a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/return1.svg" alt="img"><span> Return</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="salesreturnlist.html">Sales Return List</a></li>
+                                    <li><a href="createsalesreturn.html">Add Sales Return </a></li>
+                                    <li><a href="purchasereturnlist.html">Purchase Return List</a></li>
+                                    <li><a href="createpurchasereturn.html">Add Purchase Return </a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/users1.svg" alt="img"><span> People</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="customerlist.html">Customer List</a></li>
+                                    <li><a href="addcustomer.html">Add Customer  </a></li>
+                                    <li><a href="supplierlist.html">Supplier List</a></li>
+                                    <li><a href="addsupplier.html">Add Supplier </a></li>
+                                    <li><a href="userlist.html">User List</a></li>
+                                    <li><a href="adduser.html">Add User</a></li>
+                                    <li><a href="storelist.html">Store List</a></li>
+                                    <li><a href="addstore.html">Add Store</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/places.svg" alt="img"><span> Places</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="newcountry.html">New Country</a></li>
+                                    <li><a href="countrieslist.html">Countries list</a></li>
+                                    <li><a href="newstate.html">New State </a></li>
+                                    <li><a href="statelist.html">State list</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="components.html"><i data-feather="layers"></i><span> Components</span> </a>
+                            </li>
+                            <li>
+                                <a href="blankpage.html"><i data-feather="file"></i><span> Blank Page</span> </a>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><i data-feather="alert-octagon"></i> <span> Error Pages  </span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="error-404.html">404 Error </a></li>
+                                    <li><a href="error-500.html">500 Error </a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><i data-feather="box"></i> <span>Elements </span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="sweetalerts.html">Sweet Alerts</a></li>
+                                    <li><a href="tooltip.html">Tooltip</a></li>
+                                    <li><a href="popover.html">Popover</a></li>
+                                    <li><a href="ribbon.html">Ribbon</a></li>
+                                    <li><a href="clipboard.html">Clipboard</a></li>
+                                    <li><a href="drag-drop.html">Drag & Drop</a></li>
+                                    <li><a href="rangeslider.html">Range Slider</a></li>
+                                    <li><a href="rating.html">Rating</a></li>
+                                    <li><a href="toastr.html">Toastr</a></li>
+                                    <li><a href="text-editor.html">Text Editor</a></li>
+                                    <li><a href="counter.html">Counter</a></li>
+                                    <li><a href="scrollbar.html">Scrollbar</a></li>
+                                    <li><a href="spinner.html">Spinner</a></li>
+                                    <li><a href="notification.html">Notification</a></li>
+                                    <li><a href="lightbox.html">Lightbox</a></li>
+                                    <li><a href="stickynote.html">Sticky Note</a></li>
+                                    <li><a href="timeline.html">Timeline</a></li>
+                                    <li><a href="form-wizard.html">Form Wizard</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><i data-feather="bar-chart-2"></i> <span> Charts  </span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="chart-apex.html">Apex Charts</a></li>
+                                    <li><a href="chart-js.html">Chart Js</a></li>
+                                    <li><a href="chart-morris.html">Morris Charts</a></li>
+                                    <li><a href="chart-flot.html">Flot Charts</a></li>
+                                    <li><a href="chart-peity.html">Peity Charts</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><i data-feather="award"></i><span> Icons  </span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="icon-fontawesome.html">Fontawesome Icons</a></li>
+                                    <li><a href="icon-feather.html">Feather Icons</a></li>
+                                    <li><a href="icon-ionic.html">Ionic Icons</a></li>
+                                    <li><a href="icon-material.html">Material Icons</a></li>
+                                    <li><a href="icon-pe7.html">Pe7 Icons</a></li>
+                                    <li><a href="icon-simpleline.html">Simpleline Icons</a></li>
+                                    <li><a href="icon-themify.html">Themify Icons</a></li>
+                                    <li><a href="icon-weather.html">Weather Icons</a></li>
+                                    <li><a href="icon-typicon.html">Typicon Icons</a></li>
+                                    <li><a href="icon-flag.html">Flag Icons</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><i data-feather="columns"></i> <span> Forms  </span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="form-basic-inputs.html">Basic Inputs </a></li>
+                                    <li><a href="form-input-groups.html">Input Groups </a></li>
+                                    <li><a href="form-horizontal.html">Horizontal Form </a></li>
+                                    <li><a href="form-vertical.html"> Vertical Form </a></li>
+                                    <li><a href="form-mask.html">Form Mask </a></li>
+                                    <li><a href="form-validation.html">Form Validation </a></li>
+                                    <li><a href="form-select2.html">Form Select2 </a></li>
+                                    <li><a href="form-fileupload.html">File Upload </a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><i data-feather="layout"></i> <span> Table  </span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="tables-basic.html">Basic Tables </a></li>
+                                    <li><a href="data-tables.html">Data Table </a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/product.svg" alt="img"><span> Application</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="chat.html">Chat</a></li>
+                                    <li><a href="calendar.html">Calendar</a></li>
+                                    <li><a href="email.html">Email</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/time.svg" alt="img"><span> Report</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="purchaseorderreport.html">Purchase order report</a></li>
+                                    <li><a href="inventoryreport.html">Inventory Report</a></li>
+                                    <li><a href="salesreport.html">Sales Report</a></li>
+                                    <li><a href="invoicereport.html">Invoice Report</a></li>
+                                    <li><a href="purchasereport.html">Purchase Report</a></li>
+                                    <li><a href="supplierreport.html">Supplier Report</a></li>
+                                    <li><a href="customerreport.html">Customer Report</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/users1.svg" alt="img"><span> Users</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="newuser.html">New User </a></li>
+                                    <li><a href="userlists.html">Users List</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);"><img src="~/assets/img/icons/settings.svg" alt="img"><span> Settings</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="generalsettings.html">General Settings</a></li>
+                                    <li><a href="emailsettings.html">Email Settings</a></li>
+                                    <li><a href="paymentsettings.html">Payment Settings</a></li>
+                                    <li><a href="currencysettings.html">Currency Settings</a></li>
+                                    <li><a href="grouppermissions.html">Group Permissions</a></li>
+                                    <li><a href="taxrates.html">Tax Rates</a></li>
+                                </ul>
+                            </li>
+                        </ul>*@
+                </div>
+            </div>
+        </div>
+        <!-- /Sidebar -->
+        @* end waiting event *@
+        <div class="page-wrapper">
+            <div class="content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <!--footer-->
+    <footer class="footer footer_wrap">
+        <div class="container">
+            <div class="row align-items-center flex-row-reverse">
+                <div class="col-md-12 col-sm-12 mt-3 mt-lg-0 text-center">
+                    Copyright © @DateTime.Now.Year All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+        function setDefaultHeight() {
+            var elmnt = document.getElementById("page-main");
+            var height = 0;
+
+            if (elmnt.scrollHeight) {
+                height = elmnt.scrollHeight;
+            }
+            else {
+                height = $("#page-main").height();
+
+            }
+            ////height = $(".page-main").height();
+            height = height - 62;
+            $("#sidebar").height(height + "px");
+        }
+
+        $(window).on("scroll", function (e) {
+            var elmnt = document.getElementById("page-main");
+            var height = 0;
+            height = elmnt.scrollHeight;
+            if ($(this).scrollTop() > height) {
+                setDefaultHeight();
+            } else {
+                setDefaultHeight();
+            }
+        });
+
+        $(function (e) {
+            $('#example').DataTable();
+        });
+
+        //$('#example').DataTable({
+        //    retrieve: true,
+        //    paging: false
+
+
+        //});
+
+
+    </script>
+    <!-- Back to top -->
+    <a href="#top" id="back-to-top" style="display: inline;"><i class="fa fa-angle-up"></i></a>
+    <!-- Dashboard Core -->
+    @*<script src="~/js/vendors/jquery-3.2.1.min.js"></script>*@
+
+    <script src="~/plugins/fullcalendar/moment.min.js"></script>
+    <script src="~/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="~/js/vendors/jquery.sparkline.min.js"></script>
+    <script src="~/js/vendors/selectize.min.js"></script>
+    <script src="~/js/vendors/jquery.tablesorter.min.js"></script>
+    <script src="~/js/vendors/circle-progress.min.js"></script>
+    <script src="~/plugins/rating/jquery.rating-stars.js"></script>
+    <!-- Fullside-menu Js-->
+    <script src="~/plugins/fullside-menu/jquery.slimscroll.min.js"></script>
+    <script src="~/plugins/fullside-menu/waves.min.js"></script>
+    <!-- Echarts Js-->
+    <script src="~/plugins/echarts/echarts.js"></script>
+    <script src="~/js/index1.js"></script>
+    <!--Morris.js Charts Plugin -->
+    <script src="~/plugins/am-chart/amcharts.js"></script>
+    <script src="~/plugins/am-chart/serial.js"></script>
+    <!-- Custom scroll bar Js-->
+    <script src="~/plugins/scroll-bar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- Data tables -->
+    <script src="~/plugins/datatable/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/datatable/dataTables.bootstrap4.min.js"></script>
+    @*Export to exel ,pdf and csv for Datatable *@
+
+    <link href="~/css/buttons.dataTables.css" rel="stylesheet" />
+    <script src="~/js/jszip.min.js"></script>
+    <script src="~/js/dataTables.buttons.min.js"></script>
+    <script src="~/js/pdfmake.min.js"></script>
+    <script src="~/js/vfs_fonts.js"></script>
+    <script src="~/js/buttons.html5.min.js"></script>
+    <script src="~/js/buttons.print.min.js"></script>
+    @*Export to exel ,pdf and csv for Datatable *@
+    <!-- Select2 js -->
+    <script src="~/plugins/select2/select2.full.min.js"></script>
+    <!-- Custom Js-->
+    <script src="~/js/custom.js"></script>
+    <!-- Inline js -->
+    <script src="~/js/select2.js"></script>
+    <!-- Data table js -->
+    <script type="text/javascript">
+        function setDefaultHeight() {
+            var elmnt = document.getElementById("page-main");
+            var height = 0;
+
+            if (elmnt.scrollHeight) {
+                height = elmnt.scrollHeight;
+            }
+            else {
+                height = $("#page-main").height();
+
+            }
+            ////height = $(".page-main").height();
+            height = height - 62;
+            $("#sidebar").height(height + "px");
+        }
+
+
+        setTimeout(function () {
+            $('#global-loader');
+            setTimeout(function () {
+                $("#global-loader").fadeOut("slow");
+            }, 100);
+        }, 500);
+        $(window).on("scroll", function (e) {
+            var elmnt = document.getElementById("page-main");
+            var height = 0;
+            height = elmnt.scrollHeight;
+            if ($(this).scrollTop() > height) {
+                setDefaultHeight();
+            } else {
+                setDefaultHeight();
+            }
+        });
+        $(function (e) {
+            $('#example').dataTable();
+
+        });
+
+        $('#example').dataTable({
+            //  retrieve: true,
+            paging: false,
+            "order": []
+            // "order": [[3, "desc"]]
+        });
+
+
+    </script>
+    <script>
+        $('body').tooltip({ selector: '[data-toggle="tooltip"]' });
+    </script>
+    <!-- Bootstrap DatePicker -->
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js" type="text/javascript"></script>*@
+    @*<link href="~/css/bootstrap-datepicker.css" rel="stylesheet" />
+        <script src="~/js/bootstrap-datepicker.js"></script>*@
+
+    <link href="~/css/DateTimePickerBL.css" rel="stylesheet" />
+    <script src="~/js/DateTimePickerForBL.js"></script>
+    <link href="~/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <!---Tabs JS-->
+    <script src="~/plugins/tabs/jquery.multipurpose_tabcontent.js"></script>
+
+    <!-- Bootstrap DatePicker -->
+    <script type="text/javascript">
+        $(function () {
+            var currDate = new Date();
+            $('#datePicker')
+                .datepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    format: 'dd M yyyy',
+                    language: "tr",
+                    changeMonth: true,
+                    changeYear: true,
+                })
+                .on('changeDate', function (e) {
+                    // Revalidate the date field
+                    // $('#eventForm').formValidation('revalidateField', 'date');
+                    $('.datepicker').hide();
+                });
+
+            $('#txtigmdate')
+                .datepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    format: 'dd M yyyy',
+                    language: "tr",
+                    changeMonth: true,
+                    changeYear: true,
+                })
+                .on('changeDate', function (e) {
+                    // Revalidate the date field
+                    // $('#eventForm').formValidation('revalidateField', 'date');
+
+                });
+
+            $('.datePickerPOD')
+                .datepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    format: 'dd M yyyy',
+                    language: "tr",
+                    changeMonth: true,
+                    changeYear: true,
+                    endDate: currDate,
+                })
+                .on('changeDate', function (e) {
+                    // Revalidate the date field
+                    // $('#eventForm').formValidation('revalidateField', 'date');
+                    // $('.datePickerPOD').hide();
+                });
+
+        });
+    </script>
+    @*<script src="~/plugins/forn-wizard/js/PO-form-wizard.js"></script>*@
+    @*<script>
+            $(function () {
+                var currDate = new Date();
+                $(".form_datetime1").datetimepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    format: 'dd M yyyy hh:ii',
+                    language: "tr",
+                    changeMonth: true,
+                    changeYear: true,
+                    forceParse: true,
+                    // endDate: currDate
+                })
+                    .on('changeDate', function (e) {
+                        // Revalidate the date field
+                        // $('#eventForm').formValidation('revalidateField', 'date');
+                        $('.datetimepicker').hide();
+                    });
+                $(".DepartureDateTime").datetimepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    format: 'dd M yyyy hh:ii',
+                    language: "tr",
+                    changeMonth: true,
+                    changeYear: true,
+                    forceParse: true,
+                    // endDate: currDate
+                })
+                    .on('changeDate', function (e) {
+                        // Revalidate the date field
+                        // $('#eventForm').formValidation('revalidateField', 'date');
+                        $('.datetimepicker').hide();
+                    });
+                $(".RemovalDateTime").datetimepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    format: 'dd M yyyy hh:ii',
+                    language: "tr",
+                    changeMonth: true,
+                    changeYear: true,
+                    forceParse: true,
+                    // endDate: currDate
+                })
+                    .on('changeDate', function (e) {
+                        // Revalidate the date field
+                        // $('#eventForm').formValidation('revalidateField', 'date');
+                        $('.datetimepicker').hide();
+                    });
+
+                $(".form_date2").datetimepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    format: 'dd M yyyy',
+                    language: "tr",
+                    changeMonth: true,
+                    changeYear: true,
+                    forceParse: true,
+                    timepicker: false,
+                    // endDate: currDate
+                })
+                    .on('changeDate', function (e) {
+                        // Revalidate the date field
+                        // $('#eventForm').formValidation('revalidateField', 'date');
+                        $('.datetimepicker').hide();
+                    });
+
+            });
+        </script>*@
+    <!---Tabs scripts-->
+    <script>
+        $(function (e) {
+            $(".first_tab").champ();
+            $(".accordion_example").champ({
+                plugin_type: "accordion",
+                side: "left",
+                active_tab: "3",
+                controllers: "true"
+            });
+
+            $(".second_tab").champ({
+                plugin_type: "tab",
+                side: "right",
+                active_tab: "1",
+                controllers: "false"
+            });
+
+        });
+    </script>
+
+
+    <!-- Menu modal -->
+    @* FOR WEB CAMP *@
+    <script src="~/Webcam_Plugin/jquery.webcam.js"></script>
+    @*<script src="~/js/sweet-alert.min.js"></script>*@
+    <script type="text/javascript">
+        function setDefaultHeight() {
+            var elmnt = document.getElementById("page-main");
+            var height = 0;
+
+            if (elmnt.scrollHeight) {
+                height = elmnt.scrollHeight;
+            }
+            else {
+                height = $("#page-main").height();
+
+            }
+            ////height = $(".page-main").height();
+            height = height - 62;
+            $("#sidebar").height(height + "px");
+        }
+
+        $(window).on("scroll", function (e) {
+            var elmnt = document.getElementById("page-main");
+            var height = 0;
+            height = elmnt.scrollHeight;
+            if ($(this).scrollTop() > height) {
+                setDefaultHeight();
+            } else {
+                setDefaultHeight();
+            }
+        });
+
+        $(function (e) {
+            $('#example').DataTable();
+        });
+
+        $(function (e) {
+            $('#ExcelPage').DataTable();
+        });
+
+
+        $(function (e) {
+            $('#ExcelPage1').DataTable();
+        });
+
+        $(function (e) {
+            $('#ExcelPage2').DataTable();
+        });
+
+        $(function (e) {
+            $('#ExportExcelPage').DataTable();
+        });
+
+
+        $(function (e) {
+            $('#ExcelPage1').DataTable();
+        });
+
+        $(function (e) {
+            $('#ExcelPage2').DataTable();
+        });
+
+        setTimeout(function () {
+            $('#global-loader');
+            setTimeout(function () {
+                $("#global-loader").fadeOut("slow");
+            }, 100);
+        }, 500);
+
+
+        //$('#ExcelPage').DataTable({
+        //    retrieve: true,
+        //    paging: false
+
+
+        //});
+
+
+    </script>
+    <!-- Back to top -->
+    <a href="#top" id="back-to-top" style="display: inline;"><i class="fa fa-angle-up"></i></a>
+    <!-- Dashboard Core -->
+    @*<script src="~/js/vendors/jquery-3.2.1.min.js"></script>*@
+
+    <script src="~/plugins/fullcalendar/moment.min.js"></script>
+    <script src="~/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="~/js/vendors/jquery.sparkline.min.js"></script>
+    <script src="~/js/vendors/selectize.min.js"></script>
+    <script src="~/js/vendors/jquery.tablesorter.min.js"></script>
+    <script src="~/js/vendors/circle-progress.min.js"></script>
+    <script src="~/plugins/rating/jquery.rating-stars.js"></script>
+    <!-- Fullside-menu Js-->
+    <script src="~/plugins/fullside-menu/jquery.slimscroll.min.js"></script>
+    <script src="~/plugins/fullside-menu/waves.min.js"></script>
+    <!-- Echarts Js-->
+    <script src="~/plugins/echarts/echarts.js"></script>
+    <script src="~/js/index1.js"></script>
+    <!--Morris.js Charts Plugin -->
+    <script src="~/plugins/am-chart/amcharts.js"></script>
+    <script src="~/plugins/am-chart/serial.js"></script>
+    <!-- Custom scroll bar Js-->
+    <script src="~/plugins/scroll-bar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- Data tables -->
+    <script src="~/plugins/datatable/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/datatable/dataTables.bootstrap4.min.js"></script>
+    @*Export to exel ,pdf and csv for Datatable *@
+
+    <link href="~/css/buttons.dataTables.css" rel="stylesheet" />
+    <script src="~/js/jszip.min.js"></script>
+    <script src="~/js/dataTables.buttons.min.js"></script>
+    <script src="~/js/pdfmake.min.js"></script>
+    <script src="~/js/vfs_fonts.js"></script>
+    <script src="~/js/buttons.html5.min.js"></script>
+    <script src="~/js/buttons.print.min.js"></script>
+    @*Export to exel ,pdf and csv for Datatable *@
+    <!-- Select2 js -->
+    <script src="~/plugins/select2/select2.full.min.js"></script>
+    <!-- Custom Js-->
+    <script src="~/js/custom.js"></script>
+    <!-- Inline js -->
+    <script src="~/js/select2.js"></script>
+    <!-- Data table js -->
+    <script type="text/javascript">
+        function setDefaultHeight() {
+            var elmnt = document.getElementById("page-main");
+            var height = 0;
+
+            if (elmnt.scrollHeight) {
+                height = elmnt.scrollHeight;
+            }
+            else {
+                height = $("#page-main").height();
+
+            }
+            ////height = $(".page-main").height();
+            height = height - 62;
+            $("#sidebar").height(height + "px");
+        }
+
+        $(window).on("scroll", function (e) {
+            var elmnt = document.getElementById("page-main");
+            var height = 0;
+            height = elmnt.scrollHeight;
+            if ($(this).scrollTop() > height) {
+                setDefaultHeight();
+            } else {
+                setDefaultHeight();
+            }
+        });
+        $(function (e) {
+            $('#example').dataTable();
+
+        });
+
+        $('#example').dataTable({
+            //  retrieve: true,
+            paging: false,
+            "order": []
+            // "order": [[3, "desc"]]
+        });
+
+
+
+        $(function (e) {
+            $('#ExcelPage').dataTable();
+
+        });
+
+        $('#ExcelPage').dataTable({
+            //  retrieve: true,
+            paging: false,
+            bFilter: false,
+            "order": [],
+            "dom": 'Bfrtip',
+
+            "buttons": [{
+                "extend": 'excel',
+                "title": 'Vessel&CustomerPendency',
+                "filename": 'Vessel&CustomerPendency_List'
+
+            }
+            ]
+            // "order": [[3, "desc"]]
+        });
+
+
+
+        $(function (e) {
+            $('#ExportExcelPage').dataTable();
+
+        });
+
+        $('#ExportExcelPage').dataTable({
+            //  retrieve: true,
+            paging: false,
+            bFilter: false,
+            "order": [],
+            "dom": 'Bfrtip',
+
+            "buttons": [{
+                "extend": 'excel',
+                "title": 'ExportVesselWiseMovement',
+                "filename": 'ExportVesselWiseMovement_List'
+
+            }
+            ]
+            // "order": [[3, "desc"]]
+        });
+
+
+
+    </script>
+    <script>
+        $('body').tooltip({ selector: '[data-toggle="tooltip"]' });
+    </script>
+
+
+    <link href="~/css/DateTimePickerBL.css" rel="stylesheet" />
+    <script src="~/js/DateTimePickerForBL.js"></script>
+    <link href="~/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <!---Tabs JS-->
+    <script src="~/plugins/tabs/jquery.multipurpose_tabcontent.js"></script>
+
+    <!-- Bootstrap DatePicker -->
+
+    <script>
+        $(function () {
+            var currDate = new Date();
+            $(".form_datetime1").datetimepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy hh:ii',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                forceParse: true,
+                autoclose: true,
+
+                // endDate: currDate
+            })
+                .on('changeDate', function (e) {
+                    // Revalidate the date field
+                    // $('#eventForm').formValidation('revalidateField', 'date');
+                    $('.datetimepicker').hide();
+                });
+            $(".DepartureDateTime").datetimepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy hh:ii',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                forceParse: true,
+                // endDate: currDate
+            })
+                .on('changeDate', function (e) {
+                    // Revalidate the date field
+                    // $('#eventForm').formValidation('revalidateField', 'date');
+                    $('.datetimepicker').hide();
+                });
+            $(".RemovalDateTime").datetimepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy hh:ii',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                forceParse: true,
+                // endDate: currDate
+            })
+                .on('changeDate', function (e) {
+                    // Revalidate the date field
+                    // $('#eventForm').formValidation('revalidateField', 'date');
+                    $('.datetimepicker').hide();
+                });
+
+            $(".form_date2").datetimepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                forceParse: true,
+                timepicker: false,
+                // endDate: currDate
+            })
+                .on('changeDate', function (e) {
+                    // Revalidate the date field
+                    // $('#eventForm').formValidation('revalidateField', 'date');
+                    $('.datetimepicker').hide();
+                });
+            $(".datePickerPOD1").datetimepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                forceParse: true,
+                timepicker: false,
+                // endDate: currDate
+            })
+            $(".DPCostDefine").datetimepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                forceParse: true,
+                timepicker: false,
+                // endDate: currDate
+            })
+            $(".datePickerout").datetimepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                forceParse: true,
+                timepicker: false,
+                // endDate: currDate
+            })
+            $("#txtEntryDate").datetimepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                forceParse: true,
+                timepicker: false,
+                // endDate: currDate
+            })
+
+
+
+
+            $(".form_datetime2").datetimepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                forceParse: true,
+                timepicker: false,
+                // endDate: currDate
+            })
+                .on('changeDate', function (e) {
+                    // Revalidate the date field
+                    // $('#eventForm').formValidation('revalidateField', 'date');
+                    $('.datetimepicker').hide();
+                });
+
+        });
+    </script>
+    <!---Tabs scripts-->
+    <script>
+        $(function (e) {
+            $(".first_tab").champ();
+            $(".accordion_example").champ({
+                plugin_type: "accordion",
+                side: "left",
+                active_tab: "3",
+                controllers: "true"
+            });
+
+            $(".second_tab").champ({
+                plugin_type: "tab",
+                side: "right",
+                active_tab: "1",
+                controllers: "false"
+            });
+
+        });
+    </script>
+    <script src="~/Scripts/jquery.sumoselect.min.js"></script>
+    @* <script>
+            //for jump menue
+            function OpenModelDashboard() {
+                $("#menuModal").modal();
+                $("#menuModal").show();
+                $('#tblMenuTable').hide();
+                $('#TxtSearchMenu').val('');
+
+            }
+            function CloseModelDashboard() {
+                GroupMenuList = [];
+
+            }
+            function FetchMenuListAgainstSearchText() {
+                var SearchText = $('#TxtSearchMenu').val();
+                if (SearchText == undefined || SearchText == null || SearchText == NaN) {
+                    SearchText = '';
+                }
+
+                var data = { 'SearchText': SearchText }
+                data = JSON.stringify(data);
+                $("#global-loader").fadeIn();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/getMenuList",
+
+                    data: data,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: false,
+                    success: function (response) {
+                        $('#tblMenuTable').show();
+                        GroupMenuList = response;
+                        $('#tblMenuTable').DataTable({
+                            "destroy": true,
+                            "bLengthChange": false,
+                            "aaData": response,
+                            "bPaginate": false,
+                            "bInfo": false,
+                            "paging": false,
+                            "aaSorting": [],
+                            "columnDefs": [{
+                                "targets": 0,
+                                "orderable": false,
+                            }],
+                            "columns": [
+
+
+                                { "data": "MenuName" },
+                                { "data": "SubMenu" },
+
+                                {
+                                    "data": "ItemID",
+                                    "width": "20%",
+                                    "className": "text-center",
+                                    "orderable": false,
+                                    "render": function (data, type, row, meta) {
+                                        if (row.IsFavourite == '0') {
+                                            return '<a href="' + '/' + row.ControllerName + '/' + row.Action + '" class="btn btn-primary"><i class="fa fa-arrow-right"></i></a> <a href="#" class="btn btn-light" onclick="SetFavoriteMenu(' + row.MenuID + ')"><i class="fa fa-star" style="color:#5ed84f;" ></i></a>';
+
+                                        }
+                                        else {
+
+                                            return '<a href="' + '/' + row.ControllerName + '/' + row.Action + '" class="btn btn-primary"><i class="fa fa-arrow-right"></i></a> <a href="#" class="btn btn-success" onclick="SetFavoriteMenu(' + row.MenuID + ')"><i class="fa fa-star" ></i></a>';
+                                        }
+                                    }
+
+                                }
+
+
+                            ]
+                        });
+                        $("#global-loader").fadeOut();
+
+                    },
+
+                    error: function (error) {
+
+                        let str = error.responseText;
+                        var a = str.indexOf("<title>") + 7;
+                        var b = str.indexOf("</title>");
+                        str = str.substring(a, b);
+                        alert("Something went wrong: " + str);
+                        $("#global-loader").fadeOut();
+
+
+                    }
+                });
+
+
+            }
+
+            function SetFavoriteMenu(MenuID) {
+
+                var data = { 'MenuID': MenuID }
+                data = JSON.stringify(data);
+                $("#global-loader").fadeIn();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/SetFavouriteMenu",
+
+                    data: data,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: false,
+                    success: function (response) {
+                        alert(response);
+                        FetchMenuListAgainstSearchText();
+                        $("#global-loader").fadeOut();
+
+                    },
+
+                    error: function (error) {
+
+                        let str = error.responseText;
+                        var a = str.indexOf("<title>") + 7;
+                        var b = str.indexOf("</title>");
+                        str = str.substring(a, b);
+                        alert("Something went wrong: " + str);
+                        $("#global-loader").fadeOut();
+
+
+                    }
+                });
+
+
+            }
+
+
+        </script>*@
+    <!-- Custom JS -->
+    <script src="~/assets/js/script.js"></script>
+    <!-- Feather Icon JS -->
+    <script src="~/assets/js/feather.min.js"></script>
+
+    <!-- Slimscroll JS -->
+    @*<script src="~/assets/js/jquery.slimscroll.min.js"></script>*@
+
+    <!-- Datatable JS -->
+    <script src="~/assets/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/js/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Select2 JS -->
+    <script src="~/assets/plugins/select2/js/select2.min.js"></script>
+
+    <!-- Sweetalert 2 -->
+
+    
+    <script src="~/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <link href="~/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <link href="~/css/DateTimePickerBL.css" rel="stylesheet" />
+    <script src="~/js/DateTimePickerForBL.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1530 @@
+﻿
+@{
+    ViewBag.Title = "Update IGM Details";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style>
+    /*.table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }*/
+    textarea.form-control {
+        height: 40px !important;
+    }
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js" integrity="sha256-6XMVI0zB8cRzfZjqKcD01PBsAy3FlDASrlC8SxCpInY=" crossorigin="anonymous"></script>
+<div class=" content-area" id="divSearchIGM">
+    <div class="page-header">
+        <h4 class="page-title">IGM Manual</h4>
+        <div class="col" style="text-align:right;font-size:larger">
+            @*<a href="@Url.Action("IGMUploadViaExcel", "BookingEntry")" target="_blank" style="color:#780bdb;font-family:-webkit-pictograph" title="Upload By Excel/IGM/CGM"><i class="fa fa-file-excel-o" style="font-size:40px;color:green"></i></a>*@
+            <a href="@Url.Action("IGMUploadViaExcel", "BookingEntry")" target="_blank" class="btn btn-primary" title="Upload By Excel/IGM/CGM">Bulk Upload</a>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Search By</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.DropDownList("ddlSearch", new List<SelectListItem>
+                            { new SelectListItem { Text = "--Select--", Value = ""},
+                            new SelectListItem { Text = "IGM-Item No", Value = "IGM-Item No"},
+                            new SelectListItem { Text = "Container No", Value = "Container No"},
+                            new SelectListItem { Text = "Via No", Value = "Via No"},
+                            new SelectListItem { Text = "BLNumber", Value = "BLNumber"},
+                              }, new { @class = "form-select", autocomplete = "off", @id = "ddlSearch", onchange = "OnSearchChange()" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-3 col-sm-12" id="divIGMNo" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">IGM No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtIGMNo", null, new { @class = "form-control", @id = "txtIGMNo", name = "txtIGMNo", autocomplete = "off", placeholder = "IGM No" })
+                                            @*<select id="ddlContainerNo" class="form-control" onchange="GetTotalPkgsContainerWise()">
+                                                    <option value="">--Select--</option>
+                                                </select>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12" id="divItemNo" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Item No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtItemNo", null, new { @class = "form-control", @id = "txtItemNo", name = "txtItemNo", autocomplete = "off", placeholder = "Item No" })
+                                            @*<select id="ddlContainerNo" class="form-control" onchange="GetTotalPkgsContainerWise()">
+                                                    <option value="">--Select--</option>
+                                                </select>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" id="divContainerNo" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Container No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtContainerNo", null, new { @class = "form-control", @id = "txtContainerNo", name = "txtContainerNo", autocomplete = "off", placeholder = "Container No", @maxlength = 11 })
+                                            @*<select id="ddlContainerNo" class="form-control" onchange="GetTotalPkgsContainerWise()">
+                                                    <option value="">--Select--</option>
+                                                </select>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" id="divViaNo" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label mandatory" id="lblViaNo">Via No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtViaNo", null, new { @class = "form-control", @id = "txtViaNo", name = "txtViaNo", autocomplete = "off", placeholder = "Via No" })
+                                            @*<select id="ddlContainerNo" class="form-control" onchange="GetTotalPkgsContainerWise()">
+                                                    <option value="">--Select--</option>
+                                                </select>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-1 col-sm-12">
+                                <div class="form-group" style="padding-top:25px">
+                                    @*<label class="form-label" style="visibility:hidden">.</label>*@
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <button class="btn btn-filters" type="button" id="btnSearch" name="Search" onclick="OnSearchClick()"> <img src="~/assets/images/icons/search-whites.svg" alt="img"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblIGMDets">
+                                        <thead>
+                                            <tr>
+                                                <th class="wd-15p sorting"></th>
+                                                <th class="wd-15p sorting"></th>
+                                                <th class="wd-15p sorting"></th>
+                                                <th class="wd-15p sorting">Container No</th>
+                                                <th class="wd-15p sorting">Size</th>
+                                                <th class="wd-15p sorting">Type</th>
+                                                <th class="wd-15p sorting">JO No</th>
+                                                <th class="wd-15p sorting">JO Date</th>
+                                                <th class="wd-15p sorting">IGM No</th>
+                                                <th class="wd-15p sorting">Item No</th>
+                                                <th class="wd-15p sorting">Line</th>
+
+                                                @*<th class="wd-10p sorting" style="display:none">EQID</th>
+                                                    <th class="wd-10p sorting" style="display:none">VendorID</th>
+                                                    <th class="wd-15p sorting" style="display:none">WarehouseID</th>
+                                                    <th class="wd-15p sorting" style="display:none">PackageID</th>*@
+
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class=" content-area" id="divIGMEntry" style="display:none; margin-top:-20px;">
+    <div class="page-header">
+        <h4 class="page-title">IGM Entry</h4>
+        <ol class="breadcrumb" style="background-color: #FAFBFE">
+            <li class="breadcrumb-item">
+                <a onclick="BackToSearch();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Search"></i> </a>
+            </li>
+        </ol>
+    </div>
+
+    <div class="row" style="margin-top:-15px;">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblContainerDets">
+                                        <thead>
+                                            <tr>
+
+                                                <th class="wd-15p sorting" style="width:20px"> <input type="checkbox" class="checkbox origin" name="checklist[]" id="chkIsScan"></th>
+                                                <th class="wd-15p sorting">Container No</th>
+                                                <th class="wd-15p sorting">Size</th>
+                                                <th class="wd-15p sorting">Type</th>
+                                                <th class="wd-15p sorting">Cargo Type</th>
+                                                <th class="wd-15p sorting">In Date</th>
+                                                <th class="wd-15p sorting" style="width:200px">Seal No</th>
+                                                <th class="wd-15p sorting" style="width:80px">Pkgs</th>
+                                                <th class="wd-15p sorting" style="width:80px">Cargo Wt (KGS)</th>
+                                                <th class="wd-15p sorting" style="width:80px">Cargo Description</th>
+                                                <th class="wd-15p sorting" style="width:80px">Pkg Type</th>
+                                                <th class="hiderow"  style="display:none;">EntryID</th>
+
+                                                @*<th class="wd-10p sorting" style="display:none">EQID</th>
+                                                    <th class="wd-10p sorting" style="display:none">VendorID</th>
+                                                    <th class="wd-15p sorting" style="display:none">WarehouseID</th>
+                                                    <th class="wd-15p sorting" style="display:none">PackageID</th>*@
+
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row" >
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">IGM No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtIGMNoAdd", null, new { @class = "form-control", @id = "txtIGMNoAdd", name = "txtIGMNoAdd", autocomplete = "off", placeholder = "IGM No" })
+                                            <input type="hidden" id="hdnIGMMode" value="" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Item No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtItemNoAdd", null, new { @class = "form-control", @id = "txtItemNoAdd", name = "txtItemNoAdd", autocomplete = "off", placeholder = "Item No" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BL No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtBLNo", null, new { @class = "form-control", @id = "txtBLNo", name = "txtBLNo", autocomplete = "off", placeholder = "BL No" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-lg-3">
+                                @*<div class="input-group">*@
+                                <div class="form-group label-floating">
+
+                                    <label class="form-label mandatory">BL Date</label>
+                                    @Html.TextBox("txtBLDate", null, new { @class = "form-control  form_datetime1 ", @id = "txtBLDate", name = "txtBLDate", Value = DateTime.Now.ToString("dd MMM yyyy HH:mm"), autocomplete = "off" })
+                                </div>
+                                @*</div>*@
+                            </div>
+                        </div>
+                        <!--<div class="row">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BOE No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtBOENo" type="text" placeholder="BOE No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BOE Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">-->
+                        @* @Html.TextBox("txtBOEDate", null, new { @class = "form-control form_datetime1", @id = "txtBOEDate", name = "txtBOEDate", autocomplete = "on", @Value = DateTime.Now.ToString("dd MMM yyyy hh:mm") })*@
+                        <!--@Html.TextBox("txtBOEDate", null, new { @class = "form-control form_datetime1", @id = "txtBOEDate", name = "txtBOEDate",@Value = DateTime.Now.ToString("dd MMM yyyy hh:mm"), autocomplete = "off" })-->
+                        @* @Html.TextBox("txtBLDate", null, new { @class = "form-control  form_datetime1 ", @id = "txtBLDate", name = "txtBLDate", @Value = DateTime.Now.ToString("dd MMM yyyy HH:mm"), autocomplete = "off" })*@
+
+                        <!--</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Do Valid Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtValidDate", null, new { @class = "form-control form_datetime1", @id = "txtValidDate", name = "txtValidDate", autocomplete = "on", @Value = DateTime.Now.ToString("dd MMM yyyy hh:mm") })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">CHA</label>
+
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="text" placeholder="CHA" class="form-control" id="ddlCHA" />
+                                            <input type="hidden" class="form-control" id="ddlCHAId" />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">Delivery Type</label>
+                                    @Html.DropDownList("ddlDeliveryType", new List<SelectListItem>
+                                    {
+                                   new SelectListItem { Text = "Select", Value = "Select"},
+                                      new SelectListItem { Text = "Loaded", Value = "Loaded"},
+                                    new SelectListItem { Text = "Destuff", Value = "Destuff"},
+                                      }, new { @class = "form-select", autocomplete = "off", @id = "ddlDeliveryType" })
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">RMS Status</label>
+                                    @Html.DropDownList("ddlRMS", new List<SelectListItem>
+                                    {
+                                   new SelectListItem { Text = "Select", Value = "Select"},
+                                      new SelectListItem { Text = "Yes", Value = "1"},
+                                    new SelectListItem { Text = "No", Value = "0"},
+                                      }, new { @class = "form-select", autocomplete = "off", @id = "ddlRMS" })
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">Scan Type</label>
+                                    @Html.DropDownList("ddlScanType", new List<SelectListItem>
+                                    {
+                                   new SelectListItem { Text = "Select", Value = "Select"},
+                                      new SelectListItem { Text = "D", Value = "D"},
+                                    new SelectListItem { Text = "M", Value = "M"},
+                                      }, new { @class = "form-select", autocomplete = "off", @id = "ddlScanType" })
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+                                    <label class="form-label hidden">.</label>
+                                    <button class="btn btn-filters float-right" id="Save" onclick="Save()" title="Save"><i class="fa-solid fa-check"></i></button>
+
+                                </div>
+                            </div>
+
+                        </div>-->
+                        <div class="row">
+                            @*<div class="col-sm-12 col-lg-6">
+                                    <div class="form-group label-floating">
+                                        <label class="form-label">Consignee</label>
+
+                                        @Html.DropDownList("ddlConsignee", (IEnumerable<SelectListItem>)ViewBag.ConIGMList, "--Select--", new { @class = "form-control", @id = "ddlConsignee", name = "ddlConsignee", autocomplete = "off" })
+
+                                    </div>
+                                </div>*@
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Consignee</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="text" class="form-control" id="ddlConsignee" />
+                                            <input type="hidden" class="form-control" id="hdnConsigneeID" />
+                                            @*@Html.DropDownListFor(model => model.BillParty, (IEnumerable<SelectListItem>)ViewBag.Customer, "--Select--", new { @class = "form-control", @id = "ddlCustomerName1", name = "ddlCustomerName1", autoComplete = "on" })*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Notify Consignee</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="text" class="form-control" id="ddlNConsignee" />
+                                            <input type="hidden" class="form-control" id="hdnNConsigneeID" />
+                                            @*@Html.DropDownListFor(model => model.BillParty, (IEnumerable<SelectListItem>)ViewBag.Customer, "--Select--", new { @class = "form-control", @id = "ddlCustomerName1", name = "ddlCustomerName1", autoComplete = "on" })*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            @*<div class="col-sm-12 col-lg-6">
+                                    <div class="form-group label-floating">
+                                        <label class="form-label">Notify Consignee</label>
+
+                                        @Html.DropDownList("ddlNConsignee", (IEnumerable<SelectListItem>)ViewBag.NConIGMList, "--Select--", new { @class = "form-control", @id = "ddlNConsignee", name = "ddlNConsignee", autocomplete = "off" })
+
+                                    </div>
+                                </div>*@
+
+
+                            <div class="col-sm-12 col-lg-6">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">Consignee Address</label>
+                                    @Html.TextArea("txtConsigneeAddress", null, new { @class = "form-control", @id = "txtConsigneeAddress", name = "txtConsigneeAddress", autocomplete = "off", rows = "1", @maxlength = 500 })
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-lg-6">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">Notify Consignee Address</label>
+                                    @Html.TextArea("txtNConsigneeAddress", null, new { @class = "form-control", @id = "txtNConsigneeAddress", name = "txtNConsigneeAddress", autocomplete = "off", rows = "1", @maxlength = 500 })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="display:none">
+                            <div class="col-sm-12 col-lg-6">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">Cargo Description</label>
+                                    @Html.TextArea("txtCargoDesc", null, new { @class = "form-control", @id = "txtCargoDesc", name = "txtCargoDesc", autocomplete = "off", rows = "1", @maxlength = 1000 })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">POL</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="text" class="form-control" id="ddlPOL" />
+                                            <input type="hidden" class="form-control" id="hdnPOLID" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Total Pkgs</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtTotalPkgs", null, new { @class = "form-control", @id = "txtTotalPkgs", name = "txtTotalPkgs", autocomplete = "off", placeholder = "Total Pkgs" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-lg-3" style="display:none">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">Pkg Type</label>
+                                    @*@Html.TextBox("txtOrigin", null, new { @class = "form-control", @id = "txtOrigin", name = "txtOrigin", autocomplete = "off", rows = "2", @maxlength = 500 })*@
+                                    @Html.DropDownList("ddlPkgType", (IEnumerable<SelectListItem>)ViewBag.PackageIGMList, "--Select--", new { @class = "form-select", @id = "ddlPkgType", name = "ddlPkgType", autocomplete = "off" })
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Total Weight</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtTotalWeight", null, new { @class = "form-control", @id = "txtTotalWeight", name = "txtTotalWeight", autocomplete = "off", placeholder = "Total Weight" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Remarks</label>
+
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="text" placeholder="Remarks" class="form-control" id="txtRemarks" />
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group" style="padding-top:25px">
+                                    @*<label class="form-label" style="visibility:hidden">.</label>
+                                        onclick="OnSaveClick()"
+
+                                    *@
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <button class="btn btn-submit px-4" type="button" style="display:none" id="btnSave" name="Save" onclick="OnSaveClick()">Save</button>
+                                            <button class="btn btn-save px-4" type="button" style="display:none" id="btnUpdate" name="Update" onclick="OnSaveClick()">Update</button>
+                                            <button class="btn btn-cancel" type="button" id="btnClear" name="Clear" onclick="Clear()">Clear</button>
+                                            <label id="lblJONo" style="display:none"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var pkgTypeList = [];
+
+    @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.PackageIGMList)
+    {
+        <text>
+            pkgTypeList.push({
+                value: '@item.Value',
+                text: '@item.Text'
+            });
+        </text>
+    }
+
+    function buildPkgTypeDropdown(selectedValue) {
+        var html = '<select class="form-select ddlPkgType">';
+        html += '<option value="">--Select--</option>';
+
+        $.each(pkgTypeList, function (i, item) {
+            var selected = (item.value == selectedValue) ? 'selected' : '';
+            html += '<option value="' + item.value + '" ' + selected + '>' + item.text + '</option>';
+        });
+
+        html += '</select>';
+        return html;
+    }
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#tblIGMDets').dataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+            "bPaginate": false,
+            // "bFilter": false,
+            "paging": false,
+            "order": [],
+            "aoColumnDefs": [
+                {
+                    'bSortable': false,
+                    'aTargets': [0],
+                },
+
+            ],
+            "aoColumnDefs": [
+                {
+                    'bSortable': false,
+                    'aTargets': [1],
+                },
+            ]
+        })
+        $('#tblContainerDets').dataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+            "bPaginate": false,
+            // "bFilter": false,
+            "paging": false,
+            "order": [],
+            "aoColumnDefs": [
+                {
+                    'bSortable': false,
+                    'aTargets': [0],
+                },
+
+            ]
+        })
+    });
+    function OnSearchChange() {
+        var ddlSearch = $("#ddlSearch").val();
+
+        $("#txtIGMNo").val("");
+        $("#txtItemNo").val("");
+        $("#txtContainerNo").val("");
+        $("#txtViaNo").val("");
+
+        if (ddlSearch != "") {
+
+            if (ddlSearch == "IGM-Item No") {
+                $("#divIGMNo").show();
+                $("#divItemNo").show();
+                $("#divContainerNo").hide();
+                $("#divViaNo").hide();
+            }
+            else if (ddlSearch == "Container No") {
+                $("#divIGMNo").hide();
+                $("#divItemNo").hide();
+                $("#divContainerNo").show();
+                $("#divViaNo").hide();
+            }
+            else if (ddlSearch == "Via No") {
+                $("#divIGMNo").hide();
+                $("#divItemNo").hide();
+                $("#divContainerNo").hide();
+
+                // Update label and placeholder for Via No
+                $("#lblViaNo").text("Via No");
+                $("#txtViaNo").attr("placeholder", "Via No");
+
+                $("#divViaNo").show();
+            }
+            else if (ddlSearch == "BLNumber") {
+                $("#divIGMNo").hide();
+                $("#divItemNo").hide();
+                $("#divContainerNo").hide();
+
+                // Change the same field to BL Number
+                $("#lblViaNo").text("BL Number");
+                $("#txtViaNo").attr("placeholder", "BL Number");
+
+                $("#divViaNo").show();
+            }
+        }
+        else {
+            $("#divIGMNo").hide();
+            $("#divItemNo").hide();
+            $("#divContainerNo").hide();
+            $("#divViaNo").hide();
+        }
+    }
+
+    $("#ddlConsignee").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/BookingEntry/getAutoImporterName",
+                data: "{ 'prefixText': '" + request.term + "'}",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //debugger;
+                    response($.map(data, function (item) {
+                        //debugger;
+                        return {
+                            label: item.ImporterName,
+                            val: item.ImporterID,
+                            label1: item.ImporterAddress
+
+                        };
+                    }))
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            })
+        },
+        select: function (e, i) {
+            //debugger;
+            $("#ddlConsignee").val(i.item.label);
+            $("#hdnConsigneeID").val(i.item.val);
+            //$("#ddlNConsignee").val(i.item.label);
+            //$("#hdnNConsigneeID").val(i.item.val);
+            $("#txtConsigneeAddress").val(i.item.label1);
+            //$("#txtNConsigneeAddress").val(i.item.label1);
+        },
+        minLength: 1
+    });
+
+    $("#ddlNConsignee").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/BookingEntry/getAutoImporterName",
+                data: "{ 'prefixText': '" + request.term + "'}",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //debugger;
+                    response($.map(data, function (item) {
+                        //debugger;
+                        return {
+                            label: item.ImporterName,
+                            val: item.ImporterID,
+                            label1: item.ImporterAddress
+                        };
+                    }))
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            })
+        },
+        select: function (e, i) {
+            //debugger;
+            //$("#ddlConsignee").val(i.item.label);
+            //$("#hdnConsigneeID").val(i.item.val);
+            $("#ddlNConsignee").val(i.item.label);
+            $("#hdnNConsigneeID").val(i.item.val);
+            //$("#txtConsigneeAddress").val(i.item.label1);
+            $("#txtNConsigneeAddress").val(i.item.label1);
+        },
+        minLength: 1
+    });
+
+    $("#ddlPOL").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/BookingEntry/getAutoPOD",
+                data: "{ 'prefixText': '" + request.term + "'}",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //debugger;
+                    response($.map(data, function (item) {
+                        //debugger;
+                        return {
+                            label: item.PODName,
+                            val: item.PODName
+                        };
+                    }))
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            })
+        },
+        select: function (e, i) {
+            //debugger;
+            $("#ddlPOL").val(i.item.label);
+            $("#hdnPOLID").val(i.item.val);
+        },
+        minLength: 1
+    });
+
+    function OnSearchClick() {
+        var ddlSearch = $("#ddlSearch").val();
+        var txtIGMNo = $("#txtIGMNo").val();
+        var txtItemNo = $("#txtItemNo").val();
+        var txtContainerNo = $("#txtContainerNo").val();
+        var txtViaNo = $("#txtViaNo").val();
+
+        if (ddlSearch == "") {
+            alert('Please enter any one search criteria and then proceed...')
+            return false;
+        }
+        if (ddlSearch == "IGM-Item No") {
+            if (txtIGMNo == "") {
+                alert('Please enter IGM No')
+                $("#txtIGMNo").focus();
+                return false;
+            }
+            if (txtItemNo == "") {
+                alert('Please enter Item No');
+                $("#txtItemNo").focus();
+                return false;
+            }
+        }
+        else if (ddlSearch == "Container No") {
+            if (txtContainerNo == "") {
+                alert('Please enter Container No')
+                $("#txtContainerNo").focus();
+                return false;
+            }
+            if (txtContainerNo.length != "11") {
+                alert('Please enter valid Container No')
+                $("#txtContainerNo").focus();
+                return false;
+            }
+        }
+        else if (ddlSearch == "Via No") {
+            if (txtViaNo == "") {
+                alert('Please enter required field')
+                $("#txtViaNo").focus();
+                return false;
+            }
+        }
+
+        var data1 = { 'Search': ddlSearch, 'IGMNo': txtIGMNo, 'ItemNo': txtItemNo, 'ContainerNo': txtContainerNo, 'ViaNo': txtViaNo };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            url: "/BookingEntry/getSearchIGMManual",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            // dataType: "json",
+            success: function (data) {
+                $('#tblIGMDets').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "aaData": data,
+                    "paging": false,
+                    "order": [],
+                    "aoColumnDefs": [
+                        {
+                            'bSortable': false,
+                            'aTargets': [0],
+                        },
+                        {
+                            'bSortable': false,
+                            'aTargets': [1],
+                        },
+
+                    ],
+                    "columns": [
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<a href=\"#\" class=\"" + row.BtnDeleteCss + "\" title=\"Delete\" onclick=\"DeleteIGM('" + row.EntryID  + "')\">Delete</a>";
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<a href=\"#\" class=\"" + row.BtnEditCss + "\" title=\"Edit\" onclick=\"EditIGM('" + row.IGMNo + "','" + row.ItemNo + "','" + row.JONo + "')\">Edit</a>";
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<a href=\"#\" class=\"" + row.BtnAddCss + "\" title=\"Add\" onclick=\"AddIGM('" + row.JONo + "')\">Add</a>";
+                                return data;
+                            }
+                        },
+                        { "data": "ContainerNo" },
+                        { "data": "Size" },
+                        { "data": "ContainerType" },
+                        { "data": "JONo" },
+                        { "data": "JODate" },
+                        { "data": "IGMNo" },
+                        { "data": "ItemNo" },
+                        { "data": "LineName" }
+                    ]
+                })
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        })
+    }
+
+
+    function DeleteIGM(EntryID) {
+        var data1 = { 'EntryID': EntryID};
+        //var data1 = { 'IGMNo': IGMNo, 'ItemNo': ItemNo, 'JONo': JONo };
+        var data = JSON.stringify(data1);
+        var cmf = confirm("Do you want to cancel this IGM Entry?");
+
+        if (cmf) {
+            //alert("Do you want to cancel this WorkOrder no " + GPNO + " ?");
+            $.ajax({
+                url: "/BookingEntry/CancelIGMEntry",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    alert("Record Cancelled successfully!");
+                    //window.location.reload();
+                    OnSearchClick();
+                    //Search();
+                },
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                }
+            });
+        } else {
+            alert("You pressed No!");
+            return false;
+        }
+    }
+
+    function EditIGM(IGMNo, ItemNo,JONo) {
+        $("#divIGMEntry").show();
+        $("#divSearchIGM").hide();
+        $("#btnSave").hide();
+        $("#btnUpdate").show();
+
+        $("#hdnIGMMode").val("EDIT");
+
+        var data1 = { 'IGMNo': IGMNo, 'ItemNo': ItemNo, 'JONo': JONo };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            url: "/BookingEntry/getEditIGMNoDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            // dataType: "json",
+            success: function (response) {
+                console.log(response);
+                $("#txtIGMNoAdd").val(response.IGMNo);
+                $("#txtItemNoAdd").val(response.ItemNo);
+                $("#txtBLNo").val(response.IGM_BLNo);
+                $("#txtBLDate").val(response.IGM_BLDate);
+                $("#ddlConsignee").val(response.Consignee);
+                $("#txtConsigneeAddress").val(response.Con_IGMAddress);
+                $("#ddlNConsignee").val(response.NConsignee);
+                $("#txtNConsigneeAddress").val(response.NCon_IGMAddress);
+                $("#txtCargoDesc").val(response.IGM_GoodsDesc);
+                $("#txtTotalPkgs").val(response.TotIGMQty);
+                $("#ddlPOL").val(response.POL);
+                $("#txtRemarks").val(response.Remarks);
+
+                //$("#txtBOENo").val(response.BOENo);
+                //$("#txtBOEDate").val(response.BOEDate);
+                //$("#txtValidDate").val(response.ValidDate);
+                //$("#ddlCHA").val(response.CHAName);
+                //$("#ddlDeliveryType").val(response.DeliveryType);
+                //$("#ddlRMS").val(response.RMS);
+                //$("#ddlScanType").val(response.scanType);
+
+                document.getElementById('lblJONo').value = response.JONo;
+                console.log("JONo:", response.JONo);
+                if (response.PKGType == "0") {
+                    $("#ddlPkgType").val("");
+                }
+                else {
+                    $("#ddlPkgType").val(response.PKGType);
+                }
+                $("#txtTotalWeight").val(response.TotIGMWt);
+
+                $('#tblContainerDets').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "aaData": response.ConDetailsIGMManualEntities,
+                    "paging": false,
+                    "order": [],
+                    "aoColumnDefs": [
+                        {
+                            'bSortable': false,
+                            'aTargets': [0],
+                        },
+                    ],
+                    "columns": [
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<input type=\"checkbox\" class=\"checkbox origin\" id=\"chkContainerCheck\" checked=\"checked\" value=\"'" + row.ContainerNo + "'\" \>";
+                                return data;
+                            }
+                        },
+                        { "data": "ContainerNo" },
+                        { "data": "Size" },
+                        { "data": "ContainerType" },
+                        { "data": "Cargotype" },
+                        { "data": "InDate" },
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<input type=\"text\" class=\"form-control\" id=\"txtSealNo\" Value=\"" + row.SealNo + "\" />";
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<input type=\"text\" class=\"form-control\" id=\"txtIGMQty\" onchange=\"OnQtyChange()\" Value=\"" + row.IGMQty + "\" />";
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<input type=\"text\" class=\"form-control\" id=\"txtIGMWt\" onchange=\"OnQtyChange()\" Value=\"" + row.IGMWt + "\" />";
+
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<input type=\"text\" class=\"form-control\" id=\"txtCargoDesc\" Value=\"" + row.IGM_GoodsDesc + "\" />";
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "PackType", 
+                            "render": function (data, type, row, meta) {
+                                return buildPkgTypeDropdown(row.PackType);
+                            }
+                        },
+                        //{ "data": "EntryID" }
+                        {
+                            data: "EntryID",
+                            render: function (data) {
+                                return "<input type='hidden' class='hdnEntryID' value='" + data + "' />";
+                            },
+                            visible: false
+                        }
+                    ]
+                })
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        })
+    }
+    function AddIGM(JONo) {
+        $("#divIGMEntry").show();
+        $("#divSearchIGM").hide();
+        $("#btnSave").hide();
+        $("#btnUpdate").text("Save").show();
+
+        $("#hdnIGMMode").val("ADD");
+
+        var data1 = { 'JONo': JONo };
+        var data = JSON.stringify(data1);
+        $("#lblJONo").val(JONo)
+
+        $.ajax({
+            url: "/BookingEntry/getAddIGMDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            // dataType: "json",
+            success: function (data) {
+                console.log(data);
+
+                data = JSON.parse(data);
+                $("#txtIGMNoAdd").val(data[0].IGMNo);
+                $("#txtBLNo").val(data[0].BLNumber);
+                $('#tblContainerDets').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "aaData": data,
+                    "paging": false,
+                    "order": [],
+                    "aoColumnDefs": [
+                        {
+                            'bSortable': false,
+                            'aTargets': [0],
+                        },
+
+                    ],
+                    "columns": [
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<input type=\"checkbox\" class=\"checkbox origin\" id=\"chkContainerCheck\" checked=\"checked\" Value=\"'" + row.ContainerNo + "'\" \>";
+                                return data;
+                            }
+                        },
+                        { "data": "ContainerNo" },
+                        { "data": "Size" },
+                        { "data": "ContainerType" },
+                        { "data": "Cargotype" },
+                        { "data": "InDate" },
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<input type=\"text\" class=\"form-control\" id=\"txtSealNo\" Value=\"" + row.SealNo + "\" />";
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<input type=\"text\" class=\"form-control\" id=\"txtIGMQty\" onchange=\"OnQtyChange()\" Value=\"" + row.IGMQty + "\" />";
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<input type=\"text\" class=\"form-control\" id=\"txtIGMWt\" onchange=\"OnQtyChange()\" Value=\"" + row.IGMWt + "\" />";
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+                                data = "<input type=\"text\" class=\"form-control\" id=\"txtCargoDesc\" Value=\"" + row.IGM_GoodsDesc + "\" />";
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "IGM_PackType",
+                            "render": function (data, type, row, meta) {
+                                return buildPkgTypeDropdown(row.IGM_PackType);
+                            }
+                        },
+                        {
+                            "data": null,
+                            "render": function () {
+                                return "<input type='hidden' class='hdnEntryID' value='0' />";
+                            },
+                            "visible": false
+                        }
+                    ]
+                })
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        })
+    }
+    function BackToSearch() {
+        Clear();
+        $("#divIGMEntry").hide();
+        $("#divSearchIGM").show();
+    }
+    function Clear() {
+        $("#txtIGMNoAdd").val("");
+        $("#txtItemNoAdd").val("");
+        $("#txtBLNo").val("");
+        $("#txtBLDate").val("");
+        $("#ddlConsignee").val("");
+        $("#txtConsigneeAddress").val("");
+        $("#ddlNConsignee").val("");
+        $("#txtNConsigneeAddress").val("");
+        $("#txtCargoDesc").val("");
+        $("#txtTotalPkgs").val("");
+        $("#txtTotalWeight").val("");
+        $("#ddlPkgType").val("");
+
+        var table = $('#tblContainerDets').DataTable();
+        table
+            .clear()
+            .draw();
+    }
+    function OnSaveClick() {
+        var res1 = validateSave();
+        if (res1 == false) {
+            return false;
+        }
+        var checkboxarray = [];
+        $('input[type=checkbox]').each(function () {
+            if (this.checked) {
+
+                checkboxarray.push($(this).val());
+            }
+        });
+        var tablearray = [];
+        var table = document.getElementById("tblContainerDets");
+        var row;
+        var TotalWeight = 0;
+        var TotalPKGS = 0;
+
+
+
+        if (table != null) {
+            for (var i = 1; i < table.rows.length; i++) {
+                row = table.rows[i];
+
+                for (var k = 0; k < checkboxarray.length; k++) {
+
+
+                    var ContainerNo = row.cells[0].childNodes[0].value;
+
+                    if (ContainerNo == checkboxarray[k]) {
+
+                        var ContainerNo1 = row.cells[1].innerText;
+                        var Size = row.cells[2].innerText;
+                        var ContainerType = row.cells[3].innerText;
+                        var Cargotype = row.cells[4].innerText;
+                        var InDate = row.cells[5].innerText;
+                        var SealNo = row.cells[6].childNodes[0].value;
+                        var IGMQty = row.cells[7].childNodes[0].value;
+                        var IGMWt = row.cells[8].childNodes[0].value;
+                        var CargoDesc = row.cells[9].childNodes[0].value;
+                        //var PkgType = row.cells[10].childNodes[0].value;
+                        var ddlPkg = row.cells[10].querySelector('select');
+                        var PackType = ddlPkg.options[ddlPkg.selectedIndex].text;
+                        var EntryID = 0;
+
+                        var hdn = row.querySelector('.hdnEntryID');
+                        if (hdn && hdn.value !== "") {
+                            EntryID = parseInt(hdn.value, 10);
+                        }
+
+                        console.log("EntryID:", EntryID);
+
+                        TotalWeight = parseFloat(TotalWeight) + parseFloat(IGMWt);
+                        TotalPKGS = parseFloat(TotalPKGS) + parseFloat(IGMQty);
+                        if ((parseFloat(IGMWt) < 0) || (parseFloat(IGMWt) == 0)) {
+                            alert("Invalid Weight")
+                            return false;
+                        }
+                        if (Size == "20") {
+                            if (parseFloat(IGMWt) > 40000) {
+                                alert("Invalid Weight")
+                                row.cells[8].childNodes[0].focus();
+                                return false;
+                            }
+                        }
+                        if ((Size == "40") || (Size == "45")) {
+                            if (parseFloat(IGMWt) > 45000) {
+                                alert("Invalid Weight")
+                                row.cells[8].childNodes[0].focus();
+                                return false;
+                            }
+                        }
+
+                        tablearray.push({ 'ContainerNo': ContainerNo1, 'Size': Size, 'ContainerType': ContainerType, 'Cargotype': Cargotype, 'InDate': InDate, 'SealNo': SealNo, 'IGMQty': IGMQty, 'IGMWt': IGMWt, 'IGM_GoodsDesc': CargoDesc, 'PackType': PackType, 'EntryID': EntryID })
+                    }
+                }
+            }
+        }
+
+        if (parseFloat(TotalWeight) > parseFloat($("#txtTotalWeight").val())) {
+            alert("Total Weight should not be smaller than Container Weight")
+            $("#txtTotalWeight").focus();
+            return false;
+        }
+        if (parseFloat(TotalPKGS) > parseFloat($("#txtTotalPkgs").val())) {
+            alert("Total Pkgs should not be smaller than Container Pkgs")
+            $("#txtTotalPkgs").focus();
+            return false;
+        }
+        if (tablearray.length == 0) {
+            alert("Please select Container(s) to proceed");
+            return false;
+        }
+        else {
+            var r = confirm("Do you want to save/update the details ?");
+            if (r == true) {
+                var data1 = { 'Containerdata': tablearray, 'IGMNo': $("#txtIGMNoAdd").val(), 'ItemNo': $("#txtItemNoAdd").val(), 'IGM_BLNo': $("#txtBLNo").val(), 'IGM_BLDate': $("#txtBLDate").val(), 'Consignee': $("#ddlConsignee").val(), 'Con_IGMAddress': $("#txtConsigneeAddress").val(), 'NConsignee': $("#ddlNConsignee").val(), 'NCon_IGMAddress': $("#txtNConsigneeAddress").val(), 'IGM_GoodsDesc': $("#txtCargoDesc").val(), 'TotIGMQty': $("#txtTotalPkgs").val(), 'PKGType': $("#ddlPkgType option:selected").text(), 'TotIGMWt': $("#txtTotalWeight").val(), 'JONo': document.getElementById('lblJONo').value, 'POL': $("#ddlPOL").val(), 'Mode': $("#hdnIGMMode").val(), 'Remark': $("#txtRemarks").val() };
+                var data = JSON.stringify(data1);
+
+                $.ajax({
+                    //url: "/BookingEntry/cc",
+                    url: "/BookingEntry/IGMManualSave",
+                    data: data,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        @*if (response == "1") {
+                            alert("Record saved successfully");
+                            document.location = '@Url.Action("IGMManual", "BookingEntry")';
+                        }
+                        else {
+                            alert("Record not saved successfully. Try Again!");
+                        }*@
+                        if (response === "INSERTED") {
+                            alert("Record Saved successfully");
+                            document.location = '@Url.Action("IGMManual", "BookingEntry")';
+                        }
+                        else if (response === "UPDATED") {
+                            alert("Record Updated Successfully");
+                            document.location = '@Url.Action("IGMManual", "BookingEntry")';
+                        }
+                        else if (response === "Duplicate container") {
+                            alert("Duplicate Container No found for same IGM No & Item No!");
+                        }
+                        else {
+                            alert("Record not saved successfully. Try Again!");
+                        }
+                    },
+                    error: function (errormessage) {
+                        alert("error");
+                        alert(errormessage.responseText);
+                    }
+                })
+            }
+        }
+    }
+    function validateSave() {
+        var txtIGMNoAdd = document.getElementById('txtIGMNoAdd').value;
+        var txtItemNoAdd = document.getElementById('txtItemNoAdd').value;
+        var txtBLNo = document.getElementById('txtBLNo').value;
+        var txtBLDate = document.getElementById('txtBLDate').value;
+        var ddlConsignee = document.getElementById('ddlConsignee').value;
+        var ddlNConsignee = document.getElementById('ddlNConsignee').value;
+        var txtTotalPkgs = document.getElementById('txtTotalPkgs').value;
+        var txtTotalWeight = document.getElementById('txtTotalWeight').value;
+        var POL = document.getElementById('ddlPOL').value;
+
+
+        var blResult = Boolean;
+        blResult = true;
+        document.getElementById('txtIGMNoAdd').style.borderColor = "Gainsboro";
+        document.getElementById('txtItemNoAdd').style.borderColor = "Gainsboro";
+        document.getElementById('txtBLNo').style.borderColor = "Gainsboro";
+        document.getElementById('txtBLDate').style.borderColor = "Gainsboro";
+        document.getElementById('ddlConsignee').style.borderColor = "Gainsboro";
+        document.getElementById('ddlNConsignee').style.borderColor = "Gainsboro";
+        document.getElementById('txtTotalPkgs').style.borderColor = "Gainsboro";
+        document.getElementById('txtTotalWeight').style.borderColor = "Gainsboro";
+        document.getElementById('ddlPOL').style.borderColor = "Gainsboro";
+
+
+
+        if (txtIGMNoAdd == "") {
+            document.getElementById('txtIGMNoAdd').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+        if (txtItemNoAdd == "") {
+            document.getElementById('txtItemNoAdd').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+        if (txtBLNo == "") {
+            document.getElementById('txtBLNo').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+        if (txtBLDate == "") {
+            document.getElementById('txtBLDate').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+        if (ddlConsignee == "") {
+            document.getElementById('ddlConsignee').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+        if (ddlNConsignee == "") {
+            document.getElementById('ddlNConsignee').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+        if (txtTotalPkgs == "") {
+            document.getElementById('txtTotalPkgs').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+        if (txtTotalWeight == "") {
+            document.getElementById('txtTotalWeight').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+        if (POL == "") {
+            document.getElementById('ddlPOL').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+        if (blResult == false) { alert('Please fill the required fields!'); }
+        return blResult;
+    }
+    function OnQtyChange() {
+        var checkboxarray = [];
+        $('input[type=checkbox]').each(function () {
+            if (this.checked) {
+
+                checkboxarray.push($(this).val());
+            }
+        });
+        var table = document.getElementById("tblContainerDets");
+        var TotalPKGS = 0;
+        var TotalWeight = 0;
+        if (table != null) {
+            if (table.rows.length > 1) {
+                for (var i = 1; i < table.rows.length; i++) {
+                    row = table.rows[i];
+                    for (var k = 0; k < checkboxarray.length; k++) {
+                        var ContainerNo = row.cells[0].childNodes[0].value;
+                        if (ContainerNo == checkboxarray[k]) {
+                            var IGMQty = row.cells[7].childNodes[0].value;
+                            var IGMWt = row.cells[8].childNodes[0].value;
+                            TotalWeight = parseFloat(TotalWeight) + parseFloat(IGMWt);
+                            TotalPKGS = parseFloat(TotalPKGS) + parseFloat(IGMQty);
+                        }
+                    }
+                }
+            }
+        }
+        $("#txtTotalPkgs").val(TotalPKGS)
+        $("#txtTotalWeight").val(TotalWeight)
+    }
+    $("#chkIsScan").click(function () {
+
+        var oTableStaticFlow = $('#tblContainerDets').DataTable();
+
+
+        var cells = oTableStaticFlow.column(0).nodes(), // Cells from 1st column
+            state = this.checked;
+
+        for (var i = 0; i < cells.length; i += 1) {
+            cells[i].querySelector("input[type='checkbox']").checked = state;
+        }
+    });
+
+
+</script>
+
+
+
+<script>
+
+
+    /*function ShowConIgm() {
+        $("#global-loader").fadeOut("slow");
+
+        var IGMNo = $("#txtIGMNoadd").val();
+        var ItemNo = $("#txtItemNoadd").val();
+        //var ContainerNo = $("#txtContainerNo").val();
+        var data1 = { 'IGMNo': IGMNo, 'ItemNo': ItemNo, 'ContainerNo': ContainerNo };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GetDetailsBOECon",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#txtBOENo").val(data[0].boeNO);
+
+                $("#example2").empty();
+                RepTableDataJsonwopaging($("#example2"), data, "Voucher Details", "VoucherDetails_List");
+
+
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }*/
+
+        function Save() {
+
+
+         debugger;
+         ///ddlentryType
+
+
+
+             var CHA = $("#ddlCHAId").val();
+            var BOENo = $("#txtBOENo").val();
+            var BOEDate = $("#txtBOEDate").val();
+            var ValidDate = $("#txtValidDate").val();
+            var CHAName = $("#ddlCHA").val();
+
+            var DeliveryType = $("#ddlDeliveryType").val();
+            var RMS = $("#ddlRMS").val();
+            var ScanType = $("#ddlScanType").val();
+            var Remarks = $("#txtRemarks").val();
+
+            if (CHAName == "") {
+                 alert("Please select CHA.");
+                 return false;
+            }
+            if (DeliveryType == "") {
+                alert("Please select  Delivery Type");
+                return false;
+            }
+            if (RMS == "") {
+                alert("Please select RMS.");
+                return false;
+            }
+            if (ScanType == "") {
+                alert("Please select Scan Type.");
+                return false;
+            }
+            var SelectedData = new Array();
+            var tablearray = new Array();
+
+            //var table = document.getElementById("tblContainerDets");
+
+            /*var row;
+            for (var i = 1; i < table.rows.length; i++) {
+
+                row = table.rows[i];
+                IgmNo = row.cells[0].innerText;
+                ItemNo = row.cells[1].innerText;
+                Jono = row.cells[2].innerText;
+                ContainerNo = row.cells[3].innerText;
+
+                Size = row.cells[4].innerText;
+                qty = row.cells[5].innerText;
+                Weight = row.cells[6].innerText;
+
+                SelectedData.push({
+                    'IgmNo': IgmNo, 'ItemNo': ItemNo, 'Jono': Jono, 'ContainerNo': ContainerNo,
+                    'Size': Size, 'qty': qty, 'Weight': Weight
+                })
+            }*/
+
+            var data1 = {
+                'Debitdata': SelectedData, 'CHA': CHA, 'BOENo': BOENo, 'BOEDate': BOEDate, 'ValidDate': ValidDate, 'DeliveryType': DeliveryType,
+                'RMS': RMS, 'ScanType': ScanType, 'Remarks': Remarks
+            };
+         var data = JSON.stringify(data1);
+
+                          $.ajax({
+                              url: "/BookingEntry/SaveBoeDetails",
+                            data: data,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                              success: function (data) {
+                                  //alert(data);
+                                  $('#btnSave').removeAttr('disabled', 'disabled');
+
+
+                                  alert(data);
+
+                          @*document.location = '@Url.Action("BOEDetailsUpdation", "BookingEntry")';*@
+
+
+                            },
+                            error: function (errormessage) {
+                                alert(errormessage.responseText);
+                            }
+                        });
+
+
+     }
+</script>
+<script>
+    $(document).ready(function () {
+        AutomCom();
+
+    });
+
+
+    function AutomCom() {
+        debugger;
+
+        $("#ddlCHA").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/BookingEntry/getCHAName",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.AGName,
+                                val: item.AGID,
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlCHA").val(i.item.label);
+                $("#ddlCHAId").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+    };
+</script>
+

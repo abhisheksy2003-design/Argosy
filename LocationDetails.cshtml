@@ -1,0 +1,692 @@
+﻿@* Note: hdCopyId hidden field for add or modify address against location id hdCopyId=1 then add address else modify address *@
+<div>
+    <style>
+
+        .mandatory {
+            color: #5ED84F !important;
+            display: block;
+            margin-bottom: .375rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+    </style>
+    <style>
+        .table thead th, .text-wrap table thead th {
+            background-color: #151517b5;
+            color: white;
+        }
+
+        table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+            color: black;
+            font-weight: 900 !important;
+            font-size: 15px !important;
+        }
+    </style>
+    @*<div class=" content-area overflow-hidden">*@
+    <div class="page-header">
+        <h4 class="page-title"> Add GST/Location for: @ViewBag.Name</h4> <label id="lblCommonID" style="display:none"> @ViewBag.CommonID</label> <label id="lblName" style="display:none"> @ViewBag.Name</label>
+        <ol class="breadcrumb"  style="background-color: #FAFBFE">
+
+            <li class="breadcrumb-item"><a onclick="getBack();" class="btn btn-added p-3 me-2" style="color:white;align-content:center;"><i class="fa fa-arrow-left" data-placement="bottom" title="Back"></i>  </a></li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="card-body">
+                            <div class="btn-list">
+                                @foreach (var d in ViewBag.CustomerLocationList as List<MvcBondEntities.BusinessEntities.Ext_location_Master>)
+                                {
+                                    <a href="#" onclick="getLocationWiseData(@d.LocationID,@d.GSTID)" class="btn btn-outline-primary btn-default me-2">@d.Location</a>
+                                    <input type="hidden" value="@d.LocationID" class="locationClass" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    @*</div>*@
+                    <div class="row p-2">
+                        <div class="col-md-3 col-lg-4">
+                            <div class="form-group label-floating">
+                                <label class="form-label"> Type of Registration </label>
+                                @Html.DropDownList("ddlRegisterType", (IEnumerable<SelectListItem>)ViewBag.RegTypeList, "--Select--", new { @class = "form-select form-s-electlg", @id = "ddlRegisterType", name = "ddlRegisterType", autocomplete = "off" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-lg-4">
+                            <div class="form-group label-floating">
+                                <label class="form-label"> GST NO</label>
+                                @Html.TextBox("txtGSTNo", null, new { @class = "form-control", @id = "txtGSTNo", name = "txtGSTNo", autocomplete = "off", @maxlength = 15, onblur = "getStateCode()" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-4">
+                            <div class="form-group label-floating">
+                                <label class="form-label"> PAN No</label>
+                                @Html.TextBox("txtPANNo", null, new { @class = "form-control", @id = "txtPANNo", name = "txtPANNo", autocomplete = "off", @maxlength = 50 })
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-md-2 col-lg-4" id="divddlLocation">
+                            <div class="form-group label-floating">
+                                <label class="form-label"> Location</label>
+                                @Html.DropDownList("ddlLocation", (IEnumerable<SelectListItem>)ViewBag.LocationList, "--Select--", new { @class = "form-select form-select", @id = "ddlLocation", name = "ddlLocation", autocomplete = "off", onchange = "getLocationValidation()" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 col-lg-3">
+                            <div class="form-group label-floating">
+                                <label class="form-label"> GST Registration Date</label>
+                                @Html.TextBox("datePicker1", null, new { @class = "form-control form_datetime1", @*@id = "datePicker1",*@ autocomplete = "off" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 col-lg-2">
+                            <div class="form-group label-floating">
+                                <label class="form-label"> State</label>
+                                @Html.TextBox("txtState", null, new { @class = "form-control", @id = "txtState", name = "txtState", autocomplete = "off", @maxlength = 400, @Readonly = "readonly", tabindex = "-1" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-1">
+                            <div class="form-group label-floating">
+                                <label class="form-label"> Code</label>
+                                @Html.TextBox("txtCode", null, new { @class = "form-control", @id = "txtCode", name = "txtCode", autocomplete = "off", @maxlength = 400, @Readonly = "readonly", tabindex = "-1" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2">
+                            <div class="form-group label-floating">
+                                <label class="form-label">Pin Code</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("ddlPinCode", null, new { @class = "form-control", @id = "ddlPinCode", name = "ddlPinCode", autocomplete = "off", @maxlength = 6, tabindex = "-1" })
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-lg-12">
+                            <div class="form-group label-floating">
+                                <label class="form-label">Address</label>
+                                @Html.TextArea("txtAddress", null, new { @class = "form-control", @id = "txtAddress", name = "txtAddress", autocomplete = "off", rows = "2", @maxlength = 500 })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-lg-6">
+                            <div class="form-group label-floating">
+                                <label class="form-label"> Email ID</label>
+                                @Html.TextBox("txtEmail", null, new { @class = "form-control", @id = "txtEmail", name = "txtEmail", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-6">
+                            <div class="form-group label-floating">
+                                <label class="form-label"> Contact No</label>
+                                @Html.TextBox("txtContact", null, new { @class = "form-control", @id = "txtContact", name = "txtContact", autocomplete = "off" })
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-2 col-xs-12">
+                            <div class="form-group label-floating" style="padding-top:30px">
+                                @*<label class="custom-control custom-checkbox"></label>*@
+                                @*@Html.EditorFor(model => model.IsScan, new { htmlAttributes = new { @class = "custom-control-input", @id = "IsScan", name = "IsScan", placeholder = "IsScan", autocomplete = "off", type = "checkbox",onchange="OnIsScanChange()" } })*@
+                                <input type="checkbox" class="checkbox origin" name="checklist[]" id="chkIsActive">
+                                <span>Is Active?</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="btn-list text-center">
+                        <div class="col ">
+                            <div class=" btn-list col-12">
+                                <button class="btn btn-save px-4" type="button" id="Save" onclick="Save();" name="Save">Save</button>
+                                <button class="btn btn-cancel px-4" type="button" id="Save" onclick="New();" name="New">Clear</button>
+                               @* <button class="btn btn-info  pull-right me-2" type="button" id="Save" onclick="Copy();" name="New">Make Copy</button>*@
+                                @Html.Hidden("hdCopyId", null, new { @class = "form-control", @id = "hdCopyId", name = "hdCopyId", autocomplete = "off" })
+                                @Html.Hidden("hdGSTID", null, new { @class = "form-control", @id = "hdGSTID", name = "hdGSTID", autocomplete = "off" })
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--End of save button-->
+                </div>
+                <!-- table-wrapper -->
+            </div>
+            <!-- section-wrapper -->
+        </div>
+    </div>
+    </div>
+
+
+
+
+<script>
+
+
+    function getLocationValidation()
+    {
+        var locationID = $("#ddlLocation").val();
+        var id = document.getElementsByClassName("locationClass");
+        var i = 0;
+        while (i <= id.length) {
+            if (id[i].value == locationID)
+            {
+                alert("Location details already exist.")
+            }
+           // alert(id[i].value);
+            i++;
+        }
+    }
+
+    function getStateCode() {
+        debugger;
+        var gstNO = $("#txtGSTNo").val();
+        if (gstNO != "")
+        {
+
+        if (gstNO.length != 15) {
+            alert("Please check GST NO");
+        }
+        else {
+            var gst = gstNO;
+            var str1 = gst.substring(0, gst.length - 3);
+            var str2 = str1.substring(2);
+            $("#txtPANNo").val(str2);
+            //alert(str1);
+            //alert(str2);
+
+
+            var str = gstNO.substring(0, 2)
+
+            var data1 = { 'GSTNO': str };
+        var data = JSON.stringify(data1);
+
+
+        //alert(data);
+         $.ajax({
+             url: "/Master/getStateCode",
+                    data: data,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+             success: function (response) {
+
+                 //alert(JSON.stringify(response));
+                 $("#txtState").val(response[0].State);
+                 $("#txtCode").val(response[0].State_Code);
+                 //getpincode(response[0].State_ID);
+                    },
+                    error: function (errormessage) {
+                        alert("error");
+                        alert(errormessage.responseText);
+                    }
+                });
+
+        }
+        }
+    }
+
+    //function getpincode(State_ID) {
+    //    debugger
+    //    var data1 = { 'State_ID': State_ID };
+    //    var data = JSON.stringify(data1);
+    //    $.ajax({
+    //        url: "/Master/getpincode",
+    //        type: 'Post',
+    //        data: data,
+    //        async: false,
+    //        contentType: 'application/json; charset=utf-8',
+    //        success: function (response) {
+    //            var select = $("#ddlPinCode");
+    //            select.empty();
+    //            select.append($('<option/>', {
+    //                value: "",
+
+    //            }));
+    //            debugger;
+    //            $.each(response, function (data, value) {
+    //                debugger;
+    //                select.append($("<option></option>").val(value.PINCODE).html(value.PINCODE));
+    //            })
+    //        },
+    //        failure: function (response) {
+    //            alert(response);
+    //            alert(response.responseText);
+    //        },
+    //        error: function (response) {
+    //            alert(response.responseText);
+    //        }
+    //    })
+    //}
+
+
+    function Save() {
+
+        var LocationDetails = {};
+        var res = Validation();
+      //  alert(res);
+        if (res == 0)
+        {
+            return false;
+        }
+        var ISActive = 0;
+        if ($("#chkIsActive").is(":checked")) {
+            ISActive = "1";
+
+        }
+        else {
+            ISActive = "0";
+
+        }
+        LocationDetails.Common_ID = $("#lblCommonID").text();
+        LocationDetails.Name = $("#lblName").text();
+        LocationDetails.GSTIn_uniqID = $("#txtGSTNo").val();
+        LocationDetails.TyepReg = $("#ddlRegisterType option:selected").text();
+        LocationDetails.RegDate = $("#datePicker1").val();
+        LocationDetails.PANNo = $("#txtPANNo").val();
+        LocationDetails.LocationID = $("#ddlLocation option:selected").val();
+       // LocationDetails.Country = $("#txtCountry").val().replace(/'/g, "''");
+        LocationDetails.State = $("#txtState").val();
+        LocationDetails.state_Code = $("#txtCode").val();
+        LocationDetails.GSTAddress = $("#txtAddress").val().replace(/'/g, "''");
+        LocationDetails.Emailid = $("#txtEmail").val().replace(/'/g, "''");
+        LocationDetails.MobNo = $("#txtContact").val().replace(/'/g, "''");
+        LocationDetails.IsCopy = $("#hdCopyId").val();
+        LocationDetails.GSTID = $("#hdGSTID").val();
+        LocationDetails.PINCODE = $("#ddlPinCode").val();
+        LocationDetails.ISActive = ISActive;
+
+        var data1 = {'LocationDetails': LocationDetails };
+        var data = JSON.stringify(data1);
+
+
+      //  alert(data);
+         $.ajax({
+             url: "/Master/SaveLocationDetails",
+                    data: data,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        alert("Record saved successfully")
+                        var result = confirm("Do you want to add another location on same GST?");
+                        if (result) {
+                            $("#txtAddress").val("");
+                            $("#ddlLocation").val("");
+                            $('#divddlLocation :input').attr('disabled', false);
+                            $("#ddlLocation").focus();
+                            $("#hdCopyId").val("");
+                            $("#hdGSTID").val("");
+                            $("#ddlPinCode").val("");
+                        }
+                        else {
+                            New();
+                        }
+
+                        //var id=$("#lblCommonID").text();
+                        //var name=$("#lblName").text();
+                        //LocationDetails(id,name)
+                      //  document.location = '@Url.Action("GlobalSearchSummary", "Master")';
+                    },
+                    error: function (errormessage) {
+                        alert("error");
+                        alert(errormessage.responseText);
+                    }
+                });
+
+
+
+    }
+
+    function New() {
+        $("#hdCopyId").val("");
+        $("#ddlRegisterType").focus();
+        $("#txtGSTNo").val("");
+        $("#ddlRegisterType").val("");
+
+        $("#datePicker1").val("");
+        $("#txtPANNo").val("");
+        $("#ddlLocation").val("");
+
+        $("#txtState").val("");
+        $("#txtCode").val("");
+        $("#txtAddress").val("");
+        $("#txtEmail").val("");
+        $("#txtContact").val("");
+        $("#hdGSTID").val("");
+        $("#ddlPinCode").val("");
+        $('#divddlLocation :input').attr('disabled', false);
+    }
+
+    function Copy() {
+        $("#hdCopyId").val("1");
+        var location = $("#ddlLocation option:selected").text();
+        var result = confirm("Do you want to copy " + location + " location?");
+        if (result) {
+            $("#hdGSTID").val("");
+            //$("#ddlLocation").val("");
+            $('#divddlLocation :input').attr('disabled', false);
+            //$("#ddlLocation").focus();
+        }
+        else {
+
+        }
+    }
+    $(document).ready(function () {
+
+
+        $(function () {
+
+
+            $('#datePicker1')
+                .datetimepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    format: 'dd M yyyy',
+                    language: "tr",
+                    changeMonth: true,
+                    changeYear: true,
+                })
+                .on('changeDate', function (e) {
+                    // Revalidate the date field
+                    // $('#eventForm').formValidation('revalidateField', 'date');
+                    $('.datepicker').hide();
+                });
+
+
+
+
+
+        });
+
+
+        Date.prototype.toShortFormat = function () {
+
+            var month_names = ["Jan", "Feb", "Mar",
+                "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep",
+                "Oct", "Nov", "Dec"];
+
+            var day = this.getDate();
+            var month_index = this.getMonth();
+            var year = this.getFullYear();
+
+            return "" + day + " " + month_names[month_index] + " " + year;
+        }
+
+
+        var today = new Date();
+        $("#datePicker1").val(today.toShortFormat());
+    });
+</script>
+<script>
+    function myRequiredValidation(TextField) {
+
+        // alert("#" + TextField);
+
+        if ($("#" + TextField).val() == "") {
+            $("#" + TextField).removeClass("form-control is-valid state-valid")
+            $("#" + TextField).addClass("form-control is-invalid state-invalid")
+            //  document.getElementById(TextField).style.borderColor = "red"
+        } else {
+            // alert("hi")
+            $("#" + TextField).removeClass("form-control is-invalid state-invalid")
+            $("#" + TextField).addClass("form-control is-valid state-valid")
+            // document.getElementById(TextField).style.borderColor = "Gainsboro"
+        }
+    };
+</script>
+<script>
+
+    function Validation() {
+
+        var ddlRegisterType = document.getElementById('ddlRegisterType').value;
+        var txtGSTNo = document.getElementById('txtGSTNo').value;
+        var datePicker1 = document.getElementById('datePicker1').value;
+        var txtPANNo = document.getElementById('txtPANNo').value;
+        var ddlLocation = document.getElementById('ddlLocation').value;
+        var txtState = document.getElementById('txtState').value;
+        var txtCode = document.getElementById('txtCode').value;
+        var txtAddress = document.getElementById('txtAddress').value;
+
+        var blResult = Boolean;
+        blResult = true;
+
+        if (ddlRegisterType == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#ddlRegisterType").removeClass("form-control is-valid state-valid")
+            $("#ddlRegisterType").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (txtGSTNo == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#txtGSTNo").removeClass("form-control is-valid state-valid")
+            $("#txtGSTNo").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (datePicker1 == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#datePicker1").removeClass("form-control is-valid state-valid")
+            $("#datePicker1").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+
+        if (txtPANNo == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#txtPANNo").removeClass("form-control is-valid state-valid")
+            $("#txtPANNo").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (ddlLocation == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#ddlLocation").removeClass("form-control is-valid state-valid")
+            $("#ddlLocation").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (txtState == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#txtState").removeClass("form-control is-valid state-valid")
+            $("#txtState").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (txtCode == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#txtCode").removeClass("form-control is-valid state-valid")
+            $("#txtCode").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (txtAddress == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#txtAddress").removeClass("form-control is-valid state-valid")
+            $("#txtAddress").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (blResult == false) { alert('Please fill the required fields!'); }
+        return blResult;
+
+        //$('#btnRemoveCSS').click(function () {
+
+    }
+</script>
+
+<script>
+
+    function getBack() {
+        // alert("hi")
+        $("#divSummary").show()
+        $('#divUpdateCustomerData').hide()
+
+    }
+</script>
+<script>
+    $("#emailID").on("blur", function () {
+        isEmail($("#emailID").val());
+
+    });
+    function isEmail(email) {
+        var regex = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+        var res1 = regex.test(email);
+        $("#emailID").removeClass();
+        if (email == "") {
+            alert('Please Enter Email Id!');
+            $("#emailID").addClass("form-control is-invalid state-invalid")
+            // document.getElementById('email').value = ""
+            return false;
+        }
+        if (res1 == false) {
+            alert('Please Enter valid Email Id!');
+            $("#emailID").addClass("form-control is-invalid state-invalid")
+            //  document.getElementById('Email').value = ""
+            return res1;
+        }
+        else {
+
+            $("#emailID").addClass("form-control is-valid state-valid")
+        }
+    }
+
+    function isNumber(contactID, contactNO) {
+        console.log(contactNO)
+        var regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+        var res2 = regex.test(parseInt(contactNO));
+        $(contactID).removeClass();
+        if (contactNO == "") {
+            $(contactID).addClass("form-control is-invalid state-invalid")
+            alert('Please Enter valid Contact Number!');
+        }
+        if (res2 == false) {
+            $(contactID).addClass("form-control is-invalid state-invalid")
+            alert('Please Enter valid Contact Number!');
+        }
+        else {
+            $(contactID).addClass("form-control is-valid state-valid")
+        }
+    }
+
+    function numericOnly(element, e) {
+        console.log(e.keyCode)
+        // Allow: backspace, delete, tab, escape, enter and . - , ;
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190, 45, 44, 59, 189, 109, 188, 186]) !== -1 ||
+            // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+            // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            console.log(e.keyCode)
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+
+    }
+</script>
+<script>
+    function getLocationWiseData(LocationID, GSTID) {
+
+
+        var Common_ID = $("#lblCommonID").text();
+        var data = JSON.stringify({
+            'id': LocationID,
+            'Common_ID': Common_ID,
+            'GSTID': GSTID
+        });
+        $.ajax({
+            url: "/Master/GetLocationWiseData",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#txtGSTNo").val(data.GSTIn_uniqID);
+                $("#ddlRegisterType").val(data.RGID);
+                $("#datePicker1").val(data.GSTregDate);
+                $("#txtPANNo").val(data.PANNo);
+                $("#ddlLocation").val(data.LocationID);
+                // LocationDetails.Country = $("#txtCountry").val().replace(/'/g, "''");
+                $("#txtState").val(data.State);
+                $("#txtCode").val(data.state_Code);
+                $("#txtAddress").val(data.GSTAddress);
+                $("#txtEmail").val(data.Emailid);
+                $("#txtContact").val(data.MobNo);
+                $("#txtContact").val(data.MobNo);
+                $("#hdGSTID").val(data.GSTID);
+                $("#ddlPinCode").val(data.PINCODE);
+                $("#chkIsActive").val(data.ISActive);
+                ///getpincode(data.State_ID);
+                $("#hdCopyId").val("");
+
+                $('#divddlLocation :input').attr('disabled', true);
+                $("#txtGSTNo").removeClass("form-control is-invalid state-invalid")
+                $("#txtGSTNo").addClass("form-control")
+                $("#ddlRegisterType").removeClass("form-control is-invalid state-invalid")
+                $("#ddlRegisterType").addClass("form-control")
+                $("#datePicker1").removeClass("form-control is-invalid state-invalid")
+                $("#datePicker1").addClass("form-control")
+                $("#txtPANNo").removeClass("form-control is-invalid state-invalid")
+                $("#txtPANNo").addClass("form-control")
+                $("#ddlLocation").removeClass("form-control is-invalid state-invalid")
+                $("#ddlLocation").addClass("form-control")
+                $("#txtState").removeClass("form-control is-invalid state-invalid")
+                $("#txtState").addClass("form-control")
+                $("#txtCode").removeClass("form-control is-invalid state-invalid")
+                $("#txtCode").addClass("form-control")
+                $("#txtAddress").removeClass("form-control is-invalid state-invalid")
+                $("#txtAddress").addClass("form-control")
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+
+
+    }
+
+    //function Save() {
+    //    debugger;
+
+    //    var State = $("#txtState").val();
+    //    var PinCode = $("#ddlPinCode").val();
+    //    var data1 = { 'State': State, 'PinCode': PinCode };
+    //    var data = JSON.stringify(data1);
+    //    $.ajax({
+    //        url: '/Master/WithReason',
+    //        type: 'Post',
+    //        data: data,
+    //        contentType: 'application/json; charset=utf-8',
+    //        success: function (data) {
+    //            if (data != "") {
+    //                alert(data);
+    //                return false;
+    //            }
+    //            else {
+    //                CheckVelid();
+    //            }
+    //        },
+    //        error: function (errormessage) {
+    //            alert(errormessage.responseText);
+    //            $("#global-loader").fadeOut("slow");
+    //        }
+    //    });
+
+    //}
+</script>

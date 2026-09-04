@@ -1,0 +1,446 @@
+﻿
+@{
+    ViewBag.Title = "ExportAccountMaster";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+
+
+<script src="~/js/GetTableJson.js"></script>
+<div class=" content-area overflow-hidden" id="divCreate">
+     
+    <div class="page-header" >
+        <h4 class="page-title">
+            Export Account Master
+        </h4>
+
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="OpenWOSummary();"   data-modal="modal-13">
+                Summary
+            </button>
+        </div>
+    </div>
+    <div class="row"  >
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Account-ID </label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtentryid" type="text" placeholder="New" readonly="readonly" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-4">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Account Name</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtacname" type="text" placeholder="Account Name" class="form-control" autocomplete="off" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-4">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Tally Name</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txttallyname" type="text" placeholder="Tally Name" class="form-control" autocomplete="off" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Group Name</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.DropDownList("ddlimportg", (IEnumerable<SelectListItem>)ViewBag.importg, "--Select--", new { @class = "form-select", @id = "importg", name = "importg", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">SAC/HSN Code</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.DropDownList("ddlHSNDDL", (IEnumerable<SelectListItem>)ViewBag.HSNDDList, "--Select--", new { @class = "form-select", @id = "ddlHSNDDL", name = "ddlHSNDDL", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                    <div class="row" style="display:none">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Display Priority</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <select class="form-control form-control-lg" id="ddldp">
+                                            <option value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Invoice Type</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.DropDownList("ddlExpensesgroup", (IEnumerable<SelectListItem>)ViewBag.InvoiceDDL, "--Select--", new { @class = "form-select", @id = "dllinvtype", name = "ddlExpensesgroup", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Tax Code</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.DropDownList("ddltax", (IEnumerable<SelectListItem>)ViewBag.TaxName, "--Select--", new { @class = "form-select", @id = "ddltax", name = "ddltax", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <label class="custom-switch">
+                                    <input type="checkbox" name="custom-switch-checkbox" id="chkIsActive" value="true" checked class="custom-switch-input">
+                                    <span class="custom-switch-indicator"></span>
+                                    <span class="custom-switch-description">IsActive</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="form-label"></label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <button id="btnSave" class="btn btn-save px-4" onclick="return Save();"> Save</button>
+                                    <button class="btn btn-cancel px-4" type="button" onclick="window.location.reload();">
+                                        Clear
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" content-area" id="divCreateSummary" style="display:none">
+    
+    <div class="page-header">
+        <h4 class="page-title">
+            Export Account Master List
+        </h4>
+
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="BackToWorkOrder();" data-modal="modal-13">
+                Add
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Search</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                            @Html.TextBox("txtsearch", null, new { @class = "form-control ", @id = "txtsearch", name = "txtsearch", autocomplete = "on" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <button class="btn btn-filters me-2" id="TripSearch" type="button" onclick="ShowSSRSummary()"><img src="~/assets/images/icons/search-whites.svg" alt="img"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.ActionLink("Export To Excel", "ExportToExcelImportAccountMaster", null, new { @class = "btn btn-success btn-md" })
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblWorkOrderOpenList" style="width:100%;"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+        function BackToWorkOrder() {
+            $("#divCreate").show();
+            $("#divCreateSummary").hide();
+        }
+        function OpenWOSummary() {
+            $("#divCreate").hide();
+            $("#divCreateSummary").show();
+        }
+
+    function Save() {
+
+
+        var r = confirm("Do you want to save?");
+        if (r == true) {
+
+
+            var ACname = document.getElementById('txtacname').value;
+         var tallyname = document.getElementById('txttallyname').value;
+         var importgroup = document.getElementById('importg').value;
+
+         var hsncode = document.getElementById('ddlHSNDDL').value;
+
+         var dp = document.getElementById('ddldp').value;
+
+         var invtype = document.getElementById('dllinvtype').value;
+         var tax = document.getElementById('ddltax').value
+         var EntryID = document.getElementById('txtentryid').value
+
+
+         var chkIsActive = document.getElementById('chkIsActive').value;
+
+
+
+         if (ACname == "") {
+             document.getElementById("txtacname").style.borderColor = "red";
+            alert('Please  Enter  Account  Name!')
+            event.preventDefault();
+            return;
+         }
+         if (tallyname == "") {
+             document.getElementById("txttallyname").style.borderColor = "red";
+             alert('Please select tally Group!')
+             event.preventDefault();
+             return;
+         }
+
+         if (hsncode == 0) {
+             document.getElementById("ddlHSNDDL").style.borderColor = "red";
+             alert('Please select HSN Code!')
+             event.preventDefault();
+             return;
+         }
+
+
+        
+         if (invtype == 0) {
+             document.getElementById("ddlinvtype").style.borderColor = "red";
+             alert('Please select invoice type!')
+             event.preventDefault();
+             return;
+         }
+         if (tax == 0) {
+             document.getElementById("ddltax").style.borderColor = "red";
+             alert('Please select tax code!')
+             event.preventDefault();
+             return;
+         }
+
+
+
+        var ExpHeadMasterEnt = {};
+        ExpHeadMasterEnt.AcName = ACname;
+         ExpHeadMasterEnt.TallyName = tallyname;
+         ExpHeadMasterEnt.IMPGID = importgroup;
+
+         ExpHeadMasterEnt.HSNCodeL = hsncode;
+
+         ExpHeadMasterEnt.disp = dp;
+         ExpHeadMasterEnt.InvTId = invtype;
+         ExpHeadMasterEnt.TaxID = tax;
+         ExpHeadMasterEnt.IsActive = chkIsActive;
+         ExpHeadMasterEnt.EntryID = EntryID;
+
+
+
+        @*expTariffMaster Is Entities Name *@
+        //This Is For Pass Data Through Java Script
+                $.ajax({
+                    url: "/export/ChecktheExportAccountmasterAlready",
+                    data: '{ExpHeadMasterEnt: ' + JSON.stringify(ExpHeadMasterEnt) + '}',
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data != "Account name already exits!") {
+                        Save1();
+                    } else {
+                        alert(data);
+                    }
+
+
+                },
+                    error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                   }
+                });
+        }
+
+        else {
+
+            alert("You Pressed No!")
+
+        }
+    }
+
+
+     function Save1() {
+         var ACname = document.getElementById('txtacname').value;
+         var tallyname = document.getElementById('txttallyname').value;
+         var importgroup = document.getElementById('importg').value;
+
+         var hsncode = document.getElementById('ddlHSNDDL').value;
+
+         var dp = document.getElementById('ddldp').value;
+
+         var invtype = document.getElementById('dllinvtype').value;
+         var tax = document.getElementById('ddltax').value
+         var chkIsActive = document.getElementById('chkIsActive').value;
+         var EntryID = document.getElementById('txtentryid').value
+
+        var ExpHeadMasterEnt = {};
+        ExpHeadMasterEnt.AcName = ACname;
+         ExpHeadMasterEnt.TallyName = tallyname;
+         ExpHeadMasterEnt.IMPGID = importgroup;
+
+         ExpHeadMasterEnt.HSNCodeL = hsncode;
+
+         ExpHeadMasterEnt.disp = dp;
+         ExpHeadMasterEnt.InvTId = invtype;
+         ExpHeadMasterEnt.TaxID = tax;
+         ExpHeadMasterEnt.IsActive = chkIsActive;
+         ExpHeadMasterEnt.EntryID = EntryID;
+
+                $.ajax({
+                    url: "/export/SaveExportAccountmaster",
+                    data: '{ExpHeadMasterEnt: ' + JSON.stringify(ExpHeadMasterEnt) + '}',
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                         alert(data);
+                         window.location.href = '@Url.Action("ExportAccountMaster", "Export")';
+
+
+                },
+                    error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                   }
+                });
+
+    }
+    function ShowSSRSummary() {
+
+
+
+        var search = document.getElementById('txtsearch').value;
+        var data1 = { 'search': search };
+        data = JSON.stringify(data1);
+        $.ajax({
+            url: "/export/GetExportAcList",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                //alert(jsonResult)
+                $("#reportTable").empty();
+                RepTableDataJson($("#tblWorkOrderOpenList"), data, "GetImportAcList", "GetImportAcList")
+                //  alert(jsonResult)
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+
+
+    }
+
+
+    function EditExportAccountMaster(entryid, AccountName, Tallyname, HSN_Code, DisplayPriority, invoicetypeID, TaXID) {
+        var r = confirm("Do you wish to modify?");
+        if (r == true) {
+
+
+
+            $("#divCreate").show();
+            $("#divCreateSummary").hide();
+            document.getElementById('txtentryid').value = entryid;
+            document.getElementById('txtacname').value = AccountName;
+            document.getElementById('txttallyname').value = Tallyname;
+            // document.getElementById('importg').value;
+            // document.getElementById('chkisdpdi').value;
+            document.getElementById('ddlHSNDDL').value = HSN_Code;
+
+            document.getElementById('ddldp').value = DisplayPriority;
+            document.getElementById('dllinvtype').value = invoicetypeID;
+            document.getElementById('ddltax').value = TaXID;
+        }
+        else {
+            alert("You Pressed No!")
+        }
+
+    }
+</script>
+

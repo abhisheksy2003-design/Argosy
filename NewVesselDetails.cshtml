@@ -1,0 +1,174 @@
+﻿@model MvcBondEntities.BusinessEntities.VesselMaster
+@{
+    ViewBag.Title = "New Vessel Details";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<link href="~/css/NewCHAProfile.css" rel="stylesheet" />
+@using (Html.BeginForm("SaveVesselDetails", "BookingEntry", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="page-header" style="margin-top:-12px;">
+        <h4 class="page-title">
+            Vessel Details
+        </h4>
+
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="window.location = '@Url.Action("GetVesselSummary", "BookingEntry")' " id="summarylist" data-modal="modal-13">
+                Summary
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Vessel Name</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.EditorFor(model => model.VesselName, new { htmlAttributes = new { @class = "form-control", @id = "vesselName", autocomplete = "on", maxlength = 100 } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5 col-sm-12">
+                            <div class="form-group">
+                                @*<label class="form-label">Is Active</label>*@
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.eMailIDs, new { htmlAttributes = new { @class = "form-control", @id = "emailID" } })*@
+                                        @Html.CheckBoxFor(m => m.IsActive, new { @checked = "checked", @id = "isActive" }) Is Active? @*<label class="form-label">Is Active</label>*@
+                                        @* <label>@Html.CheckBoxFor(m => m.IsActive)&nbsp;@Html.DisplayNameFor(m => m.IsActive)</label>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="form-label"></label>
+                            <div class="row gutters-xs">
+                                <div class="col d-flex gap-3">
+                                    <input type="submit" id="Save" name="saveProfile" value="Save" class="btn btn-save px-4" />
+
+                                    <button type="button" class="btn btn-cancel px-4" name="clearProfile" title="clear" id="clearValue">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label id="message" class="display_none"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+
+        var message = @Html.Raw(Json.Encode(ViewBag.Message))
+        alert(message);
+
+        document.getElementById("vesselName").value = "";
+        document.getElementById("isActive").checked = true;
+    };
+
+    </script>
+}
+
+
+<script>
+    //$(document).ready(function () {
+    //    $("#vesselName").autocomplete({
+
+    //        autoFocus: true,
+    //        scroll: true,
+    //        source: function (request, response) {
+    //            //  alert("hi")
+    //            $.ajax({
+    //                url: "/BookingEntry/GetNameForAutoComplete",
+    //                type: "POST",
+    //                dataType: "json",
+    //                data: { name: request.term },
+    //                success: function (data) {
+    //                    if (!data.length) {
+
+    //                    }
+    //                    else {
+
+    //                        response($.map(data, function (item) {
+
+    //                            return { value: item };
+
+
+    //                        }))
+    //                    }
+    //                }
+    //            })
+    //        },
+    //        select: function (e, ui) {
+    //            $("#vesselName").val(ui.item.value);
+    //            // CheckCompanyAvailability(ui.item.value);
+    //            return false;
+    //        },
+    //        messages: {
+    //            noResults: "", results: ""
+    //        }
+    //    });
+
+    //    $("#vesselName").on("blur", function () {
+
+    //        $.ajax(
+    //            {
+    //                url: '/BookingEntry/GetExisitingVesselName?vesselName=' + $("#vesselName").val(),
+    //                type: 'GET',
+    //                data: "",
+    //                contentType: 'application/json; charset=utf-8',
+    //                success: function (data) {
+    //                    $("#vesselName").removeClass();
+    //                    if (data == true) {
+    //                        $("#vesselName").addClass("form-control is-valid state-valid")
+    //                    } else {
+    //                        $("#vesselName").addClass("form-control is-invalid state-invalid")
+    //                    }
+    //                },
+    //                error: function () {
+    //                    alert("error");
+    //                }
+    //            });
+    //    });
+
+
+
+    //    $("#clearValue").on("click", function () {
+    //        document.getElementById("vesselName").value = "";
+    //        document.getElementById("isActive").checked = true;
+    //        $("#vesselName").removeClass();
+
+    //        $("#vesselName").addClass("form-control");
+
+    //    });
+
+
+
+
+
+    //});
+
+
+</script>
+<script>
+    document.getElementById("clearValue").addEventListener("click", function () {
+        window.location.href = '@Url.Action("GetVesselSummary", "BookingEntry")';
+    });
+</script>

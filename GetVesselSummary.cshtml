@@ -1,0 +1,379 @@
+﻿@model  IEnumerable<MvcBondEntities.BusinessEntities.Vessel>
+@{
+    ViewBag.Title = "GetVesselSummary";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+
+            var message = @Html.Raw(Json.Encode(ViewBag.Message))
+            alert(message);
+        };
+
+    </script>
+}
+
+
+<div class=" content-area overflow-hidden" id="summaryList_wrapper">
+
+    <div class="page-header">
+        <h4 class="page-title">Vessel Summary: @Model.Count()</h4>
+
+
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="window.location = '@Url.Action("NewVesselDetails", "BookingEntry" )' " id="addVvessel" data-modal="modal-13">
+                Add
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="Vessel_Details" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    @*
+                                        <th class="wd-15p sorting" style="width:1px;">#</th>*@
+                                    <th class="wd-10p sorting">Vessel Name</th>
+                                    <th style="width:30px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody style="box-sizing :border-box;">
+                                @foreach (var d in Model)
+                                {
+                                    <tr>
+                                        @*
+                                            <td>@Html.DisplayFor(m => d.VesselID)</td>*@
+                                        <td>@Html.DisplayFor(m => d.VesselName)</td>
+
+                                        <td> <a class="btn btn-outline-secondary me-2" onclick="onEditClick(@d.VesselID)" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Edit"><i class="fa fa-edit" style="color:white;"></i> </a></td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+                <div>
+                    <label id="previousValue" class="display_none"></label>
+                    <label id="currentValue" class="display_none"></label>
+                </div>
+                <!-- table-wrapper -->
+            </div>
+            <!-- section-wrapper -->
+        </div>
+    </div>
+</div>
+<div>
+    <input type="hidden" id="vesselId">
+    <input type="hidden" id="previousValue">
+
+</div>
+<div id="UpdateVessel" style="display:none">
+    <input type="hidden" id="vesselId" />
+
+    <div class="content-area overflow-hidden" id="vesselupdate">
+
+        <div class="page-header">
+            <h4 class="page-title">
+                Update Vessel
+            </h4>
+
+            <div class="page-header-breadcrumb">
+                <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="getBack();" data-modal="modal-13">
+                    Summary
+                </button>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="form-horizontal">
+                    <div class="row">
+
+
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Vessel Name</label>
+                                <input id="vesselName" class="form-control" type="text">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-sm-12" style="margin-top:40px;">
+                            <label class="custom-control custom-checkbox">
+                         
+
+                                <input id="isActive"
+                                       type="checkbox"
+                                       class="form-check-input"
+                                       onchange="getActiveState(this.checked)">
+                                <span class="custom-control-label">Is Active?</span>
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <div class="col d-flex gap-2">
+                        <!-- Save Button -->
+                        <button id="Update" class="btn btn-save px-4" onclick="return UpdateVessel();" style="background-color: #FF9F43; color:white;">
+                            Save
+                        </button>
+
+                        <!-- Clear Button -->
+                        <button class="btn btn-cancel px-4" type="button" onclick="window.location.reload();">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+             
+        </div>
+    </div>
+</div>
+
+
+<script>
+        window.onload = function () {
+
+            $('#Vessel_Details').DataTable({
+                "bLengthChange": false,
+                "bInfo": false,
+                "bPaginate": true,
+                "bFilter": true,
+                "paging": true, // Enable pagination
+                "pageLength": 10, // Set the number of records per page
+                "order": [],
+                "aoColumnDefs": [
+                    {
+                        'bSortable': false,
+                        'aTargets': [0]
+                    }
+                ]
+            });
+        };
+
+        $(document).ready(function () {
+            //console.log(document.getElementById("isActive").checked)
+            //$('#isActive').change(function () {
+
+            //    if (document.getElementById("isActive").checked == true) {
+            //        document.getElementById("isActive").checked = false;
+            //    } else {
+            //        document.getElementById("isActive").checked = true;
+            //    }
+
+            //});
+        });
+
+        function getActiveState(state) {
+            document.getElementById("isActive").checked = state;
+        }
+
+
+        function getSummary() {
+
+            $.ajax(
+                {
+                    url: '/BookingEntry/GetVesselSummary',
+                    type: 'GET',
+                    data: "",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        window.location = '@Url.Action("GetVesselSummary", "VesselSummary")'
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+        }
+</script>
+<!--<script>
+function onEditClick(id) {
+$.ajax(
+    {
+        url: "/BookingEntry/EditVesselSummary",
+        data: '{vesselID: ' + JSON.stringify(id) + '}',
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        success: function (message) {
+            $("#summaryList_wrapper").hide();
+            $("#UpdateVessel").show();
+            var IsActive = message.IsActive;
+            var name = message.VesselName;
+            var id = message.VesselID;
+            var html = "<div class=\" content-area overflow-hidden\" id=\"vesselupdate\">" +
+                "<div class=\"page-header\">" + " <h4 class=\"page-title\">Update Vessel   </h4>" +
+                " <div class=\"form-group\">" +
+                "<label class=\"form-label\"></label>" +
+                "<div class=\"row gutters-xs\">" +
+                " <div class=\"col\">" +
+                "  <button type=\"button\" onclick=\"getBack();\" class=\"btn btn-added p-3 me-2\" name=\"summarylist\" title=\"Summary list\" id=\"summarylist\" onclick=\"window.location = '@Url.Action("GetVesselSummary", "VesselSummary")' \"><i class=\"fa fa-arrow-left\"></i></button>" +
+                    " </div>" +
+                    "</div>" +
+                    "</div>" +
+                    "</div>" +
+                    "  <div class=\"row\"> " +
+                    "  <div class=\"col-12\">" +
+                    " <div class=\"card\">" +
+                    "   <div class=\"card-body\">" +
+                    "  <div class=\"form-horizontal\">" +
+                    "    <div class=\"row\">" +
+
+                    "      <div class=\"col-lg-12 col-sm-12\">" +
+                    "         <div class=\"form-group\">" +
+                    "        <label class=\"form-label mandatory\">Vessel Name</label>" +
+                    "            <div class=\"row gutters-xs\">" +
+                    "          <div class=\"col\">" +
+                    " <input id=\"vesselName\" class=\"form-control\" id=\"vesselname\" type=\"text\" value=\"" + name + "\">" +
+                    "        </div>" +
+
+                    "      </div>" +
+                    "      </div>" +
+                    "    </div>" +
+                    "    </div>" +
+
+                    "   <div class=\"col-lg-5 col-sm-12\">" +
+                    "   <div class=\"form-group\">" +
+                    "      <div class=\"row gutters-xs\">" +
+                    "    <div class=\"col\">" +
+
+                    "         <div class=\"form-group\">" +
+                    "<label class=\"custom-control custom-checkbox\">" +
+                    "<input id=\"isActive\" type=\"checkbox\" class=\"form-check-input\" checked=\"" + IsActive + "\" onChange=\"getActiveState(checked)\"/>" +
+                    "	<span class=\"custom-control-label\">Is Active? </span>" +
+                    "</label>" +
+                    "</div>  " +
+
+                    "  </div>" +
+
+                    "  </div>" +
+                    "</div>" +
+                    " </div>" +
+
+
+                    "   <div class=\"card-footer text-right\">" +
+                    "   <div class=\"form-group\">" +
+                    "  <label class=\"form-label\"></label>" +
+                    "  <div class=\"row gutters-xs\">" +
+                    " <div class=\"col\">" +
+                    "     <input type=\"submit\" id=\"Update\" name=\"updateVessel\" value=\"Update Vessel\" class=\"btn btn-submit me-2\" onClick=\"UpdateVessel()\" />" +-->
+@* <input type="button" name="clearProfile" value="Clear" class="btn btn-gray" title="clear" id="clearValue" /> *@
+<!--//"      <button type=\"button\" class=\"btn btn-icon btn-gray\" name=\"clearProfile\" title=\"clear\" id=\"clearValue\"><i class=\"fa fa-undo\"></i></button>"+
+                "   </div>"+
+                    "         </div>" +
+                    "    </div>" +
+                    "    </div>" +
+                    "  <label id=\"vesselId\" class=\"display_none\" value=\"" + id + "\">" + id + "</label>" +
+                    "      </div>" +
+
+                    "     </div>" +
+                    "          </div>" +
+                    "  </div>" +
+                    "  </div>" +
+
+                    "</div>"
+
+                function getBack() {
+                    $("#summaryList_wrapper").show();
+                    $("#UpdateVessel").hide();
+                }
+                $("#UpdateVessel").html(html);
+                document.getElementById("vesselId").style.display = "none";
+                document.getElementById("previousValue").value = message.VesselName;
+
+            },
+
+            error: function (message) {
+
+                alert(JSON.stringify(message.responseText));
+
+
+            }
+        });
+}
+    </script>-->
+
+
+<script>
+    function onEditClick(id) {
+
+        $.ajax({
+            url: "/BookingEntry/EditVesselSummary",
+            type: "POST",
+            data: JSON.stringify({ vesselID: id }),
+            contentType: "application/json; charset=utf-8",
+            success: function (message) {
+
+
+                $("#summaryList_wrapper").hide();
+
+
+                $("#UpdateVessel").show();
+
+                $("#vesselName").val(message.VesselName);
+                $("#isActive").prop("checked", message.IsActive);
+                $("#vesselId").val(message.VesselID);
+                $("#previousValue").val(message.VesselName);
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    }
+
+    function getBack() {
+        $("#UpdateVessel").hide();
+        $("#summaryList_wrapper").show();
+    }
+
+</script>
+
+
+<script>
+    function UpdateVessel() {
+
+        var vesselName = document.getElementById('vesselName').value;
+        var vesselID = document.getElementById('vesselId').value;
+        var isActive = document.getElementById("isActive").checked;
+
+        if (!vesselID || vesselID === "0") {
+            alert("Invalid Vessel ID");
+            return;
+        }
+
+        $.ajax({
+            url: "/BookingEntry/UpdateVesselDetails",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                vesselID: parseInt(vesselID),
+                vesselName: vesselName,
+                isActive: isActive
+            }),
+            success: function (message) {
+                if (message === true) {
+                    alert("Vessel updated successfully!");
+                    document.getElementById("currentValue").value = vesselName;
+
+                    getBack();
+                    window.location.reload();
+                } else {
+                    alert("Vessel updation failed. Try again!");
+                }
+            },
+
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    }
+
+</script>

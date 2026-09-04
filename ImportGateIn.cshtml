@@ -1,0 +1,1181 @@
+﻿
+@{
+    ViewBag.Title = "ImportGateIn";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<style>
+    .btn-blue {
+        background-color: #0d6efd !important; /* Bootstrap Blue */
+        border-color: #0d6efd !important;
+        color: #fff !important;
+    }
+
+    .btn-clear-custom {
+        background-color: #6c757d; /* Grey */
+        color: #fff;
+        padding: 13px 38px;
+        border-radius: 4px;
+        border: none;
+        font-weight: 600;
+    }
+
+        .btn-clear-custom:hover {
+            background-color: #5a6268;
+        }
+
+    .eir-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    .eir-modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 90%;
+        max-height: 90%;
+        background: #fff;
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+        .eir-modal-content img {
+            max-width: 100%;
+            max-height: 80vh;
+        }
+
+        .eir-modal-content iframe {
+            width: 80vw;
+            height: 80vh;
+            border: none;
+        }
+
+    .eir-close {
+        position: absolute;
+        top: 15px;
+        right: 25px;
+        color: #fff;
+        font-size: 30px;
+        cursor: pointer;
+    }
+
+    .eir-preview {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .eir-thumb {
+        width: 110px;
+        height: 110px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        position: relative;
+        background: #f9f9f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .eir-remove {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        width: 20px;
+        height: 20px;
+        background: #e53935;
+        color: #fff;
+        font-size: 14px;
+        border-radius: 50%;
+        line-height: 20px;
+        text-align: center;
+        cursor: pointer;
+        z-index: 2;
+    }
+
+    .eir-thumb img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 4px;
+    }
+
+    .eir-pdf {
+        font-size: 13px;
+        color: #d32f2f;
+        font-weight: 600;
+    }
+
+</style>
+
+<script src="~/js/GetTableJson.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+<div id="Divaddlocation" style="display:none;">
+    <div class="page-header">
+        <h4 class="page-title">Gate In </h4>
+        <div class="ibox-content text-right">
+            <a onclick="GateInBack();" class="btn btn-primary me-2 text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Generate Job Order"></i> </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Entry ID </label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtEntryID" type="text" placeholder="New" readonly="readonly" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Gate In Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtGateInDate", null, new { @class = "form-control datePicker1", @id = "txtGateInDate", name = "txtGateInDate", autocomplete = "on", @Value = DateTime.Now.ToString("dd MMM yyyy") })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BL Number</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtBLNumber" type="text" placeholder="BL Number" class="form-control" readonly />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">IGM No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtIGMNo" type="text" placeholder="IGM No" class="form-control" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">IGM Item No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtIGMItemNo" type="text" placeholder="IGM Item No" class="form-control" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Container No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtContainerNo" type="text" placeholder="Container No" class="form-control" onchange="ContainerFetch()" />
+                                            <input ID="hdnJoNo" type="hidden" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group">
+
+                                    @*<div class="col">*@
+                                    <label class="form-label">Size</label>
+                                    @Html.DropDownList("ddlSize", (IEnumerable<SelectListItem>)ViewBag.ContainerSize, "--Select--", new { @class = "form-select", @id = "ddlSize", name = "ddlSize", autocomplete = "off" })
+                                    @*</div>*@
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group">
+
+                                    @*<div class="col">*@
+                                    <label class="form-label">ISO Code</label>
+                                    @Html.DropDownList("ddlISOCode", (IEnumerable<SelectListItem>)ViewBag.ISOCodes, "--Select--", new { @class = "form-select", @id = "ddlISOCode", name = "ddlISOCode", autocomplete = "off", onblur = "BlueISOCode()" })
+                                    @* </div>*@
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+
+                                    @*<div class="col">*@
+                                    <label class="form-label">Container Type</label>
+                                    @Html.DropDownList("ddlContainerType", (IEnumerable<SelectListItem>)ViewBag.Conttyoe, "--Select--", new { @class = "form-select", @id = "ddlContainerType", name = "ddlContainerType", autocomplete = "off" })
+                                    @*</div>*@
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+
+                                    @* <div class="col">*@
+                                    <label class="form-label">Cargo Type</label>
+                                    @Html.DropDownList("ddlCargoType", (IEnumerable<SelectListItem>)ViewBag.CargoType, "--Select--", new { @class = "form-select", @id = "ddlCargoType", name = "ddlCargoType", autocomplete = "off", onchange = "CargoTypeChange()" })
+                                    @*</div>*@
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Seal No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtSealNo" type="text" placeholder="Seal No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Tare Weight</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtTareWeight" type="text" placeholder="Tare Weight" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Weight</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtCargoWeight" type="text" placeholder="Weight" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+
+                                    @*<div class="col">*@
+                                    <label class="form-label">Transport Name</label>
+                                    @Html.DropDownList("ddlTransportName", (IEnumerable<SelectListItem>)ViewBag.TransportNamr, "--Select--", new { @class = "form-select", @id = "ddlTransportName", name = "ddlTransportName", autocomplete = "off", onblur = "SBNoEntry()" })
+                                    @*</div>*@
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Vehicle No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtVehicleNo" type="text" placeholder="Vehicle No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Driver Name</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtDriverName" type="text" placeholder="Driver Name" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Driver Mobile No.</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtDriverNo" type="number" placeholder="Driver No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">EIR Copy</label>
+                                    @Html.DropDownList("ddlEIR", (IEnumerable<SelectListItem>)ViewBag.EIRCopy, "--Select--", new { @class = "form-select", @id = "ddlEIR", name = "ddlEIR", autocomplete = "off", onblur = "SBNoEntry()" })
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Remarks</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtRemarks" type="text" placeholder="Remarks" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Upload EIR Copy File</label>
+
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input id="EIRFile"
+                                                   type="file"
+                                                   class="form-control"
+                                                   multiple
+                                                   accept=".pdf,.jpg,.jpeg,.png"
+                                                   onchange="previewEIRFiles(this)" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-sm-12">
+                                <div id="eirPreview" class="eir-preview"></div>
+                            </div>
+
+
+
+                        </div>
+                        <div id="dvREF" class="row" style="display:none;">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Temp</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtTemperature" type="text" placeholder="Enter Temperature" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">HUM</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtHumidity" type="text" placeholder="Enter Humidity" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Vent.</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtVentilation" type="text" placeholder="Enter Ventilation" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="dvHAZ" style="display:none;">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Class</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtClass" type="text" placeholder="Enter Class" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">UN NO</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtUNNo" type="text" placeholder="Enter UN No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Packing Group</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <select class="form-select" id="ddlPackingGroup">
+                                                <option value="I" selected>I</option>
+                                                <option value="II">II</option>
+                                                <option value="III">III</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="dvOT" class="row" style="display:none;">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Over Width</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtOverWidth" type="text" placeholder="Over Width" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Over Height</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtOverHeight" type="text" placeholder="Over Height" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Over Length</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtOverLength" type="text" placeholder="Over Length" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="form-label"></label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @*<input type="submit" id="Save" name="save" value="Save" class="btn btn-success" />*@
+                                <button class="btn btn-submit me-2 " id="Save" onclick="Save()" title="Save">Save</button>
+                                @*<button class="btn btn-secondary me-2 float-right"  id="clear" onclick="Clear()">
+                                    Clear
+                                    </button>*@
+                                <button class="btn-clear-custom me-2 " type="button" id="clear" onclick="Clear()">
+                                    Clear
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="divAwaitingSummary">
+    <div class="page-header">
+        <h4 class="page-title">Awaiting Gate In Entry </h4>
+        <div class="ibox-content text-right">
+
+            @*<a onclick="Addbutton();" class="btn btn-primary me-2 text-right" style="align-content:center;color:white"><i class="fa fa-plus" data-placement="bottom" title="Back"></i> </a>*@
+            <button type="button" class="btn btn-blue raised me-2" onclick="ManualUploadModel()">
+                Upload Manual
+            </button>
+            <a onclick="GateInSummary();" class="btn btn-primary me-2 text-right" style="align-content:center;color:white">Summary </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="example3" class="table table-bordered table-hover display nowrap" style="width:100%">
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="divGateInSummary" style="display:none;">
+    <div class="page-header">
+        <h4 class="page-title">Gate In Summary </h4>
+
+        <div class="ibox-content text-right">
+
+            <a onclick="GateInBack();" class="btn btn-primary me-2 text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Back"></i> </a>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <br />
+                            <label class="control-label">From Date </label>
+
+                            @Html.TextBox("txtFromDate", null, new { @class = "form-control datePicker1", @id = "txtFromDate", @Value = DateTime.Now.AddDays(-1).ToString("dd MMM yyyy 08:00") })
+
+                        </div>
+                        <div class="col-md-3">
+                            <br />
+                            <label class="control-label">To Date </label>
+
+                            @Html.TextBox("txtToDate", null, new { @class = "form-control datePicker1", @id = "txtToDate", @Value = DateTime.Now.ToString("dd MMM yyyy 23:59") })
+
+                        </div>
+
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label" style="visibility:hidden"> '</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button class=" btn btn-primary" title="Show" id="btnShow" onclick="GetDetails()" type="button" style="margin-top:13px;">
+                                            Show
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="example4" class="table table-bordered table-hover display nowrap" style="width:100%">
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Manual Upload Modal -->
+<div class="modal fade" id="ManualUploadDiv" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="gstModal">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Manual File Upload</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="card-body p-4" id="dvContainerUpload">
+                    <div class="row align-items-center g-3">
+                        <div class="col-md-6">
+                            <input type="file" class="form-control" id="fileInput" name="fileInput" accept=".xls,.xlsx">
+                        </div>
+                        <div class="col-md-6 d-flex">
+                            @*<button type="button" class="btn btn-primary px-4 raised d-flex gap-2" onclick="UploadJobOrderExcel()">
+                                    <i class="material-icons-outlined">cloud_upload</i> Upload
+                                </button>
+                                <button type="button" class="btn btn-primary px-4 raised d-flex gap-2 ms-2" onclick="DownloadTemplate()">
+                                    <i class="material-icons-outlined">cloud_download</i> Template
+                                </button>*@
+                            <button type="button" class="btn btn-blue px-4 raised d-flex gap-2" onclick="UploadJobOrderExcel()">
+                                <i class="material-icons-outlined">cloud_upload</i> Upload
+                            </button>
+
+                            <button type="button" class="btn btn-blue px-4 raised d-flex gap-2 ms-2" onclick="DownloadTemplate()">
+                                <i class="material-icons-outlined">cloud_download</i> Template
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger raised ms-auto" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="eirModal" class="eir-modal">
+    <span class="eir-close" onclick="closeEIRModal()">×</span>
+
+    <div class="eir-modal-content">
+        <img id="eirModalImg" style="display:none;" />
+        <iframe id="eirModalPdf" style="display:none;"></iframe>
+    </div>
+</div>
+
+
+<script>
+    function ContainerFetch() {
+        var ContainerNo = $("#txtContainerNo").val();
+        try {
+            var data1 = { 'ContainerNo': ContainerNo };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/BookingEntry/FetchdatContainer",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    data = JSON.parse(data);
+
+
+                    $("#ddlSize").val(data[0].ContainerSizeID);
+                    $("#ddlCargoType").val(data[0].Cargotypeid);
+                    $("#ddlISOCode").val(data[0].ISOCode);
+                    $("#ddlContainerType").val(data[0].ContainerTypeID);
+                    $("#txtTemperature").val(data[0].Temperature);
+                    $("#txtHumidity").val(data[0].Humidity);
+                    $("#txtVentilation").val(data[0].Ventilation);
+                    $("#txtClass").val(data[0].Class);
+                    $("#txtUNNo").val(data[0].UNNo);
+                    $("#ddlPackingGroup").val(data[0].PackingGroup);
+                    $("#txtOverLength").val(data[0].OverLength);
+                    $("#txtOverWidth").val(data[0].OverWidth);
+                    $("#txtOverHeight").val(data[0].OverHeight);
+
+
+                    CargoTypeChange();
+
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+
+    }
+
+
+    function ManualUploadModel() {
+        $('#ManualUploadDiv').modal('show');
+    }
+
+    function DownloadTemplate() {
+        window.location = '@Url.Action("DownloadTemplate", "BookingEntry", new { fileName = "GateIN_Template.xlsx" })';
+    }
+
+    $(document).ready(function () {
+
+        GetInPendingList();
+
+    });
+    function Clear() {
+        //$("#ddlTransportName").val('');
+        //$("#txtVehicleNo").val('');
+        //$("#txtDriverName").val('');
+        //$("#txtDriverNo").val('');
+        //$("#txtRemarks").val('');
+        location.reload();
+        //Addbutton();
+
+    }
+    function GateInBack() {
+        $("#divAwaitingSummary").show();
+        $("#Divaddlocation").hide();
+        $("#divGateInSummary").hide();
+
+
+    }
+
+    function GateInSummary() {
+        $("#divAwaitingSummary").hide();
+        $("#Divaddlocation").hide();
+        $("#divGateInSummary").show();
+        GetDetailsonLoad();
+
+    }
+
+    function Addbutton() {
+        $("#divAwaitingSummary").hide();
+        $("#Divaddlocation").show();
+
+    }
+
+    function GetDetails() {
+        $("#global-loader").fadeOut("slow");
+
+        var SearchType = $("#TXtSearchOn").val();
+
+        var fromdate = $("#txtFromDate").val();
+        var TOdate = $("#txtToDate").val();
+
+        data1 = { 'fromdate': fromdate, 'TOdate': TOdate };
+        data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GateInSummary",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example4").empty();
+                RepTableDataJson($("#example4"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+    function GetDetailsonLoad() {
+        $("#global-loader").fadeOut("slow");
+        var SearchType = $("#TXtSearchOn").val();
+
+        var fromdate = $("#txtFromDate").val();
+        var TOdate = $("#txtToDate").val();
+
+        data1 = { 'fromdate': fromdate, 'TOdate': TOdate };
+        data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GateInSummaryOnLoad",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example4").empty();
+                RepTableDataJson($("#example4"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+
+    function GetInPendingList() {
+        $("#global-loader").fadeOut("slow");
+
+        var SearchType = $("#TXtSearchOn").val();
+
+        var data1 = { 'SearchType': SearchType };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GateInPendingList",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example3").empty();
+                RepTableDataJson($("#example3"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+
+    function SelectContainer(containerno,BLNumber,IGMNo, IGMItemNo, JoNo) {
+
+        $("#txtContainerNo").val(containerno);
+        $("#txtBLNumber").val(BLNumber);
+        $("#txtIGMNo").val(IGMNo);
+        $("#txtIGMItemNo").val(IGMItemNo);
+        $("#hdnJoNo").val(JoNo);
+        Addbutton();
+        ContainerFetch();
+    }
+
+     function BlueISOCode() {
+
+         debugger;
+         var ContainerNo = $("#txtContainerNo").val();
+         var ISCOCOde = $("#ddlISOCode").val();
+         var cargotype = $("#ddlCargoType option:selected").val();
+        var ContainerTypeID = $("#ddlContainerType option:selected").val();
+        if (ISCOCOde != "") {
+            var data = { 'ISCOCOde': ISCOCOde, 'cargotype': cargotype, 'ContainerNo': ContainerNo };
+            var data1 = JSON.stringify(data);
+            $.ajax({
+                type: "POST",
+                url: "/BookingEntry/GetISOCodeForGatein",
+                data: data1,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+
+                    //$("#ddlSize option:selected").val(data.Size)
+                    //$("#ddlSize").val(data.Size)
+                    $("#txtTareWeight").val(data.TareWt)
+                    $("#ddlContainerType").val(data.Type)
+
+
+
+
+
+
+                    $("#ddlCargoType").val(data.CargoType);
+
+
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            })
+        }
+    }
+
+    
+    function Save() {
+        debugger;
+    var ContainerNo = $("#txtContainerNo").val();
+
+    if (ContainerNo == "") {
+        alert("Please select Container No.");
+        return false;
+    }
+
+    var ContainerType = $("#ddlContainerType").val();
+
+    if (ContainerType == "") {
+        alert("Please select Container Type.");
+        return false;
+    }
+
+    var GateInDate = $("#txtGateInDate").val();
+    var JoNo = $("#hdnJoNo").val();
+    var VehicleNo = $("#txtVehicleNo").val();
+    var Transport = $("#ddlTransportName").val();
+    var Remarks = $("#txtRemarks").val();
+    var Driver = $("#txtDriverName").val();
+    var DriverNo = $("#txtDriverNo").val();
+
+    var Size = $("#ddlSize option:selected").text();
+    var ISOCode = $("#ddlISOCode").val();
+    var TareWeight = $("#txtTareWeight").val();
+    var CargoType = $("#ddlCargoType").val();
+    var CargoWeight = $("#txtCargoWeight").val();
+    var SealNo = $("#txtSealNo").val();
+    var Temperature = $("#txtTemperature").val();
+    var Humidity = $("#txtHumidity").val();
+    var Ventilation = $("#txtVentilation").val();
+    var Class = $("#txtClass").val();
+    var UNNo = $("#txtUNNo").val();
+    var PackingGroup = $("#txtPackingGroup").val();
+    var OverWidth = $("#txtOverWidth").val();
+    var OverHeight = $("#txtOverHeight").val();
+    var OverLength = $("#txtOverLength").val();
+
+    var EIRType = $("#ddlEIR").val();
+
+    var formData = new FormData();
+
+    formData.append("GateInDate", GateInDate);
+    formData.append("ContainerNo", ContainerNo);
+    formData.append("JoNo", JoNo);
+    formData.append("VehicleNo", VehicleNo);
+    formData.append("Transport", Transport);
+    formData.append("Driver", Driver);
+    formData.append("DriverNo", DriverNo);
+    formData.append("Remarks", Remarks);
+    formData.append("Size", Size);
+    formData.append("ISOCode", ISOCode);
+    formData.append("TareWeight", TareWeight);
+    formData.append("ContainerType", ContainerType);
+    formData.append("CargoType", CargoType);
+    formData.append("CargoWeight", CargoWeight);
+    formData.append("SealNo", SealNo);
+    formData.append("Temperature", Temperature);
+    formData.append("Humidity", Humidity);
+    formData.append("Ventilation", Ventilation);
+    formData.append("Class", Class);
+    formData.append("UNNo", UNNo);
+    formData.append("PackingGroup", PackingGroup);
+    formData.append("OverWidth", OverWidth);
+    formData.append("OverHeight", OverHeight);
+    formData.append("OverLength", OverLength);
+    formData.append("EIRType", EIRType);
+
+    var files = document.getElementById("EIRFile").files;
+
+    for (var i = 0; i < files.length; i++) {
+        formData.append("EIRFiles", files[i]);
+    }
+
+    $.ajax({
+        url: "/BookingEntry/SaveGatein",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            alert(data);
+            document.location = "/BookingEntry/ImportGateIn";
+        },
+        error: function (err) {
+            alert(err.responseText);
+        }
+    });
+}
+
+    function GatePassPrint(SlipNo) {
+        //  alert(SlipNo);
+        var data1 = { 'SlipNo': SlipNo };
+        var data = JSON.stringify(data1);
+        //   alert(data);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GateInPrint",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                var myWindow = window.open("", "MsgWindow");
+                myWindow.close();
+                var myWindow = window.open("", "MsgWindow");
+                myWindow.document.write(response);
+
+            },
+            failure: function (response) {
+                alert(response);
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        })
+    }
+
+    function CargoTypeChange() {
+
+        var cargotype = $("#ddlCargoType option:selected").text();
+
+
+        if (cargotype === "REF") {
+            $("#dvREF").show();
+            $("#dvHAZ").hide();
+            $("#dvOT").hide();
+        }
+        else if (cargotype === "REF-HAZ") {
+            $("#dvREF").show();
+            $("#dvHAZ").show();
+            $("#dvOT").hide();
+
+        }
+        else if (cargotype === "HAZ" || cargotype === "TANK-HAZ" || cargotype === "OT IN GAUGE HAZ") {
+            $("#dvREF").hide();
+            $("#dvHAZ").show();
+            $("#dvOT").hide();
+
+        }
+        else if (cargotype === "ODC-HAZ" || cargotype === "OT OUT GAUGE HAZ") {
+            $("#dvREF").hide();
+            $("#dvHAZ").show();
+            $("#dvOT").show();
+
+        }
+        else if (cargotype === "ODC" || cargotype === "OT OUT GAUGE") {
+            $("#dvREF").hide();
+            $("#dvHAZ").hide();
+            $("#dvOT").show();
+
+        }
+        else {
+            $("#dvREF").hide();
+            $("#dvHAZ").hide();
+            $("#dvOT").hide();
+        }
+
+    }
+    function UploadJobOrderExcel() {
+        debugger;
+
+        const fileInput = document.getElementById("fileInput");
+        const selectedFile = fileInput.files[0];
+
+
+        const formData = new FormData();
+        formData.append("excelFile", selectedFile);
+
+        $.ajax({
+            url: '/BookingEntry/UploadImportGateInExcelDetailsInTemp',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+
+                if (response.success) {
+                    $('#ManualUploadDiv').modal('hide');
+                    alert(response.message);   
+                }
+                else {
+                    alert(response.message);   
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Upload failed", error);
+
+            }
+        });
+    }
+
+    function UploadEIRAttachment() {
+
+        var fileInput = document.getElementById('jobOrderAttachment');
+        var jobNo = $('#txtJobNoDoc').val();
+        var docType = $('#ddlDocType').val();
+
+        if (fileInput.files.length === 0) {
+            Swal.fire("Please select a file.");
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('JobNo', jobNo);
+        formData.append('DocType', docType);
+        formData.append('UploadedFile', fileInput.files[0]);
+
+        $.ajax({
+            url: '/BookingEntry/UploadJobOrderDocument',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    FetchAttachmentTableData(response.JoNo);
+                } else {
+                    Swal.fire("Upload failed: " + response.message);
+                }
+            },
+            error: function () {
+                Swal.fire("Something went wrong while uploading.");
+            }
+        });
+    }
+    var eirFiles = [];
+
+    function previewEIRFiles(input) {
+
+        eirFiles = Array.from(input.files);
+
+        renderEIRPreview();
+    }
+
+    function renderEIRPreview() {
+
+        var preview = $("#eirPreview");
+        preview.html("");
+
+        eirFiles.forEach(function (file, index) {
+
+            var ext = file.name.split('.').pop().toLowerCase();
+            var thumb = $("<div class='eir-thumb'></div>");
+
+            var removeBtn = $("<div class='eir-remove'>×</div>");
+            removeBtn.on("click", function (e) {
+                e.stopPropagation();
+                removeEIRFile(index);
+            });
+
+            thumb.append(removeBtn);
+
+            if (ext === "jpg" || ext === "jpeg" || ext === "png") {
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+
+                    var img = $("<img />");
+                    img.attr("src", e.target.result);
+
+                    img.on("click", function () {
+                        openEIRModal(e.target.result, "image");
+                    });
+
+                    thumb.append(img);
+                };
+                reader.readAsDataURL(file);
+
+            } else if (ext === "pdf") {
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+
+                    var pdfDiv = $("<div class='eir-pdf'>PDF</div>");
+
+                    pdfDiv.on("click", function () {
+                        openEIRModal(e.target.result, "pdf");
+                    });
+
+                    thumb.append(pdfDiv);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            preview.append(thumb);
+        });
+    }
+
+    function removeEIRFile(index) {
+
+        eirFiles.splice(index, 1);
+
+        var dt = new DataTransfer();
+        eirFiles.forEach(function (file) {
+            dt.items.add(file);
+        });
+
+        document.getElementById("EIRFile").files = dt.files;
+
+        renderEIRPreview();
+    }
+
+    function openEIRModal(src, type) {
+
+        $("#eirModal").show();
+
+        if (type === "image") {
+            $("#eirModalImg").attr("src", src).show();
+            $("#eirModalPdf").hide();
+        } else if (type === "pdf") {
+            $("#eirModalPdf").attr("src", src).show();
+            $("#eirModalImg").hide();
+        }
+    }
+
+    function closeEIRModal() {
+
+        $("#eirModal").hide();
+
+        $("#eirModalImg")
+            .hide()
+            .attr("src", "");
+
+        $("#eirModalPdf")
+            .hide()
+            .attr("src", "");
+    }
+
+
+</script>

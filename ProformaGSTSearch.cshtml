@@ -1,0 +1,172 @@
+﻿
+<style>
+
+    .scrolling-table-container {
+        overflow: auto;
+        height: 600px;
+    }
+</style>
+
+
+<div class="modal-content" id="myModal">
+    <div class="modal-header">
+
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">GST Party List</h4>
+    </div>
+    <div class="modal-body">
+        <div class="card-body hero-feature">
+            <div class="row">
+                <div class="col-lg-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label class="form-label mandatory">Search</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.TextBox("txtGSTSearch", null, new { @class = "form-control", @id = "txtGSTSearch", name = "txtGSTSearch", autocomplete = "off", placeholder = "Search By Party Name or GST No" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-12">
+                    <div class="form-group" style="padding-top:26px;">
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <button class="btn btn-primary" id="btnSearch" type="button" onclick="Search()"> <i class="icon-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="table-responsive push scrolling-table-container">
+                    <table class="table table-bordered table-hover display nowrap" id="tblGSTDets" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th style="width:4px">#</th>
+                                <th>GST No</th>
+                                <th>GST Name</th>
+                                <th>Address</th>
+                                <th>State</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        Search();
+    })
+    function Search() {
+        var SearchText = $("#txtGSTSearch").val();
+        var data = { 'SearchText': SearchText };
+        var data1 = JSON.stringify(data);
+        $.ajax({
+            type: "POST",
+            url: "/ImportInvoice/GSTSearch",
+            data: data1,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $('#tblGSTDets').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "bInfo": false,
+                    "bPaginate": false,
+                    // "bFilter": false,
+                    "paging": false,
+                    "order": [],
+                    "aaData": data,
+                    "aoColumnDefs": [
+                        {
+                            'bSortable': false,
+                            'aTargets': [0]
+                        }
+                    ],
+                    "columns": [
+                        {
+                            "data": "data",
+                            "render": function (data, type, row, meta) {
+
+                                data = "<a type=\"text\" name=\"Select[]\" class=\" btn btn-sm btn-info\" id=\"btnSelect\" style=\"color:white\" onclick=\"GetGSTNo('" + row.GSTIn_uniqID + "','" + row.GSTID + "','" + row.state_Code + "','" + row.GSTName + "','" + row.RegType + "','" + "" + "')\">Select</a>";
+                                return data;
+                            }
+                        },
+                        { "data": "GSTIn_uniqID" },
+                        { "data": "GSTName" },
+                        { "data": "GSTAddress" },
+                        { "data": "State" }
+                    ]
+                })
+            },
+            failure: function (response) {
+                alert(response);
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        })
+    }
+    function GetGSTNo(GSTIn_uniqID, GSTID, state_Code, GSTName, RegType, Address) {
+
+        $('#txtGSTNo').val(GSTIn_uniqID);
+        $('#txtGSTid').val(GSTID);
+        $('#txtstatecode').val(state_Code);
+        $('#txtGSTName').val(GSTName);
+        $('#TxtRegisterType').val(RegType);
+       // $('#txtGSTAddr').val(Address);
+        $('.modal').modal('hide');
+        // $('.modal').modal('toggle');
+       $('body').removeClass('modal-open');
+      $('.modal-backdrop').remove();
+   
+        GetGstAddress(GSTID);
+
+    }
+   
+    function GetGstAddress(GSTID)
+    {
+ 
+        var data1 = { 'GSTID': GSTID };
+        var data = JSON.stringify(data1);
+
+        console.log(data);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Finance/GetAddressByGstID',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                debugger
+                console.log(response);
+                if (response == "[]") {
+                    alert("For this shipment no data found");
+                }
+                else {
+
+                    var response = JSON.parse(response);
+
+                    $("#txtGSTAddr").val(response[0].GSTAddress);
+
+
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    
+    }
+
+</script>

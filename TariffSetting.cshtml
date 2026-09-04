@@ -1,0 +1,481 @@
+﻿
+@{
+    ViewBag.Title = "Tariff Setting";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style>
+    .table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<div class=" content-area" id="DIvCompantMaster">
+    <div class="page-header">
+        <h4 class="page-title" id="New">Tariff Settings</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="ShowSummary();" id="ShowSummary" class="btn btn-josph btn-success" style="color:white;align-content:center;"><i class="fa fa-file-text" data-toggle="tooltip" data-placement="bottom" title="Summary" data-original-title="Back"></i>  </a>
+            </li>
+        </ol>
+    </div>
+
+    <div class="col-sm-12 col-lg-12">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-3">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Tariff</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.DropDownList("txtTariff", (IEnumerable<SelectListItem>)ViewBag.TariffSetting, "--Select--", new { @class = "form-control", @id = "txtTariff", name = "txtTariff", autocomplete = "off", onblur = "Entry()" })
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-xs-4" style="display:none">
+                            <div class="form-group">
+                                <label class="form-label mandatory" style="visibility:hidden">.</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#largeModal" onclick="OpenTariffDetails();"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">From</label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" placeholder="" class="form-control" id="txtFrom" />
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">To</label>
+
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" placeholder="" class="form-control" id="txtTo" />
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-3">
+                            <div class="form-group label-floating">
+
+                                <div class="col">
+                                    <label class="form-label">Wo Type</label>
+                                    @Html.DropDownList("ddlWotype", (IEnumerable<SelectListItem>)ViewBag.ItemGroup, "--Select--", new { @class = "form-control", @id = "ddlWotype", name = "ddlWotype", autocomplete = "off", onblur = "SBNoEntry()" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Item Desc</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <select id="txtItem" class="form-control" onchange="OnItemDesc();">
+                                            <option value="">--Select--</option>
+                                        </select>
+                                        <input type="hidden" class="form-control" id="ddlItemID" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Fixed Rate</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                        <input id="txtFixedRate" placeholder="" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-6" id="divSize">
+                            <div class="form-group">
+                                <label class="form-label">Size</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <select class="form-control" id="ddlsize">
+                                            <option value="0">--Select--</option>
+                                            <option value="20">20</option>
+                                            <option value="40">40</option>
+                                            <option value="45">45</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-xs-4">
+                            <div class="form-group">
+                                <label class="form-label">.</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button class="btn btn-success btn-xs" id="btnAdd" onclick="return Add();">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <div>
+                                @*<label class="form-label">Details </label>*@
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" id="example" style="width:100%">
+                                    <thead>
+                                        <tr>
+
+
+
+                                            <th class="wd-5p sorting">Tariff</th>
+                                            <th class="wd-15p sorting">From</th>
+                                            <th class="wd-15p sorting">To</th>
+                                            <th class="wd-10p sorting">Item</th>
+                                            <th class="wd-10p sorting">Fixed Rate</th>
+                                            <th class="wd-10p sorting">Size</th>
+                                            <th class="wd-5p sorting">TariffID</th>
+                                            <th class="wd-5p sorting">ItemID</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-success float-right" id="Save" onclick="Save()" title="Save"><i class="fa fa-save"></i></button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" content-area" id="divsummary" style="display:none">
+    <div class="page-header">
+        <h4 class="page-title">
+           Tariff Summary
+        </h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="Back();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Add Work Order"></i> </a>
+            </li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+
+                        <div class="row">
+
+                            <div class="col-md-2 col-lg-2">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">From</label>
+                                    @Html.TextBox("FromDate", null, new { @id = "FromDate", @class = "form-control form_date2", @Value = DateTime.Now.AddDays(-1).ToString("dd MMM yyyy") })
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-lg-2">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">To</label>
+                                    @Html.TextBox("ToDate", null, new { @id = "ToDate", @class = "form-control form_date2", @Value = DateTime.Now.ToString("dd MMM yyyy") })
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+
+                                            <button class="btn btn-primary" id="TripSearch" type="button" onclick="Showdetails()"><i class="fe fe-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <button class="btn btn-orange" id="btnSearch"   title="Export To Excel" type="button"><i class="fa fa-file-excel-o" onclick="GetExcelFile()"></i></button>
+                                    <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                        <thead>
+
+                                            <tr></tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+          function GetExcelFile() {
+
+        window.location = '@Url.Action("TariffExportToExcel", "BookingEntry")?';
+
+    }
+</script>
+<script>
+    function ShowSummary() {
+        $("#DIvCompantMaster").hide();
+        $("#divsummary").show();
+    }
+    function Back() {
+        $("#DIvCompantMaster").show();
+        $("#divsummary").hide();
+    }
+    var storeAddedItem = [];
+    function Add() {
+        debugger;
+
+
+        var element = {};
+        element.TariffID = $('#txtTariff').val();
+        element.From = $('#txtFrom').val();
+        element.To = $('#txtTo').val();
+        element.Item = $("#txtItem option:selected").text();
+        element.FixedRate = $('#txtFixedRate').val();
+        element.size = $('#ddlsize').val();
+        element.Tariff = $("#txtTariff option:selected").text();
+        element.ItemID = $('#ddlItemID').val();
+        
+        storeAddedItem.push(element);
+
+        $('#example').DataTable({
+            "destroy": true,
+            "bLengthChange": false,
+            "aaData": storeAddedItem,
+            "bPaginate": false,
+            "bInfo": false,
+            "paging": false,
+            "columns": [
+
+                { "data": "Tariff" },
+                { "data": "From" },
+                { "data": "To" },
+                { "data": "Item" },
+                { "data": "FixedRate" },
+                { "data": "size" },
+                { "data": "TariffID" },
+                { "data": "ItemID" },
+            ]
+        });
+
+    }
+
+    function Entry() {
+        $("#global-loader").fadeOut("slow");
+
+        var Search = $("#txtTariff").val();
+        var data1 = { 'Search': Search };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/SearchTariff",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                debugger;
+
+
+                $("#txtFrom").val(data[0].EffectiveFrom)
+                $("#txtTo").val(data[0].EffectiveUpto)
+                $("#txtItem").val(data[0].ItemDescrp)
+                $("#txtItemID").val(data[0].ItemID)
+                
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        })
+    }
+
+
+     function Save() {
+
+      
+         debugger;
+       
+            var SelectedData = new Array();
+            var tablearray = new Array();
+
+            var table = document.getElementById("example");
+
+            var row;
+            for (var i = 1; i < table.rows.length; i++) {
+
+                row = table.rows[i];
+                EffectiveFrom = row.cells[1].innerText;
+                EffectiveUpto = row.cells[2].innerText;
+                FixedRate = row.cells[4].innerText;
+                size = row.cells[5].innerText;
+                TariffID = row.cells[6].innerText;
+                ItemID = row.cells[7].innerText;
+                SelectedData.push({
+                    'EffectiveFrom': EffectiveFrom, 'EffectiveUpto': EffectiveUpto, 'FixedRate': FixedRate, 'size': size, 'TariffID': TariffID, 'ItemID': ItemID
+                })
+            }
+
+            var data1 = {
+                'Debitdata': SelectedData
+            };
+         var data = JSON.stringify(data1);
+ 
+
+
+                          $.ajax({
+                              url: "/BookingEntry/SaveTariffSetting",
+                            data: data,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                              success: function (data) {
+                                  //alert(data);
+                                  $('#btnSave').removeAttr('disabled', 'disabled');
+                                  
+
+                                  alert(data);
+
+                                  document.location = '@Url.Action("TariffSetting", "BookingEntry")';
+
+                            },
+                            error: function (errormessage) {
+                                alert(errormessage.responseText);
+                            }
+                        });
+
+
+     }
+    function Showdetails() {
+        debugger;
+        var FromDate = document.getElementById('FromDate').value;
+        var ToDate = document.getElementById('ToDate').value;
+
+        try {
+            var data1 = { 'FromDate': FromDate, 'ToDate': ToDate };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/BookingEntry/TarifSmmary",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    RepTableDataJsonwopaging($("#example2"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+    function SBNoEntry() {
+        $("#global-loader").fadeOut("slow");
+
+        var Search = $("#ddlWotype").val();
+        var data1 = { 'Search': Search };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/SearchtrackerSCMTRSB",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                debugger;
+
+
+                var select = $("#txtItem");
+
+                select.empty();
+                select.append($('<option/>', {
+                    value: "",
+                    text: "--Select--"
+                }));
+                for (var i = 0; i < data.length; i++) {
+                    select.append($("<option></option>").val(data[i].Item).html(data[i].Item));
+
+                }
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        })
+    }
+    function OnItemDesc() {
+        $("#global-loader").fadeOut("slow");
+
+        var select = $("#txtItem").val();
+        var data1 = { 'Search': select };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/SearchtrackerItemID",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                debugger;
+
+                $("#ddlItemID").val(data[0].ItemID)
+
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        })
+    }
+</script>

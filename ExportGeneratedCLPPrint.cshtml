@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Container Load Plan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 10px;
+            font-size: 11px;
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+        td, th {
+            border: 1px solid #000;
+            padding: 5px 6px;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
+        th {
+            background-color: #fcbd021f !important;
+            font-size: 11.5px;
+        }
+
+        .noborder td { border: none; }
+        hr { border: 2px solid orange; margin: 8px 0; }
+        h4 { text-align: center; font-weight: bold; margin: 10px 0; font-size: 17px; }
+
+        /* YE LINE SABSE ZAROORI HAI - DIRECT LANDSCAPE PRINT */
+        @@page {
+            size: A4 landscape;
+            margin: 8mm;
+        }
+
+        @@media print {
+            body {
+                margin: 0;
+                padding: 8mm;
+            }
+            /* Force landscape — koi option nahi puchega */
+            size: landscape;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <table class="noborder">
+        <tr>
+            <td style="width:20%;"><img src="~/assets/images/companylogo.jpg" height="80"></td>
+            <td style="text-align:center;">
+                <div style="font-size:21px; font-weight:bold;">@ViewBag.con_Name</div>
+                <div style="font-size:12px;">@ViewBag.AddressI</div>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+    <h4>CONTAINER LOAD PLAN</h4>
+
+    <!-- Top 3 Columns Info -->
+    <table>
+        <tr>
+            <th style="width:33.33%;">
+                CLP NO: @ViewBag.StuffingNo<br>
+                CLP Date: @ViewBag.StuffedDate<br>
+                Acc.Holder: @ViewBag.Acc_Holder<br>
+                Shipping Line: @ViewBag.Line
+            </th>
+            <th style="width:33.33%;">
+                Container No: @ViewBag.ContainerNo<br>
+                Size / Type: @ViewBag.size / @ViewBag.ContainerType<br>
+                Cargo Type: @ViewBag.Cargotype<br>
+                Custom Seal: @ViewBag.CustomSeal<br>
+                Agent Seal: @ViewBag.AgentSeal<br>
+                Class / UN: @ViewBag.Class / @ViewBag.UANNo
+            </th>
+            <th style="width:33.33%;">
+                Vessel Name: @ViewBag.VesselName<br>
+                Via No: @ViewBag.ViaNo<br>
+                POD: @ViewBag.PODID<br>
+                FPD: @ViewBag.FPDID<br>
+                POL: Nhava Sheva
+            </th>
+        </tr>
+    </table>
+
+    <br>
+
+    <!-- Main Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Sr</th>
+                <th>SB No</th>
+                <th>SB Date</th>
+                <th>PKGS Type</th>
+                <th>FOB Value</th>
+                <th>Exporter</th>
+                <th>CHA</th>
+                <th>Consignee</th>
+                <th>Description</th>
+                <th>Total Qty</th>
+                <th>Stuffed Qty</th>
+                <th>Weight</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var dr in ViewBag.SBDetailsList)
+            {
+
+                <tr>
+                    <td style="text-align:center">@dr["SrNo"]</td>
+                    <td style="text-align:left">@dr["SBNo"]</td>
+                    <td style="text-align:center">@dr["AddedOn"]</td>
+                    <td style="text-align:center">@ViewBag.Package</td>
+                    <td style="text-align:center">@dr["FOBValue"]</td>
+                    <td style="text-align:center">@ViewBag.Exporter</td>
+                    <td style="text-align:center">@ViewBag.CHA</td>
+                    <td style="text-align:center">@ViewBag.Consignee</td>
+                    <td style="text-align:center">@ViewBag.CargoDescription</td>
+                    <td style="text-align:center">@dr["SBQty"]</td>
+                    <td style="text-align:center">@dr["StuffedQty"]</td>
+                    <td style="text-align:center">@dr["StuffedWeight"]</td>
+
+                </tr>
+            }
+
+        </tbody>
+        <tfoot>
+            <tr style="font-weight:bold;">
+                <td colspan="9" style="text-align:right; border:none;"></td>
+                <td>Total</td>
+                <td>@ViewBag.StuffedQty</td>
+                <td>@ViewBag.StuffedWeight</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- Weight Box -->
+    <div style="float:right; margin-top:8px; width:280px;">
+        <table>
+            <tr>
+                <td style="width:65%;"><b>Tare Wt (in KGS)</b></td>
+                <td style="text-align:right;"><b>@ViewBag.TareWeight</b></td>
+            </tr>
+            <tr>
+                <td><b>Gross Wt (in KGS)</b></td>
+                <td style="text-align:right;"><b>@((Convert.ToDecimal(ViewBag.StuffedWeight) + Convert.ToDecimal(ViewBag.TareWeight ?? 0)).ToString("0.000"))</b></td>
+            </tr>
+        </table>
+    </div>
+    <div style="clear:both;"></div>
+
+    <p style="margin-top:20px;"><b>REMARKS :</b> @ViewBag.Remarks</p>
+
+    <p style="font-size:10px; margin-top:15px;">
+        <b>NOTE :</b><br>
+        1) All Activities including those at incoming & in process stage have been Satisfactorily completed.<br>
+        2) All necessary records have been completed and verified with date and seal.<br>
+        3) Cargo / Container delivered in good condition.
+    </p>
+
+    <!-- Signature -->
+    <table style="margin-top:40px; width:100%;">
+        <tr>
+            <td style="border-top:1px solid #000; height:70px; text-align:center;">Representative / Survey<br>Shipping Agent / CHA</td>
+            <td style="border-top:1px solid #000; height:70px; text-align:center;">CFS Surveyor</td>
+            <td style="border-top:1px solid #000; height:70px; text-align:center;">CFS Executive Name</td>
+            <td style="border-top:1px solid #000; height:70px; text-align:center;">Superintendent of Custom,JNCH</td>
+        </tr>
+    </table>
+
+</body>
+</html>

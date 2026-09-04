@@ -1,0 +1,263 @@
+﻿<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @*<title>FCl Custom Examine tally</title>*@
+    <style>
+
+        body {
+            color: black;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .box {
+            float: left;
+            width: 100%;
+            padding: 0px;
+        }
+
+        .boxHalf {
+            float: left;
+            width: 50%;
+            padding: 0px;
+            border: 1px solid gray;
+        }
+
+        .boxHeaderL {
+            /*float: left;*/
+            width: 20%;
+            padding: 0px;
+            text-align: left;
+        }
+
+        .tblBoxFortotal {
+            border-collapse: collapse;
+            width: 100%;
+            padding: 0px;
+            height: 320px;
+            float: left;
+            border-top: none;
+            border-bottom: none;
+        }
+
+        .boxHeaderR {
+            /*float: left;*/
+            width: 80%;
+            padding: 0px;
+            text-align: center;
+        }
+
+        .tblBox {
+            border-collapse: collapse;
+            width: 100%;
+            padding: 0px;
+            float: left;
+        }
+
+
+        .tblBox1 {
+            border-collapse: collapse;
+            width: 50%;
+            padding: 0px;
+            float: left;
+        }
+
+        .tblBox2 {
+            border-collapse: collapse;
+            width: 100%;
+            padding: 0px;
+            height: 320px;
+            float: left;
+        }
+
+        .headingh3 {
+            font-size: 15pt;
+            font-family: 'verdana(batlic)';
+            padding: 2px;
+            text-decoration: underline;
+        }
+
+        th {
+            border: 1px solid black;
+            font-size: 12px;
+            font-family: 'Segoe UI';
+        }
+
+
+        td {
+            border: 1px solid black;
+            font-size: 12px;
+            font-family: 'Segoe UI';
+        }
+
+
+        h5, h4 {
+            font-size: 10pt;
+            font-family: 'Segoe UI';
+        }
+
+        h3 {
+            font-size: 10pt;
+            font-family: 'verdana(batlic)';
+        }
+
+        .buttomMargin {
+            margin-bottom: -20px;
+            padding-bottom: 0px;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: red;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div style="width:100%; text-align:center; height:100%">
+        <div style="width:100%;height:100%;">
+            <table class="tblBox">
+
+                <tbody>
+                    <tr>
+                        <th style="text-align:left;width:7%"> <img height="70" width="200" src="~/images/brand/Trinetra.jpeg" /></th>
+                        <th style="width:80%;text-align:center;background-color:white;font-family: 'Segoe UI'">
+                            <spam style="width:80%;font-family: 'Segoe UI';font-weight:bold;font-size:20px">@ViewBag.con_Name</spam>   <br />
+
+                        </th>
+                         
+
+                    </tr>
+                </tbody>
+            </table>
+            <table class="tblBox">
+                <tbody>
+                    <tr>
+                        <th style="width:100%;text-align:center; background-color: #ede5e5;font-size:20px">
+
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="printBody clearfix">
+                <div class="box">
+                    <table class="tblBox">
+                        <tbody>
+                            <tr>
+                                <th style="width:15%;text-align:left;border:none;font-weight:400">Work Order No</th>
+                                <td style="width:35%;text-align:left;border:none;font-weight:bold">:<label style="visibility:hidden">Sp</label> @ViewBag.WoNo </td>
+                                <th style="width:15%;text-align:left;border:none;font-weight:400">Work Order Date</th>
+                                <td style="width:35%;text-align:left;border:none;font-weight:bold">:<label style="visibility:hidden;font-weight:400">Sp</label> @ViewBag.WoDate</td>
+                            </tr>
+                           
+                            <tr>
+                                <th style="width:15%;text-align:left;border:none;font-weight:400">Customer</th>
+                                <td style="width:35%;text-align:left;border:none">:<label style="visibility:hidden;font-weight:bold">Sp</label>  @ViewBag.CustomerName</td>
+                                <th style="width:15%;text-align:left;border:none;font-weight:400">CHA</th>
+                                <td style="width:35%;text-align:left;border:none">:<label style="visibility:hidden;font-weight:bold">Sp</label> @ViewBag.CHAName</td>
+                            </tr>
+                            <tr>
+                                <th style="width:15%;text-align:left;border:none;font-weight:400">Exporter</th>
+                                <td style="width:35%;text-align:left;border:none">:<label style="visibility:hidden;font-weight:bold">Sp</label> @ViewBag.ShipperName </td>
+                                <th style="width:15%;text-align:left;border:none;font-weight:400">Forwarder</th>
+                                <td style="width:35%;text-align:left;border:none">:<label style="visibility:hidden;font-weight:bold">Sp</label>@ViewBag.Forwarder </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                &nbsp;
+            </div>
+            <div class="printBody clearfix">
+                <div class="box">
+                    <table class="tblBox" id="tablegetdetails">
+                        <thead>
+                            <tr>
+                               
+                                <th style="background-color: #ede5e5;width:5px">SB No/Container No</th>
+                                <th style="background-color: #ede5e5;width:5px">Size</th>
+                                <th style="background-color: #ede5e5;width:5px">Item</th>
+
+                                <th style="background-color: #ede5e5;width:5px">Qty</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var dr in ViewBag.ImportFCLdetailsCustomtally)
+                            {
+                                <tr>
+                                   
+                                    <td style="text-align:center;width:5px;font-weight:bold;height:20px">@dr["SB_No_ContainerNo"]</td>
+                                    <td style="text-align:center;width:5px;height:20px">@dr["Size"]</td>
+                                    <td style="text-align:center;width:5px;height:20px">@dr["Item"]</td>
+
+                                    <td style="text-align:center;width:5px;height:20px">@dr["Qty"]</td>
+
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <label style="visibility:hidden">Hello</label><br />
+                <label style="visibility:hidden">Hello</label><br />
+
+            </div>
+            <div class="printBody clearfix">
+                <div class="box">
+                    <table class="tblBox">
+                        <tbody>
+                            <tr>
+                                <th style="width:10%;text-align:left;background-color:white;border:none;font-weight:400">Prepared by :</th>
+                                <td style="width:10%;text-align:left;border:none"> @ViewBag.UserName</td>
+                                 
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <label style="visibility:hidden">Hello</label><br />
+                <label style="visibility:hidden">Hello</label><br />
+                <label style="visibility:hidden">Hello</label><br />
+            </div>
+            <div class="printBody clearfix">
+                <div class="box">
+                    <table class="tblBox">
+                        <tbody>
+                            <tr>
+                                <td style="width:30%;text-align:left;border:none">(Signature of CHA)</td>
+                                <td style="width:30%;text-align:center;border:none">(Signature of CFS Executive)</td>
+                       
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div>
+        </div>
+    </div>
+</body>
+</html>

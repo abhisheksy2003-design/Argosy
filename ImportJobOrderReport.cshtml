@@ -1,0 +1,289 @@
+﻿@{
+    ViewBag.Title = "JobOrderReport";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style>
+    .table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+
+    .hiderow {
+        display: none;
+    }
+</style>
+<script src="~/js/GetTableJson.js"></script>
+<div id="global-loader"></div>
+<div class=" content-area overflow-hidden">
+    <div class="page-header">
+        <h4 class="page-title">Job Order Summary</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label"> From Date</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.DropDownList("ddlJoType", (IEnumerable<SelectListItem>)ViewBag.JoTypes, "--All--", new { @class = "form-control form-control-lg" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label"> From Date</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtFromDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.AddDays(-7).ToString("dd MMM yyyy 00:00") })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label"> To Date</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtToDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 23:59") })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-1 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label" style="visibility:hidden"> '</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <button class="btn btn-primary" title="Search" value="Show" onclick="Show()" type="button"><i class="fe fe-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <button class="btn btn-green" id="btnSearch" title="Export To Excel" type="button"><i class="fa fa-file-excel-o" onclick="GetExcelFile()"></i></button>
+                    <div class="input-group">
+
+                        <span class="input-group-append " id="tabPurpose">
+                            <button class="btn btn-outline-success active" id="export" style="text-transform: uppercase;" type="button" onclick="showContainerList()">Summary Details </button>
+                            <button class="btn btn-facebook" id="export" style="text-transform: uppercase;" type="button" onclick="showHoldingList()">Container Details </button>
+                            <label id="selectedImportORExport" class="display_none"></label>
+                        </span>
+                    </div><br />
+                    @*@Html.ActionLink("Export To Excel", "ExportToExcelgetImportJobOrderReport", null, new { @class = "btn btn-primary btn-md" })*@
+                    <div class="row" id="divContainerDetails">
+                        <div class="col-md-12 col-lg-12">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover tbl-cart text-nowrap" id="reportTable" style="width:100%">
+                                    <thead>
+
+                                    </thead>
+                                    <tbody style="box-sizing :border-box;">
+
+
+                                        @*@foreach (var d in Model)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(m => d.SrNo)</td>
+                                                    <td>@Html.DisplayFor(m => d.JONo)</td>
+                                                    <td>@Html.DisplayFor(m => d.ContainerNo)</td>
+                                                    <td>@Html.DisplayFor(m => d.SealNo)</td>
+                                                    <td>@Html.DisplayFor(m => d.TruckNo)</td>
+                                                    <td>@Html.DisplayFor(m => d.EIRNo)</td>
+                                                    <td>@Html.DisplayFor(m => d.EIRDate)</td>
+                                                    <td>@Html.DisplayFor(m => d.InDate)</td>
+                                                    <td>@Html.DisplayFor(m => d.AddedBy)</td>
+
+                                                </tr>
+
+
+                                            }*@
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="display:none" id="divholding">
+                        <div class="col-md-12 col-lg-12">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover tbl-cart text-nowrap" id="example4" style="width:100%">
+                                    <thead>
+
+                                    </thead>
+                                    <tbody style="box-sizing :border-box;">
+
+
+                                        @*@foreach (var d in Model)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(m => d.SrNo)</td>
+                                                    <td>@Html.DisplayFor(m => d.JONo)</td>
+                                                    <td>@Html.DisplayFor(m => d.ContainerNo)</td>
+                                                    <td>@Html.DisplayFor(m => d.SealNo)</td>
+                                                    <td>@Html.DisplayFor(m => d.TruckNo)</td>
+                                                    <td>@Html.DisplayFor(m => d.EIRNo)</td>
+                                                    <td>@Html.DisplayFor(m => d.EIRDate)</td>
+                                                    <td>@Html.DisplayFor(m => d.InDate)</td>
+                                                    <td>@Html.DisplayFor(m => d.AddedBy)</td>
+
+                                                </tr>
+
+
+                                            }*@
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function GetExcelFile() {
+
+        window.location = '@Url.Action("ExportToExcelgetImportJobOrderReport", "report")?';
+
+
+    }
+
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ddlJoType").append($("<option></option>").val("999").html("Cancel Job Order"));
+    });
+    $(window).on("load", function (e) {
+        $("#global-loader").fadeOut("slow");
+    })
+</script>
+
+
+
+<script>
+
+    function showHoldingList() {
+
+        $("#divContainerDetails").hide();
+        $("#divholding").show();
+
+        var JoType = $("#ddlJoType").val();
+        var FromDate = $("#txtFromDate").val();
+        var ToDate = $("#txtToDate").val()
+        var data1 = { 'FromDate': FromDate, 'ToDate': ToDate, 'JoType': JoType };
+        data = JSON.stringify(data1);
+
+        $.ajax({
+
+            url: '/BookingEntry/getImportJoReport',
+            type: 'Post',
+            data: data,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+
+
+                RepTableDataJson($("#example4"), data, "SalesRegisterReport", "SalesRegisterReport_list");
+                //var table = document.getElementById("reportTable");
+                //Textboxvalue(Activity)
+                $("#global-loader").fadeOut("slow");
+
+
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+
+
+        });
+
+    }
+
+    function showContainerList() {
+
+        $("#divContainerDetails").show();
+        $("#divholding").hide();
+
+    }
+
+    function ShowSelectedValue() {
+        var JoType = $("#ddlJoType").val();
+        var FromDate = $("#txtFromDate").val();
+        var ToDate = $("#txtToDate").val()
+        var data1 = { 'FromDate': FromDate, 'ToDate': ToDate, 'JoType': JoType};
+        data = JSON.stringify(data1);
+
+        // alert(data);
+        $.ajax({
+
+            url: '/BookingEntry/getImportJobOrderReport',
+            type: 'Post',
+            data: data,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+
+
+                RepTableDataJson($("#reportTable"), data, "SalesRegisterReport", "SalesRegisterReport_list");
+                //var table = document.getElementById("reportTable");
+                //Textboxvalue(Activity)
+                $("#global-loader").fadeOut("slow");
+
+
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+
+
+        });
+    }
+
+    function Show() {
+        // alert("before")
+        $("#global-loader").fadeIn("fast");
+
+        var delayInMilliseconds = 1000; //1 second
+
+        setTimeout(function () {
+            for (i = 0; i < 4000; i++) {
+                i = i + 0;
+            }
+            ShowSelectedValue();
+
+        }, delayInMilliseconds);
+
+
+        //$("#global-loader").fadeOut("slow");
+    }
+</script>
+
+
+
+
+
+
+

@@ -1,0 +1,309 @@
+﻿@{
+    ViewBag.Title = "ItemMaster";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<style>
+    .table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<div class=" content-area" id="Divsummary">
+    <div class="page-header">
+        <h4 class="page-title">Tariff Master</h4>
+        <div class="ibox-content  text-right">
+            <button type="button" class="btn btn-icon btn-teal" name="summarylist" title="Summary list" id="summarylist" onclick="summary();"><i class="fa fa-file-text"></i></button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row" style="display:none">
+
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Item Descrp</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.DropDownList("ddlItemDescrp", (IEnumerable<SelectListItem>)ViewBag.Item, "--Select--", new { @class = "form-control", @id = "ddlItemDescrp", name = "ddlItemDescrp", autocomplete = "off"  })
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Tariff ID</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input id="txtTariffID" type="text" class="form-control" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Description</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input id="txtDescription" type="text" class="form-control" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Effective From</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtEffectiveFromdate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 08:00") })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Effective UpTo</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtEffectiveUpTodate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 08:00") })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Discount %</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input id="txtDiscount" type="text" class="form-control" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-1 col-sm-12">
+                            <label class="form-label" style="visibility:hidden"> '</label>
+                            <button class="btn btn-success btn-xs" id="btnSaveDriver" onclick="Savedetails();"><i class="fa fa-floppy-o"></i></button>&nbsp;&nbsp;
+                            <input type="hidden" id="TxtEIRcopyupload" />
+                            <input type="hidden" id="TxtEIRcopyreportupload" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" content-area" id="divsummary" style="display:none">
+    <div class="page-header">
+        <h4 class="page-title">Tariff Master Summary</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="Back();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-arrow-left" data-placement="bottom" title="Add Work Order"></i> </a>
+            </li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Search</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                            @Html.TextBox("txtsearch", null, new { @class = "form-control ", @id = "txtsearch", name = "txtsearch", autocomplete = "on" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <button class="btn btn-primary" id="TripSearch" type="button" onclick="Showdetails()"><i class="fe fe-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.ActionLink("Export To Excel", "ExportToExcelImportAccountMaster", null, new { @class = "btn btn-primary btn-md" })
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                        <thead>
+                                            <tr></tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function summary() {
+        $("#Divsummary").hide();
+        $("#divsummary").show();
+    }
+    function Back() {
+        $("#Divsummary").show();
+        $("#divsummary").hide();
+    }
+    function Showdetails() {
+        $("#global-loader").fadeIn("slow");
+
+        var search = document.getElementById('txtsearch').value;
+
+        var datac = {
+            'search': search
+        };
+        var data = JSON.stringify(datac);
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/BookingEntry/GetEyardTariffSettingSummary',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (jsonResult) {
+
+                $("#example2").empty();
+                RepTableDataJsonwopaging($("#example2"), jsonResult, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+    $(window).on("load", function (e) {
+        $("#global-loader").fadeOut("slow");
+
+    })
+    
+
+
+    function Savedetails() {
+        var LineName = $("#ddlItemDescrp").val()
+        var ShippingID = $("#ddlItemDescrp").val()
+        var TariffID = $("#txtTariffID").val()
+
+        var Description = $("#txtDescription").val()
+        var EffectiveFromdate = $("#txtEffectiveFromdate").val()
+        var EffectiveUpTodate = $("#txtEffectiveUpTodate").val()
+        var Discount = $("#txtDiscount").val()
+
+
+        if (LineName == "0") {
+            Swal.fire({
+                title: "",
+                text: "Please fill the Line Name",
+                icon: "warning",
+            });
+
+            document.getElementById('ddlItemDescrp').style.borderColor = "red"
+            $("#global-loader").fadeOut("slow");
+            return false;
+
+        }
+
+        if (TariffID == "") {
+            Swal.fire({
+                title: "",
+                text: "Please fill the tariff id",
+                icon: "warning",
+            });
+
+            document.getElementById('txtTariffID').style.borderColor = "red"
+            $("#global-loader").fadeOut("slow");
+            return false;
+
+        }
+
+
+        if (Description == "") {
+            Swal.fire({
+                title: "",
+                text: "Please fill the Description",
+                icon: "warning",
+            });
+
+            document.getElementById('txtDescription').style.borderColor = "red"
+            $("#global-loader").fadeOut("slow");
+            return false;
+
+        }
+
+        var data1 = {
+            'ShippingID': ShippingID, 'TariffID': TariffID, 'Description': Description, 'EffectiveFromdate': EffectiveFromdate,
+            'EffectiveUpTodate': EffectiveUpTodate, 'Discount': Discount
+        };
+        var data = JSON.stringify(data1);
+           $.ajax({
+               url: "/BookingEntry/EmptyEyardTariffSave",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+
+
+                    alert('Record saved successfully');
+
+                   document.location = '@Url.Action("TariffMaster", "BookingEntry")'
+                    $("#global-loader").fadeOut("slow");
+
+
+                },
+
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                    $("#global-loader").fadeOut("slow");
+                }
+            });
+    }
+
+</script>

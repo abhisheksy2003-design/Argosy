@@ -1,0 +1,156 @@
+﻿@* EMPTY OUT PRINT SLIP *@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/css/printstyle.css" rel="stylesheet" />
+
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .table-bordered td, .table-bordered th {
+            border: 1px solid #000;
+            padding: 5px;
+            font-size: 12px;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 6px;
+            font-size: 12px;
+        }
+
+        th {
+            font-size: 13px;
+        }
+
+        .main-pd-wrapper {
+            width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ccc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="main-pd-wrapper">
+
+        <!-- HEADER WITH LOGO -->
+        <table>
+            <tr>
+                <td style="width:25%">
+                    <img src="~/assets/images/companylogo.jpg" height="90" />
+                </td>
+
+                <th style="text-align:center; border:none;">
+                    <span style="font-size:20px;">@ViewBag.CompanyName</span><br />
+                    <span style="font-size:12px;">@ViewBag.CompanyAddress</span>
+                </th>
+            </tr>
+        </table>
+
+        <hr style="border:2px solid orange;" />
+
+        <h4 style="text-align:center; font-weight:bold;">EMPTY OUT SLIP</h4>
+
+        <!-- Empty Out Header Info -->
+        <table class="table-bordered">
+            <tr>
+                <th>
+                    <p>Empty Out No: @ViewBag.EmptyOutNo</p>
+                    <p>Out Date: @ViewBag.OutDate</p>
+                    <p>Container No: @ViewBag.ContainerNo</p>
+                </th>
+
+                <th>
+                    <p>Location: @ViewBag.Location</p>
+                    <p>Vehicle No: @ViewBag.VehicleNo</p>
+                    <p>Remarks: @ViewBag.Remarks</p>
+                </th>
+            </tr>
+        </table>
+
+        <!-- DETAILS TABLE -->
+        <table class="table table-bordered" style="margin-top: 10px">
+            <thead>
+                <tr style="background:#fcbd021f;">
+                    <td colspan="10"><b>Additional Details</b></td>
+                </tr>
+
+                <tr>
+                    @foreach (System.Data.DataColumn col in ViewBag.Details.Columns)
+                    {
+                        <th>@col.ColumnName</th>
+                    }
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (ViewBag.Details != null)
+                {
+                    foreach (System.Data.DataRow dr in ViewBag.Details.Rows)
+                    {
+                        <tr>
+                            @foreach (var item in dr.ItemArray)
+                            {
+                                <td>@item</td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <!-- NOTES -->
+        <table class="table-bordered" style="margin-top:10px;">
+            <tr>
+                <th>
+                    <p>Terms & Conditions :</p>
+                    <p style="font-weight:300">
+                        Note: This is a computer-generated empty-out slip, signature & stamp not required.
+                    </p>
+                </th>
+
+                <th style="text-align:center;">
+                    <br /><br /><br />
+                    <p>Empty Out Executive</p>
+                </th>
+            </tr>
+        </table>
+
+        <!-- Prepared By -->
+        <table class="table-bordered" style="margin-top:10px;">
+            <tr>
+                <th>Prepared By : @ViewBag.UserName</th>
+            </tr>
+        </table>
+
+        <!-- Print Date -->
+        <table class="table-bordered" style="margin-top:10px;">
+            <tr>
+                <th>Date & Time : @ViewBag.PrintDate</th>
+            </tr>
+        </table>
+
+    </section>
+
+</body>
+</html>

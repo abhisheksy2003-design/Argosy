@@ -1,0 +1,294 @@
+﻿
+@{ ViewBag.Title = "Package Master";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml"; }
+<style>
+
+    .required {
+        content: "*";
+        color: red;
+        font: bold;
+        font-size: small;
+        padding-bottom: -50px;
+        vertical-align: middle;
+    }
+</style>
+<div class=" content-area overflow-hidden" id="divCreate">
+
+    <div class="page-header">
+        <div class="page-header-title">
+            <h4 class="page-title">
+                Port Master
+            </h4>
+        </div>
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="Summary();" id="addlocallistbtn" data-modal="modal-13">
+                  Summary
+            </button>
+        </div>
+    </div>
+
+    <div class="page-body">
+
+        <!-- Add Contact Start Model start-->
+        <div class="card col-sm-12 col-lg-12">
+            <div class="card-header">
+                <h5>PORT MASTER</h5>
+
+                <div class="card-header-right">
+                    <i class="icofont icofont-rounded-down"></i>
+                    <i class="icofont icofont-refresh"></i>
+                    <i class="icofont icofont-close-circled"></i>
+                </div>
+            </div>
+
+
+            <div class="card-block col-sm-12 col-lg-12">
+                <div class="row" style="display: none;">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">PORT ID<span class="required">*</span></label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input id="PORTID" type="text" value="0" placeholder="New" readonly="readonly" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">PORT Name<span class="required">*</span></label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input id="txtpkgCode" type="text" placeholder="PORT Name" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Port Code<span class="required">*</span></label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input id="txtpkgs" type="text" placeholder="Port Code" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none;">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="custom-switch">
+                                <input type="checkbox" name="custom-switch-checkbox" id="chkIsActive" value="true" checked="" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Is Active?</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label"></label>
+                    <div class="row gutters-xs">
+                        <div class="col">
+                            @*<input type="submit" id="Save" name="save" value="Save" class="btn btn-success" />*@
+                            <button id="btnSave" class="btn btn-save px-4" onclick="return SavePort();">Save</button>
+                            <input type="button" name="clear" value="Clear" class="btn btn-cancel px-4" onclick="Clear()" title="clear" id="clearValue" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-area" id="divCreateSummary" style="display:none">
+
+    <div class="page-header">
+        <div class="page-header-title">
+            <h4 class="page-title">
+                Port Summary
+            </h4>
+        </div>
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="Back();" id="addlocallistbtn" data-modal="modal-13">
+                 Add
+            </button>
+        </div>
+    </div>
+
+    <div class="page-body">
+
+        <!-- Add Contact Start Model start-->
+        <div class="card col-sm-12 col-lg-12">
+            <div class="card-header">
+                <h5>PORT MASTER</h5>
+
+                <div class="card-header-right">
+                    <i class="icofont icofont-rounded-down"></i>
+                    <i class="icofont icofont-refresh"></i>
+                    <i class="icofont icofont-close-circled"></i>
+                </div>
+            </div>
+
+
+            <div class="card-block col-sm-12 col-lg-12">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Search</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                    @Html.TextBox("txtsearch", null, new { @class = "form-control ", @id = "txtsearch", name = "txtsearch", autocomplete = "on" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label" style="visibility:hidden"> '</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <button class="btn btn-primary" id="btnShow" title="Show" data-toggle="tooltip" data-placement="bottom" onclick="ShowSSRSummary();"><i class="fa fa-search"></i></button>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblWorkOrderOpenList" style="width:100%;"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/GetTableJson.js"></script>
+<script>
+    function Back() {
+        $("#divCreate").show();
+        $("#divCreateSummary").hide();
+    }
+
+    function Summary() {
+        $("#divCreate").hide();
+        $("#divCreateSummary").show();
+        ShowSSRSummary();
+    }
+
+
+
+    function ShowSSRSummary() {
+        var search = document.getElementById('txtsearch').value;
+
+        var data1 = { 'search': search };
+        data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Master/PKGSList",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                //alert(jsonResult)
+                $("#reportTable").empty();
+                RepTableDataJson($("#tblWorkOrderOpenList"), data, "ExpensesTypeMaster", "ExpensesTypeMaster")
+                //  alert(jsonResult)
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+
+
+    }
+
+    function Clear() {
+        location.reload();
+    }
+ 
+</script>
+
+
+<script>
+    function SavePort() {
+        var PortID = $('#PORTID').val(); 
+        var PortName = $('#txtpkgCode').val().trim();
+        var PortCode = $('#txtpkgs').val().trim();
+
+        if (PortName === "" || PortCode === "") {
+            alert("Port Name aur Port Code required hai");
+            return;
+        }
+
+        var obj = {
+            PORTID: parseInt(PortID),
+            PortName: PortName,
+            P_Code: PortCode
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Master/SavePort",
+            data: JSON.stringify(obj),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (res) {
+                alert(res.Message);
+                if (res.Status) {
+                    $('#txtpkgCode').val('');
+                    $('#txtpkgs').val('');
+                    $('#PORTID').val('0'); // reset to new
+                }
+            },
+            error: function (xhr, status, error) {
+                alert("Error while saving: " + error);
+            }
+        });
+    }
+
+</script>
+
+
+<script>
+    function Update(PortID) {
+        debugger;
+        $("#divCreate").show();
+        $("#divCreateSummary").hide();
+
+        // Send JSON request
+        var data = JSON.stringify({ 'PortID': PortID });
+
+        $.ajax({
+            type: "POST",
+            url: "/Master/FetchPortDetails",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response && response.length > 0) {
+                    $("#PORTID").val(response[0].PortID);
+                    $("#txtpkgCode").val(response[0].PortName);
+                    $("#txtpkgs").val(response[0].P_Code);
+                } else {
+                    alert("No data found.");
+                }
+            },
+            error: function (xhr, status, error) {
+                alert("Error: " + error);
+            }
+        });
+    }
+</script>

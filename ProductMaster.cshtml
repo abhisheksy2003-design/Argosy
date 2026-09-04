@@ -1,0 +1,448 @@
+﻿
+@{
+    ViewBag.Title = "ProductMaster";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+
+<div class=" content-area">
+    <div class="page-header">
+        <h4 class="page-title" id="New">Product Master</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a onclick="getBack();" id="ShowSummary" class="btn btn-josph btn-success" style="color:white;align-content:center;"><i class="fa fa-file-text" data-toggle="tooltip" data-placement="bottom" title="Summary" data-original-title="Back"></i>  </a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-12 col-lg-12">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label">Product Name</label>
+                                @Html.TextBox("ProductName", null, new { @class = "form-control", @id = "ProductName", name = "ProductName", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label">Bar Code</label>
+                                @Html.TextBox("BarCode", null, new { @class = "form-control", @id = "BarCode", name = "BarCode", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Company</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="ddlCompany" />
+                                        <input type="hidden" class="form-control" id="hdnPayFromId" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Packing Desc</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="ddlPackingDesc" />
+                                        <input type="hidden" class="form-control" id="hdPackingID" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Packing</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="ddlPacking" />
+                                        <input type="hidden" class="form-control" id="PackingID" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-lg-2">
+                            <div class="form-group">
+                                <label class="form-label">Sales Qty</label>
+                                @Html.TextBox("SalesQty", null, new { @class = "form-control", @id = "SalesQty", name = "SalesQty", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2">
+                            <div class="form-group label-floating">
+                                <label class="form-label">.</label>
+                                @Html.DropDownList("ddlSalesQty", new List<SelectListItem> {
+                              new SelectListItem {Text = "NA",Value="NA"} ,
+                              new SelectListItem {Text = "TAB",Value="TAB"},
+                              new SelectListItem {Text = "CAP",Value="CAP"},
+                           }
+                        , new { @class = "form-control", autocomplete = "off", @id = "ddlSalesQty" })
+                                @*@Html.DropDownList("ddlRegisterType", (IEnumerable<SelectListItem>)ViewBag.GSTType, "--Select--", new { @class = "form-control", @id = "ddlRegisterType", name = "ddlRegisterType", autocomplete = "off" })*@
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Packing Type</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="ddlPackingType" />
+                                        <input type="hidden" class="form-control" id="ddlPackingTypeID" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Category</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="ddlCategory" />
+                                        <input type="hidden" class="form-control" id="ddlCategoryID" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2">
+                            <div class="form-group label-floating">
+                                <label class="form-label">Brand</label>
+                                @Html.DropDownList("ddlBrand", new List<SelectListItem> {
+                              new SelectListItem {Text = "Regular",Value="Regular"},
+                              new SelectListItem {Text = "Generic",Value="Generic"},
+                              new SelectListItem {Text = "Important",Value="Important"}
+                          }
+                        , new { @class = "form-control", autocomplete = "off", @id = "ddlBrand" })
+                                @*@Html.DropDownList("ddlRegisterType", (IEnumerable<SelectListItem>)ViewBag.GSTType, "--Select--", new { @class = "form-control", @id = "ddlRegisterType", name = "ddlRegisterType", autocomplete = "off" })*@
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Drawer/Self</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="ddlDrawerSelf" />
+                                        <input type="hidden" class="form-control" id="ddlDrawerSelfID" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Composition</label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="ddlComposition" />
+                                        <input type="hidden" class="form-control" id="ddlCompositionID" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <div class="col-sm-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label">MRP</label>
+                                @Html.TextBox("MRP", null, new { @class = "form-control", @id = "MRP", name = "MRP", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label">Rate</label>
+                                @Html.TextBox("Rate", null, new { @class = "form-control", @id = "Rate", name = "Rate", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-lg-2">
+                            <div class="form-group">
+                                <label class="form-label">Sgst</label>
+                                @Html.TextBox("Sgst", null, new { @class = "form-control", @id = "Sgst", name = "Sgst", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-lg-2">
+                            <div class="form-group">
+                                <label class="form-label">Cgst</label>
+                                @Html.TextBox("Cgst", null, new { @class = "form-control", @id = "Cgst", name = "Cgst", autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-lg-2">
+                            <div class="form-group">
+                                <label class="form-label">HSN Code</label>
+                                @Html.TextBox("HSNCode", null, new { @class = "form-control", @id = "HSNCode", name = "HSNCode", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-success float-right" id="Save" onclick="SaveDepartment()" title="Save"><i class="fa fa-save"></i></button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        AutomCom();
+
+    });
+    function AutomCom() {
+        debugger;
+        $("#ddlCompany").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Master/getAutoComList",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.ProductName,
+                                val: item.ProductID
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlCompany").val(i.item.label);
+                $("#hdnPayFromId").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+
+        $("#ddlPackingDesc").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Master/getAutoPackingDescription",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.PackingDescription,
+                                val: item.ID
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlPackingDesc").val(i.item.label);
+                $("#hdPackingID").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+        $("#ddlPacking").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Master/getAutoDescriptionM",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.DescriptionName,
+                                val: item.DescriptionID
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlPacking").val(i.item.label);
+                $("#PackingID").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+        $("#ddlPackingType").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Master/getAutoPackingType",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.PackingType,
+                                val: item.Id
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlPackingType").val(i.item.label);
+                $("#ddlPackingTypeID").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+        $("#ddlCategory").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Master/getAutoProductCategory",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.Category,
+                                val: item.Id
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlCategory").val(i.item.label);
+                $("#ddlCategoryID").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+        $("#ddlDrawerSelf").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Master/getAutoDrawerLocationM",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.LocationName,
+                                val: item.LocationID
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlDrawerSelf").val(i.item.label);
+                $("#ddlDrawerSelfID").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+        $("#ddlComposition").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Master/getAutoCompostionM",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.Compostion,
+                                val: item.ID
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlCompositionID").val(i.item.label);
+                $("#ddlCompositionID").val(i.item.val);
+            },
+            minLength: 1
+        });
+    };
+    
+</script>

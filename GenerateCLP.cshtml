@@ -1,0 +1,449 @@
+﻿
+@{
+    ViewBag.Title = "Generate CLP";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<script src="~/js/GetTableJsonwopaging.js"></script>
+
+<section class="comp-section" id="listClp">
+
+
+    <div class=" content-area" id="divCreateSummary">
+        <div class="page-header" style="margin-top:-10px;">
+            <h4 class="page-title">Pending CLP List</h4>
+            <div class="form-group">
+                <label class="form-label"></label>
+                <div class="row gutters-xs">
+                    <div class="col"> 
+                        <button type="button" class="btn btn-success" name="summarylist" title="Summary list" id="summarylist" onclick="ViewGeneratedCLPSummary();">Summary</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row" style="margin-top:-30px;">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label mandatory">Search</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                                @Html.TextBox("txtsearch", null, new { @class = "form-control ", @id = "txtsearch", name = "txtsearch", autocomplete = "on" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label" style="visibility:hidden"> '</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                <input type="button" id="btnShow" value="Show" class="btn btn-primary" onclick="ShowSSRSummary();" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblWorkOrderOpenList" style="width:100%;"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<div id="addCLP" style="display:none">
+    <div class=" content-area" id="DIvCompantMaster">
+        <div class="page-header">
+            <h4 class="page-title" id="New">Generate CLP</h4>
+            <div class="form-group">
+              <label class="form-label"></label>
+               <div class="row gutters-xs">
+                <div class="col"> 
+                  <button type="button" class="btn btn-success" name="summarylist" title="Summary list" id="summarylist" onclick="ViewGeneratedCLPSummary1();">Summary</button>
+                 </div>
+               </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-12">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-3" style="display:none;">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">SB No <span class="text-danger">*</span></label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtSBNo" type="text" placeholder="SB No" class="form-control" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3" style="display:none;">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Container No <span class="text-danger">*</span></label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtContainerNo" type="text" placeholder="SB No" class="form-control" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="hdnSBID" name="hdnSBID" value="" />
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Via Number</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtViaNumber" type="text" placeholder="Enter Via Number" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Voyage Number</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtVoyage" type="text" placeholder="Enter Voyage Number" class="form-control" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="button" id="btnShow" value="Generate" class="btn btn-success" onclick="SaveGeneratedCLPByID();" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div>
+                                    @*<label class="form-label">Details </label>*@
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblGenerateClp" style="width:100%;"></table>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+</div>
+
+<div class=" content-area" id="divGeneratedCLPSummary" style="display:none">
+    <div class="page-header">
+        <h4 class="page-title">Print CLP Summary</h4>
+        <div class="ibox-content  text-right">
+            <a onclick="getBack();" class="btn btn-added" style="color:white;align-content:center;">  Back</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row">
+                       
+                        <div class="col-lg-2 col-sm-12" id="divsearchtext" style="display:none">
+                            <div class="form-group">
+                                <label class="form-label" id="lblgetlable"></label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtSearchtext", null, new { @class = "form-control ", @id = "txtSearchtext", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">From Date <span class="text-danger">*</span></label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtSummaryFromDate", null, new { @class = "form-control form_datetime1 ", @id = "txtSummaryFromDate", autocomplete = "off", @Value = DateTime.Now.ToString("dd MMM yyyy 00:00") })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">To Date <span class="text-danger">*</span></label>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        @Html.TextBox("txtSummaryToDate", null, new { @class = "form-control form_datetime1 ", @id = "txtSummaryToDate", autocomplete = "off", @Value = DateTime.Now.ToString("dd MMM yyyy 23:59") })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label" style="visibility:hidden">.</label>
+                                <div class="row gutters-xs">
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-icon btn-filters" name="clearProfile" title="Show receipt details" id="btnShow" onclick="GetReceiptDetails()"><i class="fa fa-search"></i></button>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                   
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblGeneratedCLP"></table>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function ShowSSRSummary() {
+
+        var search = document.getElementById('txtsearch').value;
+
+        try {
+            var data1 = { 'search': search };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/Export/SearchPenndingCLP",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    RepTableDataJsonwopaging($("#tblWorkOrderOpenList"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+
+    function EditDetails(id) {
+        $("#listClp").hide();
+        $("#addCLP").show();
+        document.getElementById("hdnSBID").value = id;
+
+        $.ajax({
+            url: "/Export/GenerateCLPByID",
+            data: '{ID: ' + id + '}',
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var data1 = JSON.parse(data);
+                $("#txtSBNo").val(data1[0].SBNo);
+                $("#txtContainerNo").val(data1[0].ContainerNo);
+
+                GenerateCLPSummaryById(id);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+
+            }
+        });
+
+    }
+    function GenerateCLPSummaryById(id) {
+
+        var ID = id;
+
+        try {
+            var data1 = { 'ID': ID };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/Export/GenerateCLPSummaryById",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    RepTableDataJsonwopaging($("#tblGenerateClp"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+
+
+
+    function SaveGeneratedCLPByID() {
+
+        if (IsValid() == true) {
+            var sbid = document.getElementById("hdnSBID").value;
+
+            var SBNo = $("#txtSBNo").val();
+            var ContainerNo = $('#txtContainerNo').val();
+            var ViaNumber = $('#txtViaNumber').val();
+            var VoyageNo = $('#txtVoyage').val();
+
+
+
+            var StuffingEntry = {};
+
+            StuffingEntry.SBNo = sbid;
+            StuffingEntry.ContainerNo = ContainerNo;
+            StuffingEntry.ViaNumber = ViaNumber;
+            StuffingEntry.VoyageNo = VoyageNo;
+
+
+                $.ajax({
+                    url: "/Export/SaveGeneratedCLPByID",
+                    data: '{StuffingEntry: ' + JSON.stringify(StuffingEntry) + '}',
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                    if (data == "SUCCESS")
+                    {
+                        alert("Save Successfully !!");
+                         window.location.href = '@Url.Action("GenerateCLP", "Export")';
+                    }
+                    else
+                    {
+                        alert(" Save not Successfully !!");
+                        window.location.href = '@Url.Action("GenerateCLP", "Export")';
+                    }
+
+
+                },
+                error: function (errormessage) {
+                alert(errormessage.responseText);
+                }
+                });
+        }
+    }
+    function IsValid() {
+
+        var pod = $("#txtPOD").val();
+
+
+
+        var blResult = Boolean;
+        blResult = true;
+
+
+        if (pod == "") {
+            document.getElementById('txtPOD').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+
+        if (blResult == false) { alert('Please fill the required fields!'); }
+        return blResult;
+    }
+
+    function ViewGeneratedCLPSummary() {
+        $("#listClp").hide();
+        $("#divGeneratedCLPSummary").show();
+        ShowGeneratedCLPSummary();
+    }
+    function ViewGeneratedCLPSummary1() {
+    $("#DIvCompantMaster").hide();
+    $("#divGeneratedCLPSummary").show();
+    ShowGeneratedCLPSummary();
+    }
+
+    function getBack() {
+        location.reload();
+    }
+
+    function ShowGeneratedCLPSummary() {
+
+        var search = document.getElementById('txtSearchtext').value;
+
+        try {
+            var data1 = { 'search': search };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/Export/SearchGeneratedCLPSummary",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    RepTableDataJsonwopaging($("#tblGeneratedCLP"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+    function PrintCLP(StuffingNo) {
+
+
+        var data1 = { 'StuffingNo': StuffingNo };
+        data = JSON.stringify(data1);
+
+        $.ajax({
+            url: '/Export/ExportGeneratedCLPPrint',
+            type: 'Post',
+            data: data,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+
+                var myWindow = window.open("", "MsgWindow1", 'width=' + screen.availWidth + ',height=' + screen.availHeight + ',resizable=no');
+                myWindow.close();
+                var myWindow = window.open("", "MsgWindow1", 'width=' + screen.availWidth + ',height=' + screen.availHeight + ',resizable=no');
+                myWindow.document.write(response);
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+            }
+        });
+    };
+</script>

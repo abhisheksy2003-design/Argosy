@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Import SSR Work Order Print</title>
+
+    <link href="~/css/printstyle.css" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+            color: #000;
+        }
+
+        .main-wrapper {
+            width: 1000px;
+            margin: auto;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 0 8px #999;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 6px;
+            font-size: 12px;
+        }
+
+        th {
+            background-color: #FFF9E6;
+            font-weight: 600;
+        }
+
+        .no-border td, .no-border th {
+            border: none !important;
+        }
+
+        .header-table img {
+            max-height: 70px;
+        }
+
+        .company-name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .company-address {
+            font-size: 11px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 8px 0;
+        }
+
+        .mt-5 {
+            margin-top: 5px;
+        }
+
+        .mt-10 {
+            margin-top: 10px;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        @@media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            .main-wrapper {
+                box-shadow: none;
+                width: 100%;
+                padding: 10px;
+            }
+
+            table {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        <!-- HEADER -->
+        <table class="header-table no-border">
+            <tr>
+                <td style="width:25%">
+                    <img src="~/assets/images/companylogo.jpg" height="90" />
+                </td>
+                <td style="width:80%" class="center">
+                    <div class="company-name">@ViewBag.CompanyName</div>
+                    <div class="company-address">@ViewBag.CompanyAddress</div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="title">Import SSR Work Order Print</div>
+        <hr />
+
+        <!-- BASIC DETAILS -->
+        <table class="mt-5">
+            <tr>
+                <th style="width:15%">SSR No</th>
+                <td style="width:35%">@ViewBag.SSRNo</td>
+                <th style="width:15%">SSR Date</th>
+                <td style="width:35%">@ViewBag.SSRDate</td>
+            </tr>
+
+            <tr>
+                <th>Igm No</th>
+                <td colspan="3">@ViewBag.IgmNo</td>
+            </tr>
+
+            <tr>
+                <th>Item No</th>
+                <td colspan="3">@ViewBag.ItemNo</td>
+            </tr>
+
+            <tr>
+                <th>Type</th>
+                <td colspan="3">@ViewBag.Category</td>
+            </tr>
+
+            <tr>
+                <th>CHA Name</th>
+                <td colspan="3">@ViewBag.CHAName</td>
+            </tr>
+        </table>
+
+        <!-- CONTAINER DETAILS -->
+        <table class="mt-10">
+            <thead>
+                <tr>
+                    <th style="width:8%">Sr No</th>
+                    <th style="width:20%">Container No</th>
+                    <th style="width:10%">Size</th>
+                    <th style="width:15%">Type</th>
+                    <th style="width:15%">Examine</th>
+                    <th style="width:15%">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dr in ViewBag.InvoiceItemList)
+                {
+                    <tr>
+                        <td class="center">@dr["SRNo"]</td>
+                        <td>@dr["ContainerNo"]</td>
+                        <td class="center">@dr["size"]</td>
+                        <td class="center">@dr["ctrtype"]</td>
+                        <td class="center">@dr["Examine"]</td>
+                        <td class="center">@dr["Amount"]</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- FOOTER -->
+        <table class="no-border mt-10">
+            <tr>
+                <td style="width:50%">
+                    <strong>Prepared By :</strong> @ViewBag.PreparedBy
+                </td>
+               @* <td style="width:50%" class="right">
+                    <strong>For @ViewBag.CompanyName</strong>
+                </td>*@
+            </tr>
+        </table>
+
+        <div class="right mt-5">
+            <strong>Authorised Signatory</strong>
+        </div>
+
+    </div>
+
+    <script>
+        window.onload = function () {
+            window.print();
+        };
+    </script>
+</body>
+</html>

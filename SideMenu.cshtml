@@ -1,0 +1,107 @@
+﻿@model IEnumerable<MvcBondEntities.BusinessEntities.SubmenuInfo>
+
+<style>
+    /* Parent Active (Blue highlight) */
+    .sidebar .parent-active > a {
+        background: #0d6efd !important;
+        color: #fff !important;
+        border-radius: 8px;
+    }
+
+        /* Make active parent text white */
+        .sidebar .parent-active > a span {
+            color: #fff !important;
+        }
+
+        /* Icon white */
+        .sidebar .parent-active > a i {
+            color: #fff !important;
+        }
+
+        /* Arrow white */
+        .sidebar .parent-active > a .menu-arrow {
+            color: #fff !important;
+        }
+
+    /* Child active highlight */
+    .sidebar .child-active > a {
+        background: #e8f0fe !important;
+        color: #0d6efd !important;
+        font-weight: 600;
+        border-radius: 6px;
+    }
+
+    /* Hover effect for smooth UI */
+    .sidebar li a:hover {
+        background: #f3f6ff;
+        border-radius: 6px;
+    }
+
+</style>
+
+
+@{
+    var currentController = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+    var currentAction = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString();
+
+    if (Session["MenuList"] != null)
+    {
+        @GetTreeMenus(Session["MenuList"] as IEnumerable<MvcBondEntities.BusinessEntities.SubmenuInfo>, 0, currentController, currentAction)
+    }
+}
+
+
+@helper GetTreeMenus(IEnumerable<MvcBondEntities.BusinessEntities.SubmenuInfo> siteMenu, Nullable<int> parentID, string currentController, string currentAction)
+{
+    foreach (var i in siteMenu.Where(a => a.ParentID.Equals(parentID)))
+    {
+        var submenu = siteMenu.Where(a => a.ParentID.Equals(i.MenuID)).ToList();
+
+        bool isParentActive = submenu.Any(x =>
+            x.ControllerName.Equals(currentController, StringComparison.OrdinalIgnoreCase) &&
+            x.Action.Equals(currentAction, StringComparison.OrdinalIgnoreCase));
+
+        string parentClass = isParentActive ? "parent-active" : "";
+
+        if (submenu.Count > 0)
+        {
+            <li class="submenu @parentClass">
+
+                <a href="#parent@(i.MenuID)">
+                    <i class="fa-solid @i.menuIcon"></i>
+                    <span>@i.MenuText</span>
+                    <span class="menu-arrow"></span>
+                </a>
+
+                <ul style="display:@(isParentActive ? "block" : "none")">
+                    @foreach (var e in submenu)
+                    {
+                        bool isChildActive =
+                            e.ControllerName.Equals(currentController, StringComparison.OrdinalIgnoreCase) &&
+                            e.Action.Equals(currentAction, StringComparison.OrdinalIgnoreCase);
+
+                        <li class="@(isChildActive ? "child-active" : "")">
+                            <a href="/@e.ControllerName/@e.Action">
+                                <span>@e.MenuText</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+
+            </li>
+        }
+        else
+        {
+            bool isSingleActive =
+                i.ControllerName.Equals(currentController, StringComparison.OrdinalIgnoreCase) &&
+                i.Action.Equals(currentAction, StringComparison.OrdinalIgnoreCase);
+
+            <li class="@(isSingleActive ? "parent-active" : "")">
+                <a href="/@i.ControllerName/@i.Action">
+                    <i class="fa-solid @i.menuIcon"></i>
+                    <span>@i.MenuText</span>
+                </a>
+            </li>
+        }
+    }
+}

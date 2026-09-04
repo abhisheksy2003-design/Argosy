@@ -1,0 +1,450 @@
+﻿
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/css/printstyle.css" rel="stylesheet" />
+    <style>
+
+        body {
+            color: black;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .box {
+            float: left;
+            width: 100%;
+            padding: 0px;
+            border-style: solid;
+            border-width: 1pt;
+        }
+
+        .boxHalf {
+            float: left;
+            width: 50%;
+            padding: 0px;
+            border: 1px solid gray;
+        }
+
+        .boxHeaderL {
+            /*float: left;*/
+            width: 25%;
+            padding: 0px;
+            text-align: left;
+        }
+
+        .boxHeaderC {
+            /*float: left;*/
+            width: 75%;
+            padding: 0px;
+            text-align: center;
+        }
+
+        .boxHeaderR {
+            /*float: left;*/
+            width: 75%;
+            padding: 0px;
+            text-align: center;
+        }
+
+        .tblBox {
+            border-collapse: collapse;
+            width: 100%;
+            padding: 0px;
+            float: left;
+        }
+
+        .headingh3 {
+            font-size: 7.5pt;
+            font-family: 'Segoe UI';
+            padding: 2px;
+            text-decoration: underline;
+        }
+
+        th {
+            border: 1px solid black;
+            font-size: 7.5pt;
+            font-family: Segoe UI;
+            background-color: white;
+        }
+
+        td {
+            border: 1px solid black;
+            font-size: 7.5pt;
+            font-family: Segoe UI;
+        }
+
+        h5, h4 {
+            font-size: 7.5pt;
+            font-family: Segoe UI;
+        }
+
+        h3 {
+            font-size: 7.5pt;
+            font-family: 'Segoe UI';
+        }
+
+        .buttomMargin {
+            margin-bottom: -20px;
+            padding-bottom: 0px;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: red;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div style="width:100%; text-align:center; height:100%">
+        <div style="width:100%;height:100%;">
+            <table class="tblBox">
+                <tbody>
+                    <tr>
+                        <th style="text-align:left;width:7%"> <img height="70" width="200" src="~/images/brand/Trinetra.jpeg" /></th>
+                        <th style="width:80%;text-align:center;background-color:white;font-family: 'Segoe UI'">
+                            <spam style="font-size:9pt;margin-top: 0px;margin-bottom:-13px;">@ViewBag.con_Name</spam>   <br />
+                            
+                        </th>
+                        <th style="width:10%;text-align:center;background-color:white"></th>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="tblBox">
+                <tbody>
+                    <tr>
+                        <th style="width:100%;text-align:center; background-color: #ede5e5;font-size:20px">
+                              PROFORMA INVOICE
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="printBody clearfix">
+                <div class="box" style="border-style:none;">
+                    <table class="tblBox">
+                        <tbody>
+                            <tr>
+                                <th style="width:10%;text-align:left">Proforma No</th>
+                                <td style="width:50%;text-align:left">@ViewBag.InvNo</td>
+                                <th style="width:10%;text-align:left">Proforma Date</th>
+                                <td style="width:50%;text-align:left;">@ViewBag.AssessDate</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4" style="width:20%;text-align:left">Details of Receiver/ Billed to:</th>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="vertical-align:top;width:70%">
+                                    <div class="box" style="border-style: none;">
+                                        <table class="tblBox">
+                                            <tbody>
+                                                <tr>
+                                                    <th style="width:15%;text-align:left;border-style:none">Name</th>
+                                                    <td style="width:85%;text-align:left;border-style:none;font-weight: 700;">:<label style="visibility:hidden">Sp</label> @ViewBag.PartyName</td>
+                                                </tr>
+                                                <tr>
+                                                    <th style="width:15%;text-align:left;border-style:none">Address </th>
+                                                    <td style="width:85%;text-align:left;border-style:none">:<label style="visibility:hidden">Sp</label> @ViewBag.GstAddress</td>
+                                                </tr>
+                                                <tr>
+                                                    <th style="width:15%;text-align:left;border-style:none">GSTIN </th>
+                                                    <td style="width:85%;text-align:left;border-style:none;font-weight: 700;">:<label style="visibility:hidden">Sp</label> @ViewBag.GSTIn_uniqID</td>
+                                                </tr>
+                                                <tr>
+                                                    <th style="width:15%;text-align:left;border-style:none">Place of Supply </th>
+                                                    <td colspan="1" style="border-style:none;">
+                                                        <table class="tblBox">
+                                                            <tr>
+                                                                <td style="width:30%;text-align:left;border-style:none">:<label style="visibility:hidden">Sp</label> @ViewBag.PlaceofSupply</td>
+                                                                <th style="width:25%;text-align:left;border-style:none;border: 1px solid gray;">State Code </th>
+                                                                <td style="width:30%;text-align:left;border-style:none;border: 1px solid gray;"><label style="visibility:hidden">Sp</label> @ViewBag.state_Code</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="printBody clearfix">
+                <div class="box" style="border-style: none;">
+                    <table class="tblBox" style="border-style: none;">
+                        <tbody>
+                            <tr>
+                                <td colspan="4" style="vertical-align:top">
+                                    <div class="box" style="border-style: none;">
+                                        <table class="tblBox">
+                                            <tbody>
+                                                <tr style="border-bottom: 1px solid black;">
+                                                    <th colspan="4" style="width:20%;text-align:left;border-style: none;">Operational Details</th>
+                                                    @*<th colspan="2" style="width:20%;text-align:left;border-style: none;">Movement: </th>*@
+                                                </tr>
+                                                <tr>
+                                                    <th style="text-align:left;border-style:none;">Customer Name</th>
+                                                    <td style="text-align:left;border-style:none">:<label style="visibility:hidden;font-weight:400">Sp</label> @ViewBag.CustomerName</td>
+                                                    <th style="text-align:left;border-style:none">CHA Name</th>
+                                                    <td style="text-align:left;border-style:none">:<label style="visibility:hidden;font-weight:400">Sp</label> @ViewBag.CHAName</td>
+                                                </tr>
+                                                <tr>
+                                                    <th style="width:20%;text-align:left;border-style:none">Shipper Name</th>
+                                                    <td style="width:30%;text-align:left;border-style:none;font-weight:bold">:<label style="visibility:hidden;font-weight:400">Sp</label> @ViewBag.ShipperName</td>
+                                                    <th style="width:20%;text-align:left;border-style:none">Forwarder Name</th>
+                                                    <td style="width:30%;text-align:left;border-style:none">:<label style="visibility:hidden;font-weight:400">Sp</label> @ViewBag.ForwarderName</td>
+                                                </tr>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+  
+            <div class="table-responsive">
+                <table class="tblBox" style="border-style: none;">
+                    <thead>
+                        <tr>
+                            <th style="width:50px;background-color:#ede5e5;font-size: 10pt;font-weight: 700;">Sr No.</th>
+                            <th style="width:20px;background-color:#ede5e5;font-size: 10pt;font-weight: 700;">Details Of Bill Item Description</th>
+                            <th style="width:80px;background-color:#ede5e5;font-size: 10pt;font-weight: 700;">SB/Container No</th>
+                            <th style="width:80px;background-color:#ede5e5;font-size: 10pt;font-weight: 700;">Size</th>
+
+                            <th style="width:80px;background-color:#ede5e5;font-size: 10pt;font-weight: 700;">Amount</th>
+
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var dr in ViewBag.InvoiceItemList)
+                        {
+                            <tr>
+                                <td style="text-align:center">@dr["Sr No"]</td>
+                                <td style="text-align:left">@dr["Item"]</td>
+                                <td style="text-align:left">@dr["SB_ContainerNo"]</td>
+                                <td style="text-align:center">@dr["Size"]</td>
+
+                                <td style="text-align:center">@dr["NetAmount"]</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="text-align:left;">
+                <div style="text-align:left;">
+                    <h3 style="margin-top: -0px;margin-bottom: -0px;font-size: 9.5pt;">Charges Details:</h3>
+                </div>
+            </div>
+            
+
+          <div class="table-responsive">
+                <table class="tblbox" style="border-style: none;" id="divchargesdesc">
+                    <thead>
+                        <tr>
+                            <th style="width:10%;background-color: #ede5e5;font-size: 10pt;font-weight: 700;text-align:center" rowspan="2">sr no.</th>
+                            <th style="width:20%;background-color: #ede5e5;font-size: 10pt;font-weight: 700;" rowspan="2">charges description</th>
+                            <th style="width:13%;background-color: #ede5e5;font-size: 7.5pt;font-weight: 700;" rowspan="2">Sac Code</th>
+                            <th style="width:10%;background-color: #ede5e5;font-size: 10pt;font-weight: 700;" rowspan="2">amount</th>
+                            
+                            <th style="width:10%;background-color: #ede5e5;font-size: 10pt;font-weight: 700;" colspan="2">sgst</th>
+                            <th style="width:10%;background-color: #ede5e5;font-size: 10pt;font-weight: 700;" colspan="2">cgst</th>
+                            <th style="width:10%;background-color: #ede5e5;font-size: 10pt;font-weight: 700;" colspan="2">igst</th>
+                        </tr>
+                        <tr>
+                            <th style="width:100px;background-color: #ede5e5;">rate(%)</th>
+                            <th style="width:100px;background-color: #ede5e5;">amount</th>
+                            <th style="width:100px;background-color: #ede5e5;">rate(%)</th>
+                            <th style="width:100px;background-color: #ede5e5;">amount</th>
+                            <th style="width:100px;background-color: #ede5e5;">rate(%)</th>
+                            <th style="width:100px;background-color: #ede5e5;">amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var dr in ViewBag.InvoiceItemList)
+                        {
+                        <tr>
+                            <td style="text-align:center">@dr["sr no"]</td>
+                            <td style="text-align:center">@dr["Item"]</td>
+                            <td style="text-align:center">@dr["HSN"]</td>
+                            <td style="text-align:right">@dr["netamount"]</td>
+                       
+                            <td style="text-align:center">@dr["srate"]</td>
+                            <td style="text-align:right">@dr["sgst"]</td>
+                            <td style="text-align:center">@dr["crate"]</td>
+                            <td style="text-align:right">@dr["cgst"]</td>
+                            <td style="text-align:center">@dr["irate"]</td>
+                            <td style="text-align:right">@dr["igst"]</td>
+                        </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td style="text-align:center;" colspan="2">total</td>
+                            <td style="text-align:center"></td>
+                            
+                            <td style="text-align:right">@ViewBag.netamount </td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:right">@ViewBag.sgst </td>
+                            <td style="text-align:center"> </td>
+                            <td style="text-align:right">@ViewBag.cgst </td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:right">@ViewBag.igst </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div> 
+            <div style="border:1px solid gray;">
+                <div class="printBody clearfix">
+                    <div class="box" style="border-style: none;">
+                        <table class="tblBox">
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" style="vertical-align:top;width:65%">
+                                        <div class="box" style="border-style: none;">
+                                            <table class="tblBox">
+                                                <tbody>
+
+                                                    <tr>
+                                                        <th style="width:20%;text-align:left;font-weight: bold;border-style: none;">BANK DETAILS :</th>
+                                                        <td style="width:30%;text-align:left;font-weight: 500;border-style: none;">Company Name &nbsp; @ViewBag.con_Name</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="width:20%;text-align:left;font-weight: 500;;font-weight: 500;border-style: none;">@ViewBag.BankName</th>
+                                                        <td style="width:30%;text-align:left;border-style: none;">@ViewBag.AccountNo</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="width:20%;text-align:left;font-weight: 500;border-style: none;">@ViewBag.BranchName</th>
+                                                        <td style="width:30%;text-align:left;font-weight: 500;border-style: none;">@ViewBag.IFSCCode</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="width:5%;text-align:left;font-weight: 500;border-style: none;border-top: 1px solid black;">Remarks</th>
+                                                        <td style="width:30%;text-align:left;font-weight: 500;border-style: none;border-top: 1px solid black;">@ViewBag.Remarks</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td colspan="2" style="vertical-align:top;width:35%">
+                                        <div class="box" style="border-style: none;">
+                                            <table class="tblBox">
+                                                <tbody>
+                                                    <tr>
+                                                        <th style="width:60%;text-align:left;font-weight: 500;border-bottom: 1px solid black;border-left: none !important;border-top:none !important"> Total Amount Before Tax</th>
+                                                        <td style="width:40%;text-align:right;font-weight: 500;border-bottom: 1px solid black;border-left: none !important;border-top:none !important">@ViewBag.AmountWithoutTax</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="width:60%;text-align:left;font-weight: 500;border-bottom: 1px solid black;border-left: none !important;border-top:none !important">Add : CGST</th>
+                                                        <td style="width:40%;text-align:right;font-weight: 500;border-bottom: 1px solid black;border-left: none !important;border-top:none !important">@ViewBag.CGSTAmount</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="width:60%;text-align:left;font-weight: 500;border-bottom: 1px solid black;border-left: none !important;border-top:none !important">Add :SGST</th>
+                                                        <td style="width:40%;text-align:right;font-weight: 500;border-bottom: 1px solid black;border-left: none !important;border-top:none !important">@ViewBag.SGSTAmount</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="width:60%;text-align:left;font-weight: 500;border-bottom: 1px solid black;border-left: none !important;border-top:none !important">Add : IGST</th>
+                                                        <td style="width:40%;text-align:right;font-weight: 500;border-bottom: 1px solid black;border-left: none !important;border-top:none !important">@ViewBag.IGSTAmount</td>
+                                                    </tr>
+                                                     
+                                                    <tr>
+                                                        <th style="width:60%;text-align:left;font-weight: 500;border-bottom: 1px solid black;border-left: none !important;border-top:none !important;border-bottom:none"> Total Amount After Tax</th>
+                                                        <td style="width:40%;text-align:right;font-weight: bold;border-bottom: 1px solid black;border-left: none !important;border-top:none !important;border-bottom:none">@ViewBag.TotalAmount</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="boxHalf clearfix" style="text-align:left;height:220px">
+                    <h5 style="margin-top:0px;margin-bottom:0px;">Terms and conditions</h5>
+                    <h6 style="margin-top:0px;margin-bottom:0px;font-family:Segoe UI;font-weight:normal">
+                        
+                    </h6>
+                    <div class="row">
+                        <h3> </h3>
+                        <h3> </h3>
+                    </div>
+                    <h3 style="font-weight:normal">Note:This is Computer Generated Invoice, Signature & Stamp Not Required</h3>
+                    <h3>(E.& O.E.)</h3>
+                </div>
+                <div class="boxHalf clearfix" style="text-align:center;height:220px">
+                    <br />
+                    <h3>@ViewBag.con_Name</h3><br /><br />
+                    <h3>Authorised Signatory</h3>
+                </div>
+            </div>
+            <div class="printBody clearfix">
+                <div class="box" style="border-style: none;">
+                    <table class="tblBox" style="border-style: none;">
+                        <tbody>
+                            <tr>
+                                <td colspan="4" style="vertical-align:top">
+                                    <div class="box" style="border-style: none;">
+                                        <table class="tblBox">
+                                            <tbody>
+                                                <tr>
+                                                    <th style="width:10%;text-align:left;border-style:none">Prepared By</th>
+                                                    <td style="width:20%;text-align:left;border-style:none">:<label style="visibility:hidden">Sp</label> @ViewBag.UserName</td>
+                                                    <th style="width:10%;text-align:left;border-style:none">Checked By</th>
+                                                    <td style="width:20%;text-align:left;border-style:none">:<label style="visibility:hidden">Sp</label></td>
+                                                    <th style="width:10%%;text-align:left;border-style:none;visibility:hidden">Timing</th>
+                                                    <td style="width:10%;text-align:left;border-style:none">:<label style="visibility:hidden">Sp</label> @ViewBag.Datetime</td>
+                                                    <th style="width:10%;text-align:left;border-style:none;visibility:hidden">Timing</th>
+                                                    <td style="width:10%;text-align:left;border-style:none">:<label style="visibility:hidden">Sp</label> @ViewBag.TIme</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+@*<script>
+            setTimeout(function () {
+                window.onload = window.print();
+            }, 1000);
+            wondow.onload = function () {
+
+            };
+        </script>
+
+        <script>
+            setTimeout(function () {
+                window.onload = window.close();
+            }, 1000);
+            wondow.onload = function () {
+
+            };
+    </script>*@

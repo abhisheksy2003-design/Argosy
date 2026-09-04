@@ -1,0 +1,619 @@
+﻿﻿
+@{
+    ViewBag.Title = "DoValidDateUpdation";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style>
+    /* .table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }*/
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+
+    .hiderow {
+        display: none;
+    }
+</style>
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<div id="Divaddlocation" style="margin-top:-15px;">
+    <div class="page-header">
+        <h4 class="page-title">Update DO Valid Date </h4>
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">Search On</label>
+                                    @Html.DropDownList("ddlSearchOn", new List<SelectListItem>
+                                    {
+                                        new SelectListItem { Text = "Select", Value = "Select"},
+                                      new SelectListItem { Text = "IGM-Item No", Value = "IGM-Item No"},
+                                    new SelectListItem { Text = "Container", Value = "Container"},
+                                   
+                                    new SelectListItem { Text = "BL Number", Value = "BLNumber"},
+                                      }, new { @class = "form-select", autocomplete = "off", @id = "ddlSearchOn", onchange = "SearchOn()", onblur = "SearchOn()" })
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" style="display:none" id="divIGMNO">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">IGM No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtIGMNo" type="text" placeholder="IGM No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" style="display:none" id="divitemNo">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Item No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtItemNo" type="text" placeholder="Item No" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+           
+
+                            <div class="col-lg-3 col-sm-12" style="display:none" id="divContainer">
+                                <div class="form-group">
+                                    <label class="form-label mandatory" id="lblSingle">Label</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input id="txtContainerNo" type="text" placeholder="" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label" style="visibility:hidden"> '</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+
+                                            <button class="btn btn-filters" id="TripSearch" type="button" onclick="ShowConIgm()"> <img src="~/assets/images/icons/search-whites.svg" alt="img"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BOE No</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtBOENo" type="text" placeholder="BOE No" class="form-control" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BOE Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*@Html.TextBox("txtBOEDate", null, new { @class = "form-control datePicker1", @id = "txtBOEDate", name = "txtBOEDate", autocomplete = "on", @Value = DateTime.Now.ToString("dd MMM yyyy") })*@
+                                            @Html.TextBox("txtBOEDate",
+                                                  DateTime.Now.ToString("yyyy-MM-dd"),
+                                                  new { @class = "form-control", type = "date", id = "txtBOEDate" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12" >
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Do Valid Date</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @*@Html.TextBox("txtValidDate", null, new { @class = "form-control datePicker1", @id = "txtValidDate", name = "txtValidDate", autocomplete = "on", @Value = DateTime.Now.ToString("dd MMM yyyy") })*@
+                                            @Html.TextBox("txtValidDate", DateTime.Now.ToString("dd-MMM-YYY"),
+                                                 new { @class = "form-control", type = "date", @id = "txtValidDate" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">BL Number</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input ID="txtBLNumber" type="text" placeholder="BL Number" class="form-control" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                           
+
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Shipping Line</label>
+
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="text" placeholder="Shipping Line" class="form-control" id="ddlShippingLine" readonly />
+                                            <input type="hidden" class="form-control" id="ddlLineId" />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">CHA</label>
+
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="text" placeholder="CHA" class="form-control" id="ddlCHA" readonly/>
+                                            <input type="hidden" class="form-control" id="ddlCHAId" />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" >
+                            <div class="col-lg-2 col-sm-3" style="display:none">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">Delivery Type</label>
+                                    <input type="text" placeholder="Delivery Type" class="form-control" id="ddlDeliveryType" readonly />
+                                    @*@Html.DropDownList("ddlDeliveryType", new List<SelectListItem>
+                                    {
+                                   new SelectListItem { Text = "Select", Value = "Select"},
+                                      new SelectListItem { Text = "Loaded", Value = "Loaded"},
+                                    new SelectListItem { Text = "Destuff", Value = "Destuff"},
+                                      }, new { @class = "form-select", autocomplete = "off", @id = "ddlDeliveryType" })*@
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3" style="display:none">
+                                <div class="form-group label-floating">
+                                    <label class="form-label">RMS Status</label>
+                                    @Html.DropDownList("ddlRMS", new List<SelectListItem>
+                                    {
+                                   new SelectListItem { Text = "Select", Value = "NA"},
+                                      new SelectListItem { Text = "Yes", Value = "1"},
+                                    new SelectListItem { Text = "No", Value = "0"},
+                                      }, new { @class = "form-select", autocomplete = "off", @id = "ddlRMS" })
+                                </div>
+                            </div>
+                            @*<div class="col-lg-2 col-sm-3" style="display:none;">
+                                    <div class="form-group label-floating">
+                                        <label class="form-label">Scan Type</label>
+                                        @Html.DropDownList("ddlScanType", new List<SelectListItem>
+                                        {
+                                       new SelectListItem { Text = "Select", Value = "Select"},
+                                          new SelectListItem { Text = "D", Value = "D"},
+                                        new SelectListItem { Text = "M", Value = "M"},
+                                          }, new { @class = "form-select", autocomplete = "off", @id = "ddlScanType" })
+                                    </div>
+                                </div>*@
+                            <div class="col-lg-4 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Remarks</label>
+
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            <input type="text" placeholder="Remarks" class="form-control" id="txtRemarks" readonly />
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="table-responsive">
+                                <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                                    <thead>
+
+                                        <tr></tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"></label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @*<input type="submit" id="Save" name="save" value="Save" class="btn btn-success" />*@
+                                <button class="btn btn-save px-4" id="Save" onclick="UpdateValidDate()" title="Save">Save</button>
+                                <button type="button" class="btn btn-cancel px-4" onclick="Clear()" name="clearProfile" title="clear" id="clearValue">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        AutomCom();
+        AutoShipLine();
+    });
+    function Clear() {
+
+        location.reload();
+
+    }
+
+    function AutomCom() {
+        debugger;
+
+        $("#ddlCHA1").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/BookingEntry/getCHAName",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.AGName,
+                                val: item.AGID,
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlCHA").val(i.item.label);
+                $("#ddlCHAId").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+    };
+
+    function AutoShipLine() {
+        debugger;
+
+        $("#ddlShippingLine1").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/BookingEntry/getShippingLine",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //debugger;
+                        response($.map(data, function (item) {
+                            //debugger;
+                            return {
+                                label: item.AGName,
+                                val: item.AGID,
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //debugger;
+                $("#ddlShippingLine").val(i.item.label);
+                $("#ddlLineId").val(i.item.val);
+            },
+            minLength: 1
+        });
+
+    };
+
+    function SearchOn() {
+
+        var Search = $("#ddlSearchOn").val();
+
+        // hide all first
+        $("#divIGMNO").hide();
+        $("#divitemNo").hide();
+        $("#divSingle").hide();
+
+        if (Search == "IGM-Item No") {
+            $("#divIGMNO").show();
+            $("#divitemNo").show();
+            $("#divContainer").hide();
+
+        }
+        else if (Search == "Container") {
+            $("#lblSingle").text("Container No");
+            $("#txtSingle").attr("placeholder", "Container No");
+            $("#divContainer").show();
+        }
+        else if (Search == "BOENo") {
+            $("#lblSingle").text("BOE No");
+            $("#txtSingle").attr("placeholder", "BOE No");
+            $("#divContainer").show();
+        }
+        else if (Search == "BLNumber") {
+            $("#lblSingle").text("BL Number");
+            $("#txtSingle").attr("placeholder", "BL Number");
+            $("#divContainer").show();
+        }
+        else if (Search == "Select")
+        {
+            $("#divIGMNO").hide()
+            $("#divitemNo").hide()
+            $("#divContainer").hide()
+        }
+    }
+
+    //function ShowConIgm() {
+    //    GetBOEDetails();
+    //    $("#global-loader").fadeOut("slow");
+
+    //    var IGMNo = $("#txtIGMNo").val();
+    //    var ItemNo = $("#txtItemNo").val();
+    //    var ContainerNo = $("#txtContainerNo").val();
+    //    var data1 = { 'IGMNo': IGMNo, 'ItemNo': ItemNo, 'ContainerNo': ContainerNo };
+    //    var data = JSON.stringify(data1);
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/BookingEntry/GetDetailsBOECon",
+    //        data: data,
+    //        contentType: "application/json; charset=utf-8",
+    //        success: function (data) {
+    //            $("#txtBOENo").val(data[0].boeNO);
+
+    //            $("#example2").empty();
+    //            RepTableDataJsonwopaging($("#example2"), data, "Voucher Details", "VoucherDetails_List");
+
+    //            $("#txtBOENo").val(data[0].BOENo);
+    //            $("#txtBOEDate").val(data[0].BOEDate);
+    //            $("#txtValidDate").val(data[0].ValidDate);
+    //            $("#ddlCHA").val(data[0].CHAID);
+
+
+    //            $("#global-loader").fadeOut("slow");
+    //        },
+    //        error: function (response) {
+    //            alert(response.responseText);
+    //            $("#global-loader").fadeOut("slow");
+    //        }
+    //    })
+    //}
+
+    function ShowConIgm() {
+
+        GetDODetails();
+
+        $("#global-loader").fadeOut("slow");
+
+        var IGMNo = $("#txtIGMNo").val();
+        var ItemNo = $("#txtItemNo").val();
+        var ContainerNo = $("#txtContainerNo").val();
+        var data1 = { 'IGMNo': IGMNo, 'ItemNo': ItemNo, 'ContainerNo': ContainerNo };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GetDetailsDODateCon",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example2").empty();
+                RepTableDataJsonwopaging($("#example2"), data, "Voucher Details", "VoucherDetails_List");
+
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+
+    function GetDODetails() {
+
+        $("#global-loader").fadeOut("slow");
+
+        var IGMNo = $("#txtIGMNo").val();
+        var ItemNo = $("#txtItemNo").val();
+        var ContainerNo = $("#txtContainerNo").val();
+        var data1 = { 'IGMNo': IGMNo, 'ItemNo': ItemNo, 'ContainerNo': ContainerNo };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/BookingEntry/GetDetailsDODate",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                $("#txtBLNumber").val(data.BLNumber);
+                $("#ddlShippingLine").val(data.SLID);
+                $("#txtBOENo").val(data.BOENo);
+                $("#txtBOEDate").val(data.BOEDate);
+
+                //let boeDate = new Date(data.BOEDate).toISOString().split("T")[0];
+                //$("#txtBOEDate").val(boeDate).prop("readonly", true);
+
+                $("#ddlCHA").val(data.CHAName);
+                //$("#ddlDeliveryType").val(data.DeliveryType);
+                //$("#ddlRMS").val(data.RMS);
+                $("#txtRemarks").val(data.Remarks);
+
+
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+
+
+    function UpdateValidDate() {
+        
+        var ValidDate = $("#txtValidDate").val();
+        //let date = new Date(ValidDate);
+        //let formatted = date.toISOString().slice(0, 10);
+        var SelectedData = [];
+
+        var table = document.getElementById("example2");
+
+        for (var i = 1; i < table.rows.length; i++) {
+
+            var row = table.rows[i];
+
+            //var IgmNo = row.cells[0].innerText.trim();
+            //var ItemNo = row.cells[1].innerText.trim();
+            var Jono = row.cells[2].innerText.trim();
+            var ContainerNo = row.cells[3].innerText.trim();
+
+            SelectedData.push({
+                //'IgmNo': IgmNo,
+                //'ItemNo': ItemNo,
+                'Jono': Jono,
+                'ContainerNo': ContainerNo
+            });
+        }
+
+        var data1 = {
+            'Debitdata': SelectedData,
+            'ValidDate': ValidDate
+        };
+
+        $.ajax({
+            url: "/BookingEntry/UpdateValidDate",
+            type: "POST",
+            data: JSON.stringify(data1),
+            contentType: "application/json",
+            success: function (data) {
+                alert(data);
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    }
+
+
+
+         function Save() {
+
+
+    debugger;
+    ///ddlentryType
+
+
+
+        var CHA = $("#ddlCHAId").val();
+        //var ShippingLine = $("#ddlLineId").val();
+       var BOENo = $("#txtBOENo").val();
+       //var BLNumber = $("#txtBLNumber").val();
+       var BOEDate = $("#txtBOEDate").val();
+       var ValidDate = $("#txtValidDate").val();
+       var CHAName = $("#ddlCHA").val();
+
+       var DeliveryType = $("#ddlDeliveryType").val();
+       var RMS = $("#ddlRMS").val();
+       var ScanType = $("#ddlScanType").val();
+       var Remarks = $("#txtRemarks").val();
+       var Examination = $("#txtExamination").val();
+
+     
+       var SelectedData = new Array();
+       var tablearray = new Array();
+
+       var table = document.getElementById("example2");
+
+       var row;
+       for (var i = 1; i < table.rows.length; i++) {
+
+           row = table.rows[i];
+           IgmNo = row.cells[0].innerText;
+           ItemNo = row.cells[1].innerText;
+           Jono = row.cells[2].innerText;
+           ContainerNo = row.cells[3].innerText;
+
+           Size = row.cells[4].innerText;
+           qty = row.cells[5].innerText;
+           Weight = row.cells[6].innerText;
+
+
+           //let ScanTypeSelect = row.cells[7].querySelector('select');
+           //ScanType = ScanTypeSelect.value;
+           //let ExaminationInput = row.cells[8].querySelector('input');
+           //Examination = ExaminationInput.value;
+           ScanType = null;
+           Examination = null;
+
+
+
+           SelectedData.push({
+               'IgmNo': IgmNo, 'ItemNo': ItemNo, 'Jono': Jono, 'ContainerNo': ContainerNo,
+               'Size': Size, 'qty': qty, 'Weight': Weight, 'ScanType': ScanType, 'Examination': Examination
+           })
+       }
+
+       var data1 = {
+           'Debitdata': SelectedData, 'CHA': CHA,  'BOENo': BOENo, 'BOEDate': BOEDate, 'ValidDate': ValidDate, 'DeliveryType': DeliveryType,
+           'RMS': RMS, 'ScanType': ScanType,  'Remarks': Remarks
+       };
+    var data = JSON.stringify(data1);
+
+                     $.ajax({
+                         url: "/BookingEntry/SaveBoeDetails",
+                       data: data,
+                       type: "POST",
+                       contentType: "application/json; charset=utf-8",
+                       dataType: "json",
+                         success: function (data) {
+                             //alert(data);
+                             $('#btnSave').removeAttr('disabled', 'disabled');
+
+
+                             alert(data);
+
+                     document.location = '@Url.Action("BOEDetailsUpdation", "BookingEntry")';
+
+
+                       },
+                       error: function (errormessage) {
+                           alert(errormessage.responseText);
+                       }
+                   });
+
+
+}
+</script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js" integrity="sha256-6XMVI0zB8cRzfZjqKcD01PBsAy3FlDASrlC8SxCpInY=" crossorigin="anonymous"></script>

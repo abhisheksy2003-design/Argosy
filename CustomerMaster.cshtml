@@ -1,0 +1,390 @@
+﻿
+@{
+    ViewBag.Title = "CustomerMaster";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style>
+   /* .table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }
+*/
+    /*.table tbody tr td a {
+        color: white;
+    }*/
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+    /* Action column center */
+    .action-col {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    /* Button container */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 6px; /* 👈 buttons ke beech gap */
+    }
+
+        /* Button size clean */
+        .action-buttons .btn {
+            padding: 4px 8px;
+            font-size: 13px;
+        }
+
+</style>
+
+<div class=" content-area" id="divSummary">
+    <div class="page-header">
+        <h4 class="page-title">Customer Master</h4>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-7 col-sm-12">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" id="txtSearch" class="form-control" placeholder="Search for...">
+                    <span class="input-group-append">
+                        <button class="btn btn-filters ms-1" id="btnSearch" type="button" style="background-color: #007bff !important;"> <img src="~/assets/images/icons/search-whites.svg" alt="img"></button>
+                        @* <a onclick="AddBL();" class="btn btn-primary btn-success text-right" style="align-content:center;color:white"><i class="fa fa-plus" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Generate BL"></i> </a>*@
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-sm-12" id="divAddMaster" >
+            <div class="form-group">
+                <div class="input-group">
+                    <a onclick="AddMaster();" class="btn btn-primary me-2 text-right" style="align-content:center;color:white"><i class="fa fa-plus" data-placement="bottom" title="Add" data-original-title="Generate BL"></i> </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">      
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="table-responsive">
+                                    <table id="tblGlobalGST" class="table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                
+                                                <th class="wd-15p">Name</th>
+                                                <th class="wd-25p">Address</th>
+
+                                                <th class="wd-15p">CHA</th>
+                                                <th class="wd-10p ">Shipper</th>
+                                                <th class="wd-10p ">Importer</th>
+                                                <th class="wd-15p">Customer</th>
+                                                <th class="wd-10p ">Shipping</th>
+                                                <th class="wd-10p ">Vendor</th>
+                                            </tr>
+                                        </thead>
+                                        @*<tbody style="box-sizing :border-box;">
+                                                @foreach (var d in Model)
+                                                {
+
+                                                    <tr>
+                                                        <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+                                                        <td>@d.TransName <input name=hdTrailerID type=hidden id=trailerid value='@d.trailerid'></td>
+                                                        <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+                                                        <td>@d.TransName <input name=hdTrailerID type=hidden id=trailerid value='@d.trailerid'></td>
+                                                        <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+                                                        <td>@d.TransName <input name=hdTrailerID type=hidden id=trailerid value='@d.trailerid'></td>
+                                                        <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+                                                        <td>@d.TransName <input name=hdTrailerID type=hidden id=trailerid value='@d.trailerid'></td>
+                                                        <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+                                                        <td>@d.TransName <input name=hdTrailerID type=hidden id=trailerid value='@d.trailerid'></td>
+                                                        <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>*@
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class=" content-area" id="divUpdateCustomerData">
+
+</div>
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            var message = @Html.Raw(Json.Encode(ViewBag.Message))
+            alert(message);
+
+            document.getElementById("custCode").value = "";
+            document.getElementById("custName").value = "";
+            document.getElementById("custAddress").value = "";
+            //document.getElementById("custCity").value = "";
+            document.getElementById("contactPerson").value = "";
+            document.getElementById("designation").value = "";
+            document.getElementById("contactNo1").value = "";
+            document.getElementById("contactNo2").value = "";
+            document.getElementById("fax").value = "";
+            document.getElementById("cellNO").value = "";
+            document.getElementById("emailID").value = "";
+            document.getElementById("website").value = "";
+            document.getElementById("credit").value = "";
+            document.getElementById("remarks").value = "";
+            document.getElementById("isActive").checked = true;
+            document.getElementById("IsContract").checked = false;
+
+        };
+
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#tblGlobalGST').dataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+            "bPaginate": false,
+            "bFilter": true,
+            "paging": false,
+            //"aoColumnDefs": [
+            //{
+            //    'bSortable': false,
+            //    'aTargets': [2]
+            //}
+            // ]
+
+        })
+    });
+</script>
+<script>
+
+        $("#btnSearch").click(function () {
+            debugger;
+            var SearchText = $("#txtSearch").val();
+
+          
+            if (SearchText == "") {
+                 
+                $("#txtSearch").removeClass("form-control is-valid state-valid")
+                $("#txtSearch").addClass("form-control is-invalid state-invalid")
+                $("#divAddMaster").hide()
+            }
+            else {
+                $("#txtSearch").removeClass("form-control is-invalid state-invalid")
+                $("#txtSearch").addClass("form-control is-valid state-valid")
+                $("#divAddMaster").show()
+
+               
+
+                var data = JSON.stringify({
+                    'SearchText': SearchText,
+
+
+                });
+                $.ajax({
+                    url: "/Master/GetGlobalGSTList",
+                    data: data,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                     
+                    success: function (data) {
+                         
+
+                        $('#tblGlobalGST').dataTable({
+                            "destroy": true,
+                            "bLengthChange": false,
+                            "aaData": data,
+
+                            "bInfo": false,
+                            "bPaginate": false,
+                            "bFilter": true,
+                            "paging": false,
+                            "columns": [
+                                {
+                                    "data": "Id",
+                                    "orderable": false,
+                                    "className": "text-center action-col",
+                                    "render": function (data, type, row) {
+                                        if (type === 'display') {
+                                            return `
+                                                 <div class="action-buttons">
+                                                     <a href="#" onclick="EditDetails(${data})" 
+                                                        class="btn btn-sm btn-secondary" title="Edit">
+                                                         <i class="fa fa-edit"></i>
+                                                     </a>
+                                                
+                                                     <a href="#" onclick="ViewDetails(${data})" 
+                                                        class="btn btn-sm btn-info" title="View">
+                                                         <i class="fa fa-eye"></i>
+                                                     </a>
+                                                
+                                                     <a href="#" onclick="LocationDetails(${data},'${row.Name}')" 
+                                                        class="btn btn-sm btn-success" title="Location/GST">
+                                                         <i class="fa fa-map-marker"></i>
+                                                     </a>
+                                                 </div>`;
+                                        }
+                                        return data;
+                                    }
+                                },
+
+                                { "data": "Name" },
+                                { "data": "Address" },
+                                { "data": "CHA" },
+                                { "data": "Shipper" },
+                                { "data": "Consinee" },
+                                { "data": "Customer" },
+                                { "data": "ShippingLine" },
+                                { "data": "Vendor" }
+                            ]
+
+                        });
+
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+
+            }
+        });
+</script>
+<script>
+
+    function EditDetails(id) {
+        // alert(id);
+
+        var data = JSON.stringify({
+            'ID': id
+        });
+
+        $.ajax({
+            url: "/Master/EditCustomerDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                $("#divSummary").hide()
+                $('#divUpdateCustomerData').show()
+                $('#divUpdateCustomerData').html(response);
+                //  $('#AGaID').addClass("form-control disabled");
+                // $('.code').attr("disabled", true);
+                document.getElementById("custCode").readOnly = true;
+            }
+        });
+    }
+</script>
+<script>
+
+    function AddMaster() {
+        // alert(jono)
+
+
+        $.ajax({
+            url: "/Master/AddCustomerDetails",
+
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                $("#divSummary").hide()
+                $('#divUpdateCustomerData').show()
+
+                $('#divUpdateCustomerData').html(response);
+
+            }
+        });
+    }
+</script>
+
+<script>
+
+    function ViewDetails(id) {
+        //alert('View');
+
+        var data = JSON.stringify({
+            'ID': id
+        });
+
+        $.ajax({
+            url: "/Master/EditCustomerDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                $("#divSummary").hide()
+                $('#divUpdateCustomerData').show()
+
+                $('#divUpdateCustomerData').html(response);
+                $('#divUpdateCustomerData :input').attr('disabled', true);
+
+            }
+        });
+    }
+
+
+    function LocationDetails(id, Name) {
+        //alert('View');
+
+        var data = JSON.stringify({
+            'ID': id,
+            'Name': Name
+        });
+
+        $.ajax({
+            url: "/Master/LocationDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                $("#divSummary").hide()
+                $('#divUpdateCustomerData').show()
+
+                $('#divUpdateCustomerData').html(response);
+                // $('#divUpdateCustomerData :input').attr('disabled', true);
+
+            }
+        });
+    }
+    function DeliveryAddress(id, Name) {
+        //alert('View');
+
+        var data = JSON.stringify({
+            'ID': id,
+            'Name': Name
+        });
+
+        $.ajax({
+            url: "/Master/DeliveryAddresses",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                $("#divSummary").hide()
+                $('#divUpdateCustomerData').show()
+
+                $('#divUpdateCustomerData').html(response);
+                // $('#divUpdateCustomerData :input').attr('disabled', true);
+
+            }
+        });
+    }
+</script>

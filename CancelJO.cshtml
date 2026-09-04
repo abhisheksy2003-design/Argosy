@@ -1,0 +1,88 @@
+﻿@model MvcBondEntities.BusinessEntities.JobOrderMEntities
+<div>
+    <div class="modal-header">
+        <h5 class="modal-title" id="example-Modal3">Cancelling JO No. @ViewBag.JONo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" id="divAttach">
+
+        <form id="myForm">
+
+            <div class="form-group">
+                <label class="form-label">Reason</label>
+                <div class="row gutters-xs">
+                    <div class="col">
+                        @Html.DropDownListFor(model => model.CancelReasonID, (IEnumerable<SelectListItem>)ViewBag.ReasonDropdownList, "--Select--", new { @class = "form-control", @id = "ddlReason", name = "ReasonId", onblur = "myRequiredValidation('ddlReason')" })
+                        <input type="hidden" id="hdJOno" value="@ViewBag.JONo" />
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" id="btnCancel" onclick="CancelJOWithReason()" class="btn btn-primary">Cancel</button>
+    </div>
+</div>
+<script>function CancelJOWithReason() {
+
+        var jono = $('#hdJOno').val();
+        var ReasonId = $('#ddlReason').val();
+        // alert(jono);
+        //  alert(ReasonId);
+        if (ReasonId != "") {
+            $("#ddlReason").removeClass("form-control is-invalid state-invalid")
+            $("#ddlReason").addClass("form-control is-valid state-valid")
+
+            //alert("hi");
+            //var table = $('#example').DataTable();
+            //$('#example tbody').on('click', '.removebutton', function () {
+
+            //    table
+            //    .row($(this).parents('tr'))
+            //    .remove()
+            //    .draw();
+
+            //});
+
+            var data = JSON.stringify({
+                'jono': jono,
+                'ReasonId': ReasonId
+            });
+            //  alert(data)
+            $.ajax({
+
+                type: "POST",
+                url: "/BookingEntry/CancelJOWithReason",
+                data: data,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    JOSummary();
+                    $('#ddlReason').val("");
+                    $('#hdJOno').val("");
+                    $('#myModal').modal('hide');
+
+                    // alert(response);
+                    //  JOSummary()
+                },
+                error: function (errormessage) {
+                    //  alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        }
+        else {
+            alert("Please select Reason!")
+            $("#ddlReason").removeClass("form-control is-valid state-valid")
+            $("#ddlReason").addClass("form-control is-invalid state-invalid")
+
+        }
+
+    }</script>
+
+

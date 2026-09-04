@@ -1,0 +1,766 @@
+﻿@model MvcBondEntities.BusinessEntities.VesselMovement
+
+@{
+    ViewBag.Title = "NewVesselMovementDetails";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<style>
+    /* .table thead th, .text-wrap table thead th {
+        background-color: #151517b5;
+        color: white;
+    }*/
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        color: black;
+        font-weight: 900 !important;
+        font-size: 15px !important;
+    }
+</style>
+
+
+<link href="~/css/NewCHAProfile.css" rel="stylesheet" />
+<script src="~/js/GetTableJson.js"></script>
+<script src="~/js/validation.js"></script>
+<div class=" content-area" id="divDriver">
+    
+
+
+    <div class="page-header" style="margin-top:-12px;">
+        <h4 class="page-title">
+            Vessel Movement Details
+        </h4>
+
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="ViewSummaryDrivers();" id="summarylist" data-modal="modal-13">
+                Summary
+            </button>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:-10px;">
+        <div class="col-md-12 col-lg-12">
+            @using (Html.BeginForm("SaveVesselMovementDetails", "BookingEntry", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="">
+                                    <div class="form-group">
+                                        <label class="form-label"></label>
+                                        <div class="input-group">
+                                            @* <input type="text" class="form-control" placeholder="Search for...">*@
+                                            <span class="input-group-append " id="tabPurpose">
+
+                                                @*@Html.HiddenFor(model => model.IsImportORExportSelected, new { htmlAttributes = new { @class = "form-control", @id = "selectedImportORExport" } })*@
+                                                <label id="selectedImportORExport" class="display_none"></label>
+                                                @Html.EditorFor(model => model.IsImportORExportSelected, new { htmlAttributes = new { @class = "display_none", @id = "txtSelectedImportORExport", maxlength = 100 } })
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-horizontal">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="form-label" style="color:black">VIA No</label>
+                                                <div class="row gutters-xs">
+                                                    <div class="col">
+                                                        @Html.EditorFor(model => model.ViaNO, new { htmlAttributes = new { @class = "form-control", @id = "viaNO", autocomplete = "on", maxlength = 100 } })
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="form-label ">Voyage No</label>
+                                                <div class="row gutters-xs">
+                                                    <div class="col">
+                                                        @Html.EditorFor(model => model.VoyageNo, new { htmlAttributes = new { @class = "form-control", @id = "voyageNo", autocomplete = "on", maxlength = 100, onblur = "myRequiredValidation('voyageNo')" } })
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="form-label ">IGM No</label>
+                                                <div class="row gutters-xs">
+                                                    <div class="col">
+                                                        @Html.EditorFor(model => model.IGMNo, new { htmlAttributes = new { @class = "form-control", @id = "igmno", autocomplete = "on", maxlength = 20 } })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="form-label">IGM Date</label>
+                                                <div class="row gutters-xs">
+                                                    <div class="col">
+
+                                                        @Html.EditorFor(model => model.IGMDate, new { htmlAttributes = new { @class = "form-control  datePicker1", @id = "txtigmdate", @Value = DateTime.Now.ToString("dd MMM yyyy") } })
+                                                        @* @Html.Hidden("CurrentDate", null, new { @class = "form-control  form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy") })*@
+
+
+                                                        <label id="dateTime" class="display_none"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="form-label">Vessel Name</label>
+                                                <div class="row gutters-xs">
+                                                    <div class="col">
+
+                                                        @Html.DropDownListFor(model => model.VesselID, (IEnumerable<SelectListItem>)ViewBag.VesselList, "--Select--", new { @class = "form-select form-select dropdown-disable", @id = "ddlVesselList", name = "txtVesselID", onblur = "myRequiredValidation('ddlVesselList')" })
+
+
+                                                        <label id="vesselID" class="display_none"></label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="form-label ">Port Name</label>
+                                                <div class="row gutters-xs">
+                                                    <div class="col">
+                                                        @Html.DropDownListFor(model => model.PortID, (IEnumerable<SelectListItem>)ViewBag.portList, "--Select--", new { @class = "form-select form-select dropdown-disable", @id = "ddlPort", name = "PortID", onblur = "myRequiredValidation('ddlPort')" })
+
+
+                                                        @*@Html.EditorFor(model => model.TrainNO, new { htmlAttributes = new { @class = "form-control", @id = "trainNO", autocomplete = "on", maxlength = 100 } })*@
+
+                                                        @*<div class="input-group-append ml-10">
+                            @if (ViewBag.portList.Count > 0)
+                            {
+                                i = 0;
+                                foreach (var d in ViewBag.portList)
+                                {
+
+                                    <button type="button" class="btn btn-outline-info" onclick="onPortClick(@d.PortID,@d.PortCode)" id="@d.PortCode"> @d.PortName</button>
+
+                                }
+
+                                i++;
+                            }
+                        </div>*@
+                                                        @* @Html.EditorFor(model => model.PortID, new { htmlAttributes = new { @class = "display_none", @id = "txtPortID", maxlength = 100 } })*@
+                                                        <label id="portID" class="display_none"></label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="form-label">Berthing Date</label>
+                                                <div class="row gutters-xs">
+                                                    <div class="col">
+                                                        @*@Html.EditorFor(model => model.TrainNO, new { htmlAttributes = new { @class = "form-control", @id = "trainNO", autocomplete = "on", maxlength = 100 } })*@
+                                                        @*@Html.TextBox("FromDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy HH:mm") })
+                        @Html.EditorFor(model => model.DateNTime, new { htmlAttributes = new { @class = "display_none", @id = "txtDateTime", maxlength = 100 } })*@
+                                                        @*  @Html.EditorFor(model => model.berthingdate, new { htmlAttributes = new { @class = "form-control", @id = "txtDateTime", @readonly = "Readonly", @Value = DateTime.Now.ToString("dd MMM yyyy") } })*@
+                                                        @Html.EditorFor(model => model.berthingdate, new { htmlAttributes = new { @class = "form-control datePicker1", @id = "txtBerthingdate", @Value = DateTime.Now.ToString("dd MMM yyyy"), onblur = "myRequiredValidation('txtBerthingdate')" } })
+                                                        @Html.Hidden("CurrentDate1", null, new { @class = "form-control datePickerD", @Value = DateTime.Now.ToString("dd MMM yyyy") })
+
+                                                        <label id="dateTime" class="display_none"></label>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col d-flex gap-4">
+
+
+                                            <input type="submit" id="btnSave" name="saveProfile" value="Save" class="btn btn-save px-4" />
+
+                                            <button type="button" class="btn btn-cancel px-4" name="clearProfile" title="clear" id="clearValue">Clear</button>
+                                            <input type="hidden" id="hdview" value='@ViewBag.Message' />
+
+                                        </div>
+                                    </div>
+                                    
+
+                                   
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class=" content-area" id="divSummary" style="display:none">
+     
+    <div class="page-header" style="margin-top:-12px;">
+        <h4 class="page-title">
+            Vessel Details Summary
+        </h4>
+
+        <div class="page-header-breadcrumb">
+            <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="getBack();"   data-modal="modal-13">
+                Add
+            </button>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-3">
+                            @Html.ActionLink("Export To Excel", "ExportToExcelVesselMovement", null, new { @class = "btn btn-success btn-md" })
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblVesselSummaryDet"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*@if ($("#hdview").val() != "")
+    {*@
+<script type="text/javascript">
+
+
+    window.onload = function () {
+        // alert("hi")
+        if ($("#hdview").val() != "") {
+
+            alert($("#hdview").val());
+            // alert("Record successfully updated \n click OK to generate print.");
+        }
+    };
+
+
+    function Editimp_Movement(ViaNo, VoyageNo, IgmNo, IgmDate, VesselID, PortID, BerthingDate) {
+        var r = confirm("Do you wish to modify?");
+        $("#divDriver").show();
+        $("#divSummary").hide();
+        if (r == true) {
+
+            document.getElementById('viaNO').value = ViaNo;
+            document.getElementById('voyageNo').value = VoyageNo;
+            document.getElementById('igmno').value = IgmNo;
+            document.getElementById('txtigmdate').value = IgmDate;
+            document.getElementById('ddlVesselList').value = VesselID;
+            document.getElementById('ddlPort').value = PortID;
+            document.getElementById('txtBerthingdate').value = BerthingDate;
+
+        }
+        else {
+            alert("You Pressed No!")
+        }
+
+
+    }
+
+</script>
+@*}*@
+
+<script>
+    $(document).ready(function () {
+        upperCaseOnKeyUp(viaNO);
+
+        $("#viaNO").autocomplete({
+
+            autoFocus: true,
+            scroll: true,
+            source: function (request, response) {
+                //alert(request.term);
+
+                $.ajax({
+                    url: "/BookingEntry/GetViaNOForAutoComplete",
+                    type: "POST",
+                    dataType: "json",
+                    data: { viaNO: request.term },
+                    success: function (data) {
+                        if (!data.length) {
+
+                        }
+                        else {
+
+                            response($.map(data, function (item) {
+
+                                return { value: item };
+
+
+                            }))
+                        }
+                    }
+                })
+            },
+            select: function (e, ui) {
+                $("#viaNO").val(ui.item.value);
+                // CheckCompanyAvailability(ui.item.value);
+                return false;
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    });
+</script>
+
+
+<script>
+
+    $("#addOperator").on("click", function () {
+        $("#opertaor_wrap").removeClass();
+
+        $("#opertaor_wrap").addClass("display_block");
+
+    });
+    $("#closeOperator").on("click", function () {
+        $("#opertaor_wrap").removeClass();
+
+        $("#opertaor_wrap").addClass("display_none");
+
+    });
+
+    $('#import').click(function () {
+        $("#import").removeClass('btn btn-primary');
+        $("#import").addClass('btn btn-primary active');
+        $("#export").removeClass('btn btn-primary active');
+        $("#export").addClass('btn btn-primary');
+        document.getElementById("selectedImportORExport").value = "Import";
+        document.getElementById("txtSelectedImportORExport").value = "Import";
+
+        if (portList.length != 0) {
+            document.getElementById("portFrom").value = portList[0].Text;
+            document.getElementById("txtPortFrom").value = portList[0].Text;
+        }
+        document.getElementById("portTo").value = "ICD";
+        document.getElementById("txtPortTo").value = "ICD";
+    });
+
+    $('#export').click(function () {
+        $("#export").removeClass('btn btn-primary');
+        $("#export").addClass('btn btn-primary active');
+        $("#import").removeClass('btn btn-primary active');
+        $("#import").addClass('btn btn-primary');
+        document.getElementById("selectedImportORExport").value = "Export";
+        document.getElementById("txtSelectedImportORExport").value = "Export";
+
+        if (portList.length != 0) {
+            document.getElementById("portFrom").value = "ICD";
+            document.getElementById("txtPortFrom").value = "ICD";
+        }
+        document.getElementById("portTo").value = portList[0].Text;
+        document.getElementById("txtPortTo").value = portList[0].Text;
+    });
+
+
+</script>
+
+<script>
+    $("#viaNO").on("blur", function () {
+
+        if ($("#viaNO").val() == "") {
+            $("#viaNO").removeClass("form-control is-valid state-valid")
+            $("#viaNO").addClass("form-control is-invalid state-invalid")
+            //  document.getElementById(TextField).style.borderColor = "red"
+        } else {
+            // alert("hi")
+            $("#viaNO").removeClass("form-control is-invalid state-invalid")
+            $("#viaNO").addClass("form-control is-valid state-valid")
+            // document.getElementById(TextField).style.borderColor = "Gainsboro"
+        }
+
+        // alert("hi");
+        var igmno = $("#viaNO").val();
+
+        $.ajax(
+            {
+
+                type: 'POST',
+                url: '/BookingEntry/GetExisitingViaNO',
+                data: '{igmno: ' + JSON.stringify(igmno) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (data) {
+                    //  alert(JSON.stringify(data))
+                    if (data.VesselID == 0) {
+                        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        let current_datetime = new Date()
+                        let formatted_date = current_datetime.getDate() + " " + months[current_datetime.getMonth()] + " " + current_datetime.getFullYear() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes()
+                        let JODate = current_datetime.getDate() + " " + months[current_datetime.getMonth()] + " " + current_datetime.getFullYear()
+                        //$("#ddlVesselList").val("");
+                        //$("#ddlPort").val("");
+                        //$("#voyageNo").val("");
+                        //$("#viaNO").val("");
+                        //$("#igmno").val("");
+                        $("#txtBerthingdate").val(formatted_date);
+                        //$("#txtigmdate").val(JODate);
+
+
+                        $("#ddlVesselList").removeClass("form-control is-valid state-valid")
+                        $("#ddlVesselList").addClass("form-control is-invalid state-invalid")
+
+
+                        $("#voyageNo").removeClass("form-control is-valid state-valid")
+                        $("#voyageNo").addClass("form-control is-invalid state-invalid")
+
+                        $("#viaNO").removeClass("form-control is-valid state-valid")
+                        $("#viaNO").addClass("form-control is-invalid state-invalid")
+
+                        $("#ddlPort").removeClass("form-control is-valid state-valid")
+                        $("#ddlPort").addClass("form-control is-invalid state-invalid")
+
+
+                    }
+                    else {
+
+                        $("#ddlVesselList").removeClass("form-control is-invalid state-invalid")
+                        $("#ddlVesselList").addClass("form-control is-valid state-valid")
+
+                        $("#voyageNo").removeClass("form-control is-invalid state-invalid")
+                        $("#voyageNo").addClass("form-control is-valid state-valid")
+
+                        $("#viaNO").removeClass("form-control is-invalid state-invalid")
+                        $("#viaNO").addClass("form-control is-valid state-valid")
+
+                        $("#ddlPort").removeClass("form-control is-invalid state-invalid")
+                        $("#ddlPort").addClass("form-control is-valid state-valid")
+
+
+                        $("#txtBerthingdate").removeClass("form-control is-invalid state-invalid")
+                        $("#txtBerthingdate").addClass("form-control is-valid state-valid")
+
+                        $("#txtigmdate").removeClass("form-control is-invalid state-invalid")
+                        $("#txtigmdate").addClass("form-control is-valid state-valid")
+
+                        $("#igmno").removeClass("form-control is-invalid state-invalid")
+                        $("#igmno").addClass("form-control is-valid state-valid")
+
+                        $("#ddlVesselList").val(data.VesselID);
+                        $("#ddlPort").val(data.PortID);
+                        $("#voyageNo").val(data.VoyageNo);
+                        $("#viaNO").val(data.ViaNO);
+                        $("#txtBerthingdate").val(data.DateNTime)
+                        //$("#txtigmdate").val(data.IGMDateFormat)
+                        $("#igmno").val(data.IGMNo)
+
+                    }
+
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+    });
+
+</script>
+
+<script>
+    $("#clearValue").on("click", function () {
+
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        let current_datetime = new Date()
+        let formatted_date = current_datetime.getDate() + " " + months[current_datetime.getMonth()] + " " + current_datetime.getFullYear() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes()
+        let JODate = current_datetime.getDate() + " " + months[current_datetime.getMonth()] + " " + current_datetime.getFullYear()
+        $("#ddlVesselList").val("");
+        $("#ddlPort").val("");
+        $("#voyageNo").val("");
+        $("#igmno").val("");
+        $("#txtBerthingdate").val(formatted_date);
+        ///$("#txtigmdate").val(JODate);
+        $("#viaNO").val("");
+
+        $("#viaNO").removeClass("form-control is-valid state-valid")
+        $("#viaNO").removeClass("form-control is-invalid state-invalid")
+        $("#viaNO").addClass("form-control")
+
+
+        $("#ddlVesselList").removeClass("form-control is-valid state-valid")
+        $("#ddlVesselList").removeClass("form-control is-invalid state-invalid")
+        $("#ddlVesselList").addClass("form-control")
+
+        $("#voyageNo").removeClass("form-control is-valid state-valid")
+        $("#voyageNo").removeClass("form-control is-invalid state-invalid")
+        $("#voyageNo").addClass("form-control")
+
+        $("#igmno").removeClass("form-control is-valid state-valid")
+        $("#igmno").removeClass("form-control is-invalid state-invalid")
+        $("#igmno").addClass("form-control")
+
+        $("#ddlPort").removeClass("form-control is-valid state-valid")
+        $("#ddlPort").removeClass("form-control is-invalid state-invalid")
+        $("#ddlPort").addClass("form-control")
+
+        $("#txtBerthingdate").removeClass("form-control is-valid state-valid")
+        $("#txtBerthingdate").removeClass("form-control is-invalid state-invalid")
+        $("#txtBerthingdate").addClass("form-control")
+
+        $("#txtigmdate").removeClass("form-control is-valid state-valid")
+        $("#txtigmdate").removeClass("form-control is-invalid state-invalid")
+        $("#txtigmdate").addClass("form-control")
+
+    });
+</script>
+
+<script>
+    function myRequiredValidation(TextField) {
+
+        // alert("#" + TextField);
+
+        if ($("#" + TextField).val() == "") {
+            $("#" + TextField).removeClass("form-control is-valid state-valid")
+            $("#" + TextField).addClass("form-control is-invalid state-invalid")
+            //  document.getElementById(TextField).style.borderColor = "red"
+        } else {
+            // alert("hi")
+            $("#" + TextField).removeClass("form-control is-invalid state-invalid")
+            $("#" + TextField).addClass("form-control is-valid state-valid")
+            // document.getElementById(TextField).style.borderColor = "Gainsboro"
+        }
+    };
+</script>
+<script type="text/javascript">
+    function ViewSummaryDrivers() {
+        $("#divDriver").hide();
+        $("#divSummary").show();
+        //VesselMovement
+        $.ajax({
+            url: '/BookingEntry/getVesselSummaryDet',
+            type: 'Post',
+            data: '',
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                debugger;
+                RepTableDataJson($("#tblVesselSummaryDet"), data, "VesselMovement", "VesselMovementSummary");
+                //$("#global-loader").fadeOut("slow");
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                //$("#global-loader").fadeOut("slow");
+            }
+        });
+
+    }
+
+    function getBack() {
+        $("#divDriver").show();
+        $("#divSummary").hide();
+    }
+
+
+    $("#btnSave").click(function () {
+        // alert("hifg");
+        var chekdate = checkDatevalidation();
+        var checkigmdate = checkIGMDatevalidation();
+        //   alert(chekdate);
+        if (chekdate == false || checkigmdate == false) {
+            return false;
+        }
+        else {
+            var ddlVesselList = document.getElementById('ddlVesselList').value;
+            var ddlPort = document.getElementById('ddlPort').value;
+            var voyageNo = document.getElementById('voyageNo').value;
+            var txtBerthingdate = document.getElementById('txtBerthingdate').value;
+            var txtigmdate = document.getElementById('txtigmdate').value;
+            var viaNO = document.getElementById('viaNO').value;
+            var igmno = document.getElementById('igmno').value;
+
+            var blResult = Boolean;
+            blResult = true;
+
+            if (viaNO == "") {
+                //  document.getElementById('ContainerNo').style.borderColor = "red"
+                $("#viaNO").removeClass("form-control is-valid state-valid")
+                $("#viaNO").addClass("form-control is-invalid state-invalid")
+                blResult = blResult && false;
+            }
+
+            if (voyageNo == "") {
+                $("#voyageNo").removeClass("form-control is-valid state-valid")
+                $("#voyageNo").addClass("form-control is-invalid state-invalid")
+                blResult = blResult && false;
+            }
+
+            //if (igmno == "") {
+            //    $("#igmno").removeClass("form-control is-valid state-valid")
+            //    $("#igmno").addClass("form-control is-invalid state-invalid")
+            //    blResult = blResult && false;
+            //}
+            if (ddlVesselList == "") {
+                $("#ddlVesselList").removeClass("form-control is-valid state-valid")
+                $("#ddlVesselList").addClass("form-control is-invalid state-invalid")
+                blResult = blResult && false;
+            }
+
+            if (ddlPort == "") {
+                $("#ddlPort").removeClass("form-control is-valid state-valid")
+                $("#ddlPort").addClass("form-control is-invalid state-invalid")
+                blResult = blResult && false;
+            }
+            if (txtBerthingdate == "") {
+                $("#txtBerthingdate").removeClass("form-control is-valid state-valid")
+                $("#txtBerthingdate").addClass("form-control is-invalid state-invalid")
+                blResult = blResult && false;
+            }
+
+            //if (txtigmdate == "") {
+            //    $("#txtigmdate").removeClass("form-control is-valid state-valid")
+            //    $("#txtigmdate").addClass("form-control is-invalid state-invalid")
+            //    blResult = blResult && false;
+            //}
+            if (blResult == false) { alert('Please fill the required fields!'); }
+            return blResult;
+        }
+
+    });
+    //$('#btnRemoveCSS').click(function () {
+
+    function checkDatevalidation() {
+        var startDate = document.getElementById("txtBerthingdate").value;
+        var endDate = document.getElementById("CurrentDate1").value;
+        // alert(startDate);
+
+        //  alert(Date.parse(startDate));
+        //  alert(Date.parse(endDate));
+        //////if ((Date.parse(startDate) < Date.parse(endDate))) {
+        //////    alert("Berthing date not should be less than Current date");
+        //////  //  document.getElementById("txtBerthingdate").value = "";
+        //////    return false;
+        //////}
+        //////else {
+        //////    return true;
+        //////}
+    }
+    function checkIGMDatevalidation() {
+        var startDate = document.getElementById("txtigmdate").value;
+        var endDate = document.getElementById("CurrentDate").value;
+
+        //  alert(startDate)
+        // alert(Date.parse(startDate))
+        //////if ((Date.parse(startDate) < Date.parse(endDate))) {
+        //////    alert("IGM Date date not should be less than Current date");
+        //////    //  document.getElementById("txtBerthingdate").value = "";
+        //////    return false;
+        //////}
+        //////else {
+        //////    return true;
+        //////}
+    }
+    //$("#viaNO").keyup(function () {
+    //    debugger;
+    //    $('#viaNO').val($('#viaNO').val().toUpperCase());
+    //});
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('.datePicker1')
+            .datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                minDate: 0
+            })
+    })
+
+    $(function () {
+        $('.form_date2')
+            .datetimepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+                minDate: 0, pickTime: false,
+            })
+    })
+
+    $(function () {
+        var currDate = new Date();
+        $(".date").datetimepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'dd M yyyy', // Changed to display only date
+            language: "tr",
+            changeMonth: true,
+            changeYear: true,
+            forceParse: true,
+            pickTime: false,
+            // endDate: currDate
+        })
+            .on('changeDate', function (e) {
+                // Revalidate the date field
+                // $('#eventForm').formValidation('revalidateField', 'date');
+                $('.datetimepicker').hide();
+            });
+
+    });
+    $(function () {
+        $('.datetimepicker9').datetimepicker({
+            viewMode: 'years',
+            format: 'dd M yyyy' /*Add this line to remove time format*/,
+            pickTime: false
+        });
+    });
+
+
+    $(function () {
+
+        $('#datePicker')
+            .datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+            })
+            .on('changeDate', function (e) {
+
+                $('.datepicker').hide();
+            });
+        $('.datePickerD')
+            .datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd M yyyy',
+                language: "tr",
+                changeMonth: true,
+                changeYear: true,
+
+            });
+    });</script>
+
+
+
+
+
+
+
+
+
+
